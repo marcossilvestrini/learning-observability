@@ -16,9 +16,9 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Create Release](https://github.com/marcossilvestrini/templates/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/templates/actions/workflows/release.yml)
-[![Generate HTML](https://github.com/marcossilvestrini/templates/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/templates/actions/workflows/generate-html.yml)
-[![Slack Notification](https://github.com/marcossilvestrini/templates/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/templates/actions/workflows/slack.yml)
+[![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)
+[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)
+[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -30,23 +30,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/marcossilvestrini/templates">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/marcossilvestrini/kubernetes-observability">
+    <img src="images/observability.png" alt="observability">
   </a>
 
-<h3 align="center">Templates</h3>
+<h3 align="center">Kubernetes Observability</h3>
 
   <p align="center">
-    Project for publish template for all tools and languages
+    Project for learning about Kubernetes observability.
     <br />
-    <a href="https://github.com/marcossilvestrini/templates"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/marcossilvestrini/templates">View Demo</a>
+    <a href="https://github.com/marcossilvestrini/kubernetes-observability">View Demo</a>
     -
-    <a href="https://github.com/marcossilvestrini/templates/issues">Report Bug</a>
+    <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
     -
-    <a href="https://github.com/marcossilvestrini/templates/issues">Request Feature</a>
+    <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Request Feature</a>
   </p>
 </div>
 
@@ -79,7 +79,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `marcossilvestrini`, `templates`, `mrsilvestrini`, `marcossilvestrini`, `gmail`, `marcos.silvestrini`, `Templates`, `Project for publish template for all tools and languages`
+This project is for learning about kubernetes observability.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -90,36 +90,35 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 * [![Windows][Windows-badge]][Windows-url]
 * [![Bash][Bash-badge]][Bash-url]
 * [![Powershell][Powershell-badge]][Powershell-url]
+* [![Kubernetes][Kubernetes-badge]][Kubernetes-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This project is for getting started with kubernetes observability tools and best practices.
+
+Some tools for learning:
+
+* Prometheus
+* Alertmanager
+* Grafana
+* Grafana Loki
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
-* git
-
-  ```sh
-  #Debian
-  sudo apt install git
-
-  #RHEL
-  sudo dnf install git
-  ```
+* Linux System Up
+* Cluster Kubernetes Up
+* Git
 
 ### Installation
 
 Clone the repo
 
 ```sh
-git clone https://github.com/marcossilvestrini/templates.git
-cd templates || exit
+git clone https://github.com/marcossilvestrini/kubernetes-observability.git
+cd kubernetes-observability || exit
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -127,20 +126,21 @@ cd templates || exit
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
+I publish some exemples for use in this repository.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
-* [ ] Feature 1
-* [ ] Feature 2
-* [ ] Feature 3
-  * [ ] Nested Feature
+* [x] Create repositoty
+* [ ] Prometheus
+* [ ] Alertmanager
+* [ ] Grafana
+* [ ] Grafana Loki
+* [ ] Others tools
 
-See the [open issues](https://github.com/marcossilvestrini/templates/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/marcossilvestrini/kubernetes-observability/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -170,9 +170,10 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 <!-- CONTACT -->
 ## Contact
 
-Marcos Silvestrini - [@mrsilvestrini](https://twitter.com/mrsilvestrini) - marcos.silvestrini@gmail.com
+- Marcos Silvestrini - [@mrsilvestrini](https://twitter.com/mrsilvestrini) 
+- marcos.silvestrini@gmail.com
 
-Project Link: [https://github.com/marcossilvestrini/templates](https://github.com/marcossilvestrini/templates)
+Project Link: [https://github.com/marcossilvestrini/kubernetes-observability](https://github.com/marcossilvestrini/kubernetes-observability)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -181,7 +182,7 @@ Project Link: [https://github.com/marcossilvestrini/templates](https://github.co
 
 * [Github](https://github.com/)
 * [Github Template by othneildrew](https://github.com/othneildrew/Best-README-Template)
-* [Git gitignore Templates](https://github.com/github/gitignore)
+* [Git gitignore ](https://github.com/github/gitignore)
 * [Git Badges](https://github.com/Ileriayo/markdown-badges#usage)
 * [Github Workflows](https://docs.github.com/en/actions/using-workflows/about-workflows)
 
@@ -189,16 +190,16 @@ Project Link: [https://github.com/marcossilvestrini/templates](https://github.co
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/marcossilvestrini/templates.svg?style=for-the-badge
-[contributors-url]: https://github.com/marcossilvestrini/templates/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/marcossilvestrini/templates.svg?style=for-the-badge
-[forks-url]: https://github.com/marcossilvestrini/templates/network/members
-[stars-shield]: https://img.shields.io/github/stars/marcossilvestrini/templates.svg?style=for-the-badge
-[stars-url]: https://github.com/marcossilvestrini/templates/stargazers
-[issues-shield]: https://img.shields.io/github/issues/marcossilvestrini/templates.svg?style=for-the-badge
-[issues-url]: https://github.com/marcossilvestrini/templates/issues
-[license-shield]: https://img.shields.io/github/license/marcossilvestrini/templates.svg?style=for-the-badge
-[license-url]: https://github.com/marcossilvestrini/templates/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
+[contributors-url]: https://github.com/marcossilvestrini/kubernetes-observability/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
+[forks-url]: https://github.com/marcossilvestrini/kubernetes-observability/network/members
+[stars-shield]: https://img.shields.io/github/stars/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
+[stars-url]: https://github.com/marcossilvestrini/kubernetes-observability/stargazers
+[issues-shield]: https://img.shields.io/github/issues/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
+[issues-url]: https://github.com/marcossilvestrini/kubernetes-observability/issues
+[license-shield]: https://img.shields.io/github/license/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
+[license-url]: https://github.com/marcossilvestrini/kubernetes-observability/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/marcossilvestrini
 [Github-badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
@@ -211,3 +212,6 @@ Project Link: [https://github.com/marcossilvestrini/templates](https://github.co
 [Powershell-url]: https://learn.microsoft.com/en-us/powershell/
 [Bash-badge]: https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white
 [Bash-url]: https://www.gnu.org/software/bash/
+
+[Kubernetes-badge]: https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white
+[Kubernetes-url]: https://kubernetes.io/docs/home/

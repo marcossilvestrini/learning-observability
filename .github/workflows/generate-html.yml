@@ -43,8 +43,7 @@ jobs:
         uses: fifsky/html-to-pdf-action@master
         with:
           htmlFile: ./index.html
-          outputFile: "./${{ steps.repo_name.outputs.name }}.pdf"
-          #outputFile: ./learning-kubernetes.pdf          
+          outputFile: "./${{ steps.repo_name.outputs.name }}.pdf"          
           pdfOptions: '{"format": "A4", "margin": {"top": "10mm", "left": "10mm", "right": "10mm", "bottom": "10mm"}}'          
       - run: sudo chmod 777 "${{ steps.repo_name.outputs.name }}.pdf"
       - run: /usr/bin/git config --global user.email "marcos.silvestrini@gmail.com"
@@ -52,24 +51,7 @@ jobs:
       - run: /usr/bin/git add .
       - run: /usr/bin/git commit -m "Deploy pdf and html files"
       - run: /usr/bin/git push origin main
-
-      # - name: Convert HTML to PDF
-      #   uses: markwilson/html2pdf@v1.0
-      #   with:
-      #     htmlPath: 'index.html'
-      #     pdfName: '${{ steps.repo_name.outputs.name }}'
-      
-      # - name: Commit and Push PDF Book
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   run: |
-      #     git config user.name "GitHub Actions"
-      #     git config user.email "actions@github.com"
-      #     git pull --rebase origin main
-      #     sudo mv dist/${{ steps.repo_name.outputs.name }}.pdf . &&                              
-      #     git add ${{ steps.repo_name.outputs.name }}.pdf index.html &&
-      #     git commit -m "Deploy PDF and HTML files" &&
-      #     git push origin main
-      
+     
       - name: Upload artifacts        
         uses: actions/upload-artifact@v3
         with:
