@@ -22,8 +22,7 @@
 
 [![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
-[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
+[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 
@@ -82,7 +81,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project
+## À propos du projet
 
 Ce projet vise à en apprendre davantage sur l'observabilité de Kubernetes.
 
@@ -115,6 +114,8 @@ Quelques outils pour apprendre :
 -   Gestionnaire d'alertes
 -   Grafana
 -   Graffana Loki
+-   Heure de Grafana
+-   Alliage Grafana
 
 * * *
 
@@ -188,9 +189,154 @@ L'écosystème Prometheus se compose de plusieurs composants, dont beaucoup sont
 Pour plus d’informations sur Prometheus, accédez à la documentation officielle :  
 <https://prometheus.io/docs/introduction/overview/>
 
+### Installer Prometheus
+
+```sh
+# Download files - https://prometheus.io/download/
+wget https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+
+# Extract files
+tar xvfz prometheus-*.tar.gz
+rm  prometheus-*.tar.gz
+cd prometheus-*
+
+# Check version
+./prometheus --version
+```
+
+### Configurer Prometheus
+
+```sh
+vim prometheus.yaml
+```
+
+```yaml
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+```
+
+### Démarrer Prométhée
+
+```sh
+# Start
+./prometheus --config.file=prometheus.yml
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
+```
+
+### Points finaux importants
+
+```sh
+http://localhost:9090 # all endpoints
+http://localhost:9090/graph # PromQL expressions
+http://localhost:9090/metrics # metrics
+```
+
+### Utilisation du navigateur d'expressions
+
+Vous pouvez utiliser l'expression en mode Tableau ou Graphique.
+
+Ouvrez la page http&#x3A;//localhost:9090
+
+```sh
+# Check all http metrics
+promhttp_metric_handler_requests_total
+
+# Check http metrics with http status code 200
+promhttp_metric_handler_requests_total{code="200"}
+
+# Count http metrics
+count(promhttp_metric_handler_requests_total)
+
+# Rate function
+rate(promhttp_metric_handler_requests_total{code="200"}[1m])
+```
+
+### Exportateurs de Prométhée
+
+#### Exportateur de nœuds
+
+Prometheus Node Exporter expose une grande variété de métriques liées au matériel et au noyau.
+
+##### Installer l'exportateur de nœuds
+
+```sh
+# Download - https://prometheus.io/download#node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+```
+
+##### Démarrer l'exportateur de nœuds
+
+```sh
+# Start
+./node_exporter
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start node_exporter --name node_exporter
+```
+
+##### Exportateur de nœuds de points de terminaison
+
+```sh
+# Access metrics
+http://localhost:9100/metrics
+```
+
+##### Configurer l'exportateur de nœuds
+
+Pour activer le scrap pour l'exportateur de nœuds, vous pouvez configurer prometheus.
+
+```sh
+# Edit prometheus file and add job node
+vim prometheus.yaml
+```
+
+```yaml
+...
+scrape_configs:
+- job_name: node
+  static_configs:
+  - targets: ['localhost:9100']
+...
+```
+
+Redémarrez le service Prometheus pour appliquer un nouvel emploi.
+
 * * *
 
-## Gestionnaire d'alertes
+### Gestionnaire d'alertes
 
 ![alertmanager](images/alertmanager.png)
 
@@ -203,7 +349,15 @@ Pour plus d’informations sur Alertmanager, accédez à la documentation offici
 
 * * *
 
-## Graffana Loki
+### Graffana Loki
+
+* * *
+
+### Heure de Grafana
+
+* * *
+
+### Alliage Grafana
 
 * * *
 
@@ -240,7 +394,7 @@ Distribué sous licence MIT. Voir[`LICENSE`](LICENSE)pour plus d'informations.
 
 ## Contact
 
--   Marcos Sylvestrini -[@mrsilvestrini](https://twitter.com/mrsilvestrini)
+-   Marcos Silvestrini - [@mrsilvestrini](https://twitter.com/mrsilvestrini)
 -   [marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)
 
 Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
@@ -254,6 +408,8 @@ Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
 ## Remerciements
 
 -   [Prométhée](https://prometheus.io/docs/introduction/overview/)
+-   [Exportateur de nœuds](https://github.com/prometheus/node_exporter)
+-   [Allocations de ports par défaut de Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
