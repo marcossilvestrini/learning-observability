@@ -50,6 +50,8 @@
   </p>
 </div>
 
+---
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -76,12 +78,16 @@
   </ol>
 </details>
 
+---
+
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
 This project is for learning about kubernetes observability.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
 
 ### Built With
 
@@ -93,6 +99,8 @@ This project is for learning about kubernetes observability.
 * [![Kubernetes][Kubernetes-badge]][Kubernetes-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -106,11 +114,15 @@ Some tools for learning:
 * Grafana
 * Grafana Loki
 
+---
+
 ### Prerequisites
 
 * Linux System Up
 * Cluster Kubernetes Up
 * Git
+
+---
 
 ### Installation
 
@@ -123,12 +135,16 @@ cd kubernetes-observability || exit
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 I publish some exemples for use in this repository.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -143,6 +159,47 @@ I publish some exemples for use in this repository.
 See the [open issues](https://github.com/marcossilvestrini/kubernetes-observability/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Prometheus
+
+![prometheus](images/prometheus.png)
+
+Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
+
+Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project has a very active developer and user community.
+
+The Prometheus ecosystem consists of multiple components, many of which are optional:
+
+* the main Prometheus server which scrapes and stores time series data
+* client libraries for instrumenting application code
+* a push gateway for supporting short-lived jobs
+* special-purpose exporters for services like HAProxy, StatsD, Graphite, etc.
+* an alertmanager to handle alerts
+* various support tools
+
+For more information about Prometheus access official documentation:  
+<https://prometheus.io/docs/introduction/overview/>
+
+---
+
+## Alertmanager
+
+![alertmanager](images/alertmanager.png)
+
+For more information about Alertmanager access official documentation:  
+<https://github.com/prometheus/alertmanager>
+
+---
+
+## Grafana
+
+---
+
+## Grafana Loki
+
+---
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -160,6 +217,8 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
+
 <!-- LICENSE -->
 ## License
 
@@ -167,24 +226,25 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
+
 <!-- CONTACT -->
 ## Contact
 
-- Marcos Silvestrini - [@mrsilvestrini](https://twitter.com/mrsilvestrini) 
-- marcos.silvestrini@gmail.com
+* Marcos Silvestrini - [@mrsilvestrini](https://twitter.com/mrsilvestrini)
+* <marcos.silvestrini@gmail.com>
 
 Project Link: [https://github.com/marcossilvestrini/kubernetes-observability](https://github.com/marcossilvestrini/kubernetes-observability)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
+
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* [Github](https://github.com/)
-* [Github Template by othneildrew](https://github.com/othneildrew/Best-README-Template)
-* [Git gitignore ](https://github.com/github/gitignore)
-* [Git Badges](https://github.com/Ileriayo/markdown-badges#usage)
-* [Github Workflows](https://docs.github.com/en/actions/using-workflows/about-workflows)
+* [Prometheus](https://prometheus.io/docs/introduction/overview/)
+* [Kube Prometheus Stack](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
