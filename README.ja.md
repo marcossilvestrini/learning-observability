@@ -83,7 +83,7 @@
 
 ## プロジェクトについて
 
-このプロジェクトは、Kubernetes の可観測性について学ぶためのものです。
+このプロジェクトは、Kubernetes の可観測性について学習するためのものです。
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -113,7 +113,9 @@
 -   プロメテウス
 -   アラートマネージャー
 -   グラファナ
--   グラファナ・ロキ
+-   グラファナ ロキ
+-   グラファナ時間
+-   グラファナ合金
 
 * * *
 
@@ -181,15 +183,160 @@ Prometheus エコシステムは複数のコンポーネントで構成されて
 -   アプリケーション コードをインストルメントするためのクライアント ライブラリ
 -   短期間のジョブをサポートするためのプッシュ ゲートウェイ
 -   HAProxy、StatsD、Graphite などのサービスの専用エクスポーター。
--   アラートを処理するアラートマネージャー
+-   アラートを処理するためのアラートマネージャー
 -   各種サポートツール
 
 Prometheus の詳細については、公式ドキュメントにアクセスしてください。  
 [ｈっｔｐｓ：／／ｐろめてぇうｓ。いお／どｃｓ／いんｔろづｃちおん／おゔぇｒゔぃえｗ／](https://prometheus.io/docs/introduction/overview/)
 
+### プロメテウスをインストールする
+
+```sh
+# Download files - https://prometheus.io/download/
+wget https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+
+# Extract files
+tar xvfz prometheus-*.tar.gz
+rm  prometheus-*.tar.gz
+cd prometheus-*
+
+# Check version
+./prometheus --version
+```
+
+### プロメテウスの構成
+
+```sh
+vim prometheus.yaml
+```
+
+```yaml
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+```
+
+### プロメテウスを起動する
+
+```sh
+# Start
+./prometheus --config.file=prometheus.yml
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
+```
+
+### 重要なエンドポイント
+
+```sh
+http://localhost:9090 # all endpoints
+http://localhost:9090/graph # PromQL expressions
+http://localhost:9090/metrics # metrics
+```
+
+### 式ブラウザの使用
+
+式はテーブル モードまたはグラフ モードで使用できます。
+
+ページ http&#x3A;//localhost:9090 を開きます
+
+```sh
+# Check all http metrics
+promhttp_metric_handler_requests_total
+
+# Check http metrics with http status code 200
+promhttp_metric_handler_requests_total{code="200"}
+
+# Count http metrics
+count(promhttp_metric_handler_requests_total)
+
+# Rate function
+rate(promhttp_metric_handler_requests_total{code="200"}[1m])
+```
+
+### プロメテウスエクスポーター
+
+#### ノードエクスポーター
+
+Prometheus Node Exporter は、さまざまなハードウェアおよびカーネル関連のメトリクスを公開します。
+
+##### ノードエクスポーターのインストール
+
+```sh
+# Download - https://prometheus.io/download#node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+```
+
+##### ノードエクスポーターの開始
+
+```sh
+# Start
+./node_exporter
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start node_exporter --name node_exporter
+```
+
+##### エンドポイントノードエクスポーター
+
+```sh
+# Access metrics
+http://localhost:9100/metrics
+```
+
+##### ノードエクスポーターの構成
+
+ノード エクスポーターのスクラップを有効にするために、prometheus を設定できます。
+
+```sh
+# Edit prometheus file and add job node
+vim prometheus.yaml
+```
+
+```yaml
+...
+scrape_configs:
+- job_name: node
+  static_configs:
+  - targets: ['localhost:9100']
+...
+```
+
+新しいジョブを適用するために prometheus サービスを再起動します。
+
 * * *
 
-## アラートマネージャー
+### アラートマネージャー
 
 ![alertmanager](images/alertmanager.png)
 
@@ -202,7 +349,15 @@ Alertmanager の詳細については、公式ドキュメントにアクセス�
 
 * * *
 
-## グラファナ ロキ
+### グラファナ ロキ
+
+* * *
+
+### グラファナ時間
+
+* * *
+
+### グラファナ合金
 
 * * *
 
@@ -210,7 +365,7 @@ Alertmanager の詳細については、公式ドキュメントにアクセス�
 
 ## 貢献する
 
-オープンソース コミュニティを学び、インスピレーションを与え、創造するための素晴らしい場所にするのは、貢献のおかげです。あなたが行う貢献はすべて、**とても感謝しています**。
+オープンソース コミュニティは、貢献によって、学び、インスピレーションを与え、創造するための素晴らしい場所になります。あなたが行う貢献はすべて、**とても感謝しています**。
 
 これを改善するための提案がある場合は、リポジトリをフォークしてプル リクエストを作成してください。 「拡張」タグを付けて問題を開くこともできます。
 プロジェクトにスターを付けることを忘れないでください。再度、感謝します！
@@ -253,6 +408,8 @@ MIT ライセンスに基づいて配布されます。見る[`LICENSE`](LICENSE
 ## 謝辞
 
 -   [プロメテウス](https://prometheus.io/docs/introduction/overview/)
+-   [ノードエクスポーター](https://github.com/prometheus/node_exporter)
+-   [Prometheus のデフォルトのポート割り当て](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [キューブプロメテウス スタック](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
