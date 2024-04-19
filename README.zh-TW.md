@@ -114,6 +114,8 @@
 -   警報管理器
 -   格拉法納
 -   格拉法娜·洛基
+-   格拉法納時間
+-   格拉法納合金
 
 * * *
 
@@ -187,9 +189,154 @@ Prometheus 生態系統由多個組件組成，其中許多組件是可選的：
 有關 Prometheus 的更多資訊請訪問官方文件：  
 <https://prometheus.io/docs/introduction/overview/>
 
+### 安裝普羅米修斯
+
+```sh
+# Download files - https://prometheus.io/download/
+wget https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+
+# Extract files
+tar xvfz prometheus-*.tar.gz
+rm  prometheus-*.tar.gz
+cd prometheus-*
+
+# Check version
+./prometheus --version
+```
+
+### 配置普羅米修斯
+
+```sh
+vim prometheus.yaml
+```
+
+```yaml
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+```
+
+### 啟動普羅米修斯
+
+```sh
+# Start
+./prometheus --config.file=prometheus.yml
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
+```
+
+### 重要端點
+
+```sh
+http://localhost:9090 # all endpoints
+http://localhost:9090/graph # PromQL expressions
+http://localhost:9090/metrics # metrics
+```
+
+### 使用表達式瀏覽器
+
+您可以在表格或圖表模式下使用表達式。
+
+開啟頁面http&#x3A;//localhost:9090
+
+```sh
+# Check all http metrics
+promhttp_metric_handler_requests_total
+
+# Check http metrics with http status code 200
+promhttp_metric_handler_requests_total{code="200"}
+
+# Count http metrics
+count(promhttp_metric_handler_requests_total)
+
+# Rate function
+rate(promhttp_metric_handler_requests_total{code="200"}[1m])
+```
+
+### 普羅米修斯出口商
+
+#### 節點導出器
+
+Prometheus Node Exporter 公開了各種與硬體和核心相關的指標。
+
+##### 安裝節點導出器
+
+```sh
+# Download - https://prometheus.io/download#node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+```
+
+##### 啟動節點導出器
+
+```sh
+# Start
+./node_exporter
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start node_exporter --name node_exporter
+```
+
+##### 端點節點導出器
+
+```sh
+# Access metrics
+http://localhost:9100/metrics
+```
+
+##### 配置節點導出器
+
+若要為節點匯出器啟用廢料，您可以設定 prometheus。
+
+```sh
+# Edit prometheus file and add job node
+vim prometheus.yaml
+```
+
+```yaml
+...
+scrape_configs:
+- job_name: node
+  static_configs:
+  - targets: ['localhost:9100']
+...
+```
+
+重新啟動普羅米修斯服務以申請新工作。
+
 * * *
 
-## 警報管理器
+### 警報管理器
 
 ![alertmanager](images/alertmanager.png)
 
@@ -202,7 +349,15 @@ Prometheus 生態系統由多個組件組成，其中許多組件是可選的：
 
 * * *
 
-## 格拉法娜·洛基
+### 格拉法娜·洛基
+
+* * *
+
+### 格拉法納時間
+
+* * *
+
+### 格拉法納合金
 
 * * *
 
@@ -253,6 +408,8 @@ Prometheus 生態系統由多個組件組成，其中許多組件是可選的：
 ## 致謝
 
 -   [普羅米修斯](https://prometheus.io/docs/introduction/overview/)
+-   [節點導出器](https://github.com/prometheus/node_exporter)
+-   [Prometheus 預設連接埠分配](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Kube Prometheus 堆疊](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
