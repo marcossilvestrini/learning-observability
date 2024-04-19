@@ -238,6 +238,8 @@ customElements.define('markdown-style', MarkdownStyle);</script><markdown-style 
       <li>Alertmanager</li>
       <li>Grafana</li>
       <li>Grafana Loki</li>
+      <li>Grafana Tempo</li>
+      <li>Grafana Alloy</li>
     </ul>
     <hr>
     <h3 id="prerequisites"><a class="anchor" aria-hidden="true" tabindex="-1" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h3>
@@ -290,8 +292,195 @@ cd kubernetes-observability || exit
       <li>various support tools</li>
     </ul>
     <p>For more information about Prometheus access official documentation:<br><a href="https://prometheus.io/docs/introduction/overview/">https://prometheus.io/docs/introduction/overview/</a></p>
+    <h3 id="install-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-prometheus"><span class="octicon octicon-link"></span></a>Install Prometheus</h3>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download files - https://prometheus.io/download/</span>
+</span><span class="code-line line-number" line="2"><span class="token function">wget</span> https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># Extract files</span>
+</span><span class="code-line line-number" line="5"><span class="token function">tar</span> xvfz prometheus-*.tar.gz
+</span><span class="code-line line-number" line="6"><span class="token function">rm</span>  prometheus-*.tar.gz
+</span><span class="code-line line-number" line="7"><span class="token builtin class-name">cd</span> prometheus-*
+</span><span class="code-line line-number" line="8">
+</span><span class="code-line line-number" line="9"><span class="token comment"># Check version</span>
+</span><span class="code-line line-number" line="10">./prometheus <span class="token parameter variable">--version</span>
+</span></code><div onclick="copied(this)" data-code="# Download files - https://prometheus.io/download/
+wget https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+
+# Extract files
+tar xvfz prometheus-*.tar.gz
+rm  prometheus-*.tar.gz
+cd prometheus-*
+
+# Check version
+./prometheus --version
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h3 id="configure-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#configure-prometheus"><span class="octicon octicon-link"></span></a>Configure Prometheus</h3>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token function">vim</span> prometheus.yaml
+</span></code><div onclick="copied(this)" data-code="vim prometheus.yaml
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <pre class="language-yaml"><code class="language-yaml code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># my global config</span>
+</span><span class="code-line line-number" line="2"><span class="token key atrule">global</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="3">  <span class="token key atrule">scrape_interval</span><span class="token punctuation">:</span> 15s <span class="token comment"># Set the scrape interval to every 15 seconds. Default is every 1 minute.</span>
+</span><span class="code-line line-number" line="4">  <span class="token key atrule">evaluation_interval</span><span class="token punctuation">:</span> 15s <span class="token comment"># Evaluate rules every 15 seconds. The default is every 1 minute.</span>
+</span><span class="code-line line-number" line="5">  <span class="token comment"># scrape_timeout is set to the global default (10s).</span>
+</span><span class="code-line line-number" line="6">
+</span><span class="code-line line-number" line="7"><span class="token comment"># Alertmanager configuration</span>
+</span><span class="code-line line-number" line="8"><span class="token key atrule">alerting</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="9">  <span class="token key atrule">alertmanagers</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="10">    <span class="token punctuation">-</span> <span class="token key atrule">static_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="11">        <span class="token punctuation">-</span> <span class="token key atrule">targets</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="12">          <span class="token comment"># - alertmanager:9093</span>
+</span><span class="code-line line-number" line="13">
+</span><span class="code-line line-number" line="14"><span class="token comment"># Load rules once and periodically evaluate them according to the global 'evaluation_interval'.</span>
+</span><span class="code-line line-number" line="15"><span class="token key atrule">rule_files</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="16">  <span class="token comment"># - "first_rules.yml"</span>
+</span><span class="code-line line-number" line="17">  <span class="token comment"># - "second_rules.yml"</span>
+</span><span class="code-line line-number" line="18">
+</span><span class="code-line line-number" line="19"><span class="token comment"># A scrape configuration containing exactly one endpoint to scrape:</span>
+</span><span class="code-line line-number" line="20"><span class="token comment"># Here it's Prometheus itself.</span>
+</span><span class="code-line line-number" line="21"><span class="token key atrule">scrape_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="22">  <span class="token comment"># The job name is added as a label `job=&#x3C;job_name>` to any timeseries scraped from this config.</span>
+</span><span class="code-line line-number" line="23">  <span class="token punctuation">-</span> <span class="token key atrule">job_name</span><span class="token punctuation">:</span> <span class="token string">"prometheus"</span>
+</span><span class="code-line line-number" line="24">
+</span><span class="code-line line-number" line="25">    <span class="token comment"># metrics_path defaults to '/metrics'</span>
+</span><span class="code-line line-number" line="26">    <span class="token comment"># scheme defaults to 'http'.</span>
+</span><span class="code-line line-number" line="27">
+</span><span class="code-line line-number" line="28">    <span class="token key atrule">static_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="29">      <span class="token punctuation">-</span> <span class="token key atrule">targets</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"localhost:9090"</span><span class="token punctuation">]</span>
+</span></code><div onclick="copied(this)" data-code="# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global &#x27;evaluation_interval&#x27;.
+rule_files:
+  # - &#x22;first_rules.yml&#x22;
+  # - &#x22;second_rules.yml&#x22;
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it&#x27;s Prometheus itself.
+scrape_configs:
+  # The job name is added as a label &#x60;job=<job_name>&#x60; to any timeseries scraped from this config.
+  - job_name: &#x22;prometheus&#x22;
+
+    # metrics_path defaults to &#x27;/metrics&#x27;
+    # scheme defaults to &#x27;http&#x27;.
+
+    static_configs:
+      - targets: [&#x22;localhost:9090&#x22;]
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h3 id="start-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#start-prometheus"><span class="octicon octicon-link"></span></a>Start Prometheus</h3>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Start</span>
+</span><span class="code-line line-number" line="2">./prometheus <span class="token parameter variable">--config.file</span><span class="token operator">=</span>prometheus.yml
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># Start with PM2 - npm install pm2@latest -g</span>
+</span><span class="code-line line-number" line="5">pm2 start prometheus <span class="token parameter variable">--name</span> prometheus-server -- <span class="token parameter variable">--config.file</span><span class="token operator">=</span>prometheus.yml
+</span></code><div onclick="copied(this)" data-code="# Start
+./prometheus --config.file=prometheus.yml
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h3 id="important-endpoints"><a class="anchor" aria-hidden="true" tabindex="-1" href="#important-endpoints"><span class="octicon octicon-link"></span></a>Important Endpoints</h3>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1">http://localhost:9090 <span class="token comment"># all endpoints</span>
+</span><span class="code-line line-number" line="2">http://localhost:9090/graph <span class="token comment"># PromQL expressions</span>
+</span><span class="code-line line-number" line="3">http://localhost:9090/metrics <span class="token comment"># metrics</span>
+</span></code><div onclick="copied(this)" data-code="http://localhost:9090 # all endpoints
+http://localhost:9090/graph # PromQL expressions
+http://localhost:9090/metrics # metrics
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h3 id="using-the-expression-browser"><a class="anchor" aria-hidden="true" tabindex="-1" href="#using-the-expression-browser"><span class="octicon octicon-link"></span></a>Using the expression browser</h3>
+    <p>You can use the expression in Table or Graph mode.</p>
+    <p>Open the page <a href="http://localhost:9090/">http://localhost:9090</a></p>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Check all http metrics</span>
+</span><span class="code-line line-number" line="2">promhttp_metric_handler_requests_total
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># Check http metrics with http status code 200</span>
+</span><span class="code-line line-number" line="5">promhttp_metric_handler_requests_total<span class="token punctuation">{</span>code<span class="token operator">=</span><span class="token string">"200"</span><span class="token punctuation">}</span>
+</span><span class="code-line line-number" line="6">
+</span><span class="code-line line-number" line="7"><span class="token comment"># Count http metrics</span>
+</span><span class="code-line line-number" line="8">count<span class="token punctuation">(</span>promhttp_metric_handler_requests_total<span class="token punctuation">)</span>
+</span><span class="code-line line-number" line="9">
+</span><span class="code-line line-number" line="10"><span class="token comment"># Rate function</span>
+</span><span class="code-line line-number" line="11">rate<span class="token punctuation">(</span>promhttp_metric_handler_requests_total<span class="token punctuation">{</span>code<span class="token operator">=</span><span class="token string">"200"</span><span class="token punctuation">}</span><span class="token punctuation">[</span>1m<span class="token punctuation">]</span><span class="token punctuation">)</span>
+</span></code><div onclick="copied(this)" data-code="# Check all http metrics
+promhttp_metric_handler_requests_total
+
+# Check http metrics with http status code 200
+promhttp_metric_handler_requests_total{code=&#x22;200&#x22;}
+
+# Count http metrics
+count(promhttp_metric_handler_requests_total)
+
+# Rate function
+rate(promhttp_metric_handler_requests_total{code=&#x22;200&#x22;}[1m])
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h3 id="prometheus-exporters"><a class="anchor" aria-hidden="true" tabindex="-1" href="#prometheus-exporters"><span class="octicon octicon-link"></span></a>Prometheus Exporters</h3>
+    <h4 id="node-exporter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#node-exporter"><span class="octicon octicon-link"></span></a>Node Exporter</h4>
+    <p>The Prometheus Node Exporter exposes a wide variety of hardware- and kernel-related metrics.</p>
+    <h5 id="instal-node-exporter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#instal-node-exporter"><span class="octicon octicon-link"></span></a>Instal Node Exporter</h5>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download - https://prometheus.io/download#node_exporter</span>
+</span><span class="code-line line-number" line="2"><span class="token function">wget</span> https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># Extract</span>
+</span><span class="code-line line-number" line="5"><span class="token function">tar</span> xvfz node_exporter-*.*-amd64.tar.gz
+</span><span class="code-line line-number" line="6"><span class="token builtin class-name">cd</span> node_exporter-*.*-amd64
+</span></code><div onclick="copied(this)" data-code="# Download - https://prometheus.io/download#node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h5 id="start-node-exporter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#start-node-exporter"><span class="octicon octicon-link"></span></a>Start Node Exporter</h5>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Start</span>
+</span><span class="code-line line-number" line="2">./node_exporter
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># Start with PM2 - npm install pm2@latest -g</span>
+</span><span class="code-line line-number" line="5">pm2 start node_exporter <span class="token parameter variable">--name</span> node_exporter
+</span></code><div onclick="copied(this)" data-code="# Start
+./node_exporter
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start node_exporter --name node_exporter
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h5 id="endpoints-node-exporter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#endpoints-node-exporter"><span class="octicon octicon-link"></span></a>Endpoints Node Exporter</h5>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Access metrics</span>
+</span><span class="code-line line-number" line="2">http://localhost:9100/metrics
+</span></code><div onclick="copied(this)" data-code="# Access metrics
+http://localhost:9100/metrics
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h5 id="configure-node-exporter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#configure-node-exporter"><span class="octicon octicon-link"></span></a>Configure Node Exporter</h5>
+    <p>For enable scrap for node exporter, you can configure prometheus.</p>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Edit prometheus file and add job node</span>
+</span><span class="code-line line-number" line="2"><span class="token function">vim</span> prometheus.yaml
+</span></code><div onclick="copied(this)" data-code="# Edit prometheus file and add job node
+vim prometheus.yaml
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <pre class="language-yaml"><code class="language-yaml code-highlight"><span class="code-line line-number" line="1"><span class="token punctuation">...</span>
+</span><span class="code-line line-number" line="2"><span class="token key atrule">scrape_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="3"><span class="token punctuation">-</span> <span class="token key atrule">job_name</span><span class="token punctuation">:</span> node
+</span><span class="code-line line-number" line="4">  <span class="token key atrule">static_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="5">  <span class="token punctuation">-</span> <span class="token key atrule">targets</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'localhost:9100'</span><span class="token punctuation">]</span>
+</span><span class="code-line line-number" line="6"><span class="token punctuation">...</span>
+</span></code><div onclick="copied(this)" data-code="...
+scrape_configs:
+- job_name: node
+  static_configs:
+  - targets: [&#x27;localhost:9100&#x27;]
+...
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <p>Restart prometheus service for apply new job.</p>
     <hr>
-    <h2 id="alertmanager"><a class="anchor" aria-hidden="true" tabindex="-1" href="#alertmanager"><span class="octicon octicon-link"></span></a>Alertmanager</h2>
+    <h3 id="alertmanager"><a class="anchor" aria-hidden="true" tabindex="-1" href="#alertmanager"><span class="octicon octicon-link"></span></a>Alertmanager</h3>
     <p>
       <img src="images/alertmanager.png" alt="alertmanager">
     </p>
@@ -299,7 +488,11 @@ cd kubernetes-observability || exit
     <hr>
     <h2 id="grafana"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana"><span class="octicon octicon-link"></span></a>Grafana</h2>
     <hr>
-    <h2 id="grafana-loki"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana-loki"><span class="octicon octicon-link"></span></a>Grafana Loki</h2>
+    <h3 id="grafana-loki"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana-loki"><span class="octicon octicon-link"></span></a>Grafana Loki</h3>
+    <hr>
+    <h3 id="grafana-tempo"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana-tempo"><span class="octicon octicon-link"></span></a>Grafana Tempo</h3>
+    <hr>
+    <h3 id="grafana-alloy"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana-alloy"><span class="octicon octicon-link"></span></a>Grafana Alloy</h3>
     <hr><!-- CONTRIBUTING -->
     <h2 id="contributing"><a class="anchor" aria-hidden="true" tabindex="-1" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
     <p>Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are <strong>greatly appreciated</strong>.</p>
@@ -331,6 +524,8 @@ cd kubernetes-observability || exit
     <h2 id="acknowledgments"><a class="anchor" aria-hidden="true" tabindex="-1" href="#acknowledgments"><span class="octicon octicon-link"></span></a>Acknowledgments</h2>
     <ul>
       <li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus</a></li>
+      <li><a href="https://github.com/prometheus/node_exporter">Node Exporter</a></li>
+      <li><a href="https://github.com/prometheus/prometheus/wiki/Default-port-allocations">Prometheus Default port allocations</a></li>
       <li><a href="https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/">Kube Prometheus Stack</a></li>
     </ul>
     <p align="right">(<a href="#readme-top">back to top</a>)</p><!-- MARKDOWN LINKS & IMAGES --><!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
