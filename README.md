@@ -154,6 +154,8 @@ I publish some exemples for use in this repository.
 * [ ] Alertmanager
 * [ ] Grafana
 * [ ] Grafana Loki
+* [ ] Grafana Tempo
+* [ ] Grafana Alloy
 * [ ] Others tools
 
 See the [open issues](https://github.com/marcossilvestrini/kubernetes-observability/issues) for a full list of proposed features (and known issues).
