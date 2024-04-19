@@ -83,7 +83,7 @@
 
 ## プロジェクトについて
 
-このプロジェクトは、Kubernetes の可観測性について学習するためのものです。
+このプロジェクトは、Kubernetes の可観測性について学ぶためのものです。
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -113,14 +113,14 @@
 -   プロメテウス
 -   アラートマネージャー
 -   グラファナ
--   グラファナ ロキ
+-   グラファナ・ロキ
 
 * * *
 
 ### 前提条件
 
 -   Linux システムアップ
--   Cluster Kubernetes Up
+-   クラスタ Kubernetes アップ
 -   ギット
 
 * * *
@@ -157,6 +157,8 @@ cd kubernetes-observability || exit
 -   [ ] アラートマネージャー
 -   [ ] グラファナ
 -   [ ] グラファナ ロキ
+-   [ ] グラファナ時間
+-   [ ] グラファナ合金
 -   [ ] その他のツール
 
 を参照してください。[未解決の問題](https://github.com/marcossilvestrini/kubernetes-observability/issues)提案された機能 (および既知の問題) の完全なリストについては、こちらをご覧ください。
@@ -179,7 +181,7 @@ Prometheus エコシステムは複数のコンポーネントで構成されて
 -   アプリケーション コードをインストルメントするためのクライアント ライブラリ
 -   短期間のジョブをサポートするためのプッシュ ゲートウェイ
 -   HAProxy、StatsD、Graphite などのサービスの専用エクスポーター。
--   アラートを処理するためのアラートマネージャー
+-   アラートを処理するアラートマネージャー
 -   各種サポートツール
 
 Prometheus の詳細については、公式ドキュメントにアクセスしてください。  
@@ -192,7 +194,7 @@ Prometheus の詳細については、公式ドキュメントにアクセスし
 ![alertmanager](images/alertmanager.png)
 
 Alertmanager の詳細については、公式ドキュメントにアクセスしてください。  
-<https://github.com/prometheus/alertmanager>
+[ｈっｔｐｓ：／／ぎてゅｂ。こｍ／ｐろめてぇうｓ／あぇｒｔまなげｒ](https://github.com/prometheus/alertmanager)
 
 * * *
 
