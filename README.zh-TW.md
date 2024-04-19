@@ -157,6 +157,8 @@ cd kubernetes-observability || exit
 -   [ ] 警報管理器
 -   [ ] 格拉法納
 -   [ ] 格拉法娜·洛基
+-   [ ] 格拉法納時間
+-   [ ] 格拉法納合金
 -   [ ] 其他工具
 
 請參閱[開放式問題](https://github.com/marcossilvestrini/kubernetes-observability/issues)取得建議功能（和已知問題）的完整清單。

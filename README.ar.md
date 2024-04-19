@@ -157,6 +157,8 @@ cd kubernetes-observability || exit
 -   [ ] مدير التنبيه
 -   [ ] جرافانا
 -   [ ] جرافانا لوكي
+-   [ ] توقيت جرافانا
+-   [ ] سبائك جرافانا
 -   [ ] أدوات أخرى
 
 انظر[القضايا المفتوحة](https://github.com/marcossilvestrini/kubernetes-observability/issues)للحصول على قائمة كاملة بالميزات المقترحة (والمشكلات المعروفة).
@@ -215,9 +217,9 @@ Prometheus عبارة عن مجموعة أدوات مراقبة وتنبيه ل�
 
 1.  شوكة المشروع
 2.  قم بإنشاء فرع الميزات الخاص بك (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+3.  تنفيذ التغييرات (`git commit -m 'Add some AmazingFeature'`)
 4.  ادفع إلى الفرع (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+5.  افتح طلب السحب
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

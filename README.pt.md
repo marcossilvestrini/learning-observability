@@ -157,6 +157,8 @@ Publico alguns exemplos para uso neste repositório.
 -   [ ] Gerenciador de alertas
 -   [ ] Grafana
 -   [ ] Graffana Loki
+-   [ ] Grafana Tempo
+-   [ ] Liga Grafana
 -   [ ] Outras ferramentas
 
 Veja o[questões em aberto](https://github.com/marcossilvestrini/kubernetes-observability/issues)para obter uma lista completa dos recursos propostos (e problemas conhecidos).

@@ -22,7 +22,8 @@
 
 [![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
-[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
+[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 
@@ -81,7 +82,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## À propos du projet
+## About The Project
 
 Ce projet vise à en apprendre davantage sur l'observabilité de Kubernetes.
 
@@ -157,6 +158,8 @@ Je publie quelques exemples à utiliser dans ce référentiel.
 -   [ ] Gestionnaire d'alertes
 -   [ ] Grafana
 -   [ ] Graffana Loki
+-   [ ] Heure de Grafana
+-   [ ] Alliage Grafana
 -   [ ] Autres outils
 
 Voir le[questions ouvertes](https://github.com/marcossilvestrini/kubernetes-observability/issues)pour une liste complète des fonctionnalités proposées (et des problèmes connus).
