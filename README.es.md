@@ -114,6 +114,8 @@ Algunas herramientas para aprender:
 -   Administrador de alertas
 -   Grafana
 -   Graffana Loki
+-   Hora de Grafana
+-   Aleación de Grafana
 
 * * *
 
@@ -182,14 +184,159 @@ El ecosistema Prometheus consta de múltiples componentes, muchos de los cuales 
 -   una puerta de enlace push para respaldar trabajos de corta duración
 -   exportadores de propósito especial para servicios como HAProxy, StatsD, Graphite, etc.
 -   un administrador de alertas para manejar alertas
--   various support tools
+-   varias herramientas de apoyo
 
 Para más información sobre Prometheus acceda a la documentación oficial:  
 <https://prometheus.io/docs/introduction/overview/>
 
+### Instalar Prometeo
+
+```sh
+# Download files - https://prometheus.io/download/
+wget https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+
+# Extract files
+tar xvfz prometheus-*.tar.gz
+rm  prometheus-*.tar.gz
+cd prometheus-*
+
+# Check version
+./prometheus --version
+```
+
+### Configurar Prometeo
+
+```sh
+vim prometheus.yaml
+```
+
+```yaml
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+```
+
+### Iniciar Prometeo
+
+```sh
+# Start
+./prometheus --config.file=prometheus.yml
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
+```
+
+### Puntos finales importantes
+
+```sh
+http://localhost:9090 # all endpoints
+http://localhost:9090/graph # PromQL expressions
+http://localhost:9090/metrics # metrics
+```
+
+### Usando el navegador de expresiones
+
+Puede utilizar la expresión en modo Tabla o Gráfico.
+
+Abra la página http&#x3A;//localhost:9090
+
+```sh
+# Check all http metrics
+promhttp_metric_handler_requests_total
+
+# Check http metrics with http status code 200
+promhttp_metric_handler_requests_total{code="200"}
+
+# Count http metrics
+count(promhttp_metric_handler_requests_total)
+
+# Rate function
+rate(promhttp_metric_handler_requests_total{code="200"}[1m])
+```
+
+### Exportadores de Prometeo
+
+#### Exportador de nodos
+
+Prometheus Node Exporter expone una amplia variedad de métricas relacionadas con el hardware y el kernel.
+
+##### Exportador de nodos de instalación
+
+```sh
+# Download - https://prometheus.io/download#node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+```
+
+##### Iniciar exportador de nodos
+
+```sh
+# Start
+./node_exporter
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start node_exporter --name node_exporter
+```
+
+##### Exportador de nodos de terminales
+
+```sh
+# Access metrics
+http://localhost:9100/metrics
+```
+
+##### Configurar el exportador de nodos
+
+Para habilitar la chatarra para el exportador de nodos, puede configurar Prometheus.
+
+```sh
+# Edit prometheus file and add job node
+vim prometheus.yaml
+```
+
+```yaml
+...
+scrape_configs:
+- job_name: node
+  static_configs:
+  - targets: ['localhost:9100']
+...
+```
+
+Reinicie el servicio Prometheus para solicitar un nuevo trabajo.
+
 * * *
 
-## Administrador de alertas
+### Administrador de alertas
 
 ![alertmanager](images/alertmanager.png)
 
@@ -202,7 +349,15 @@ Para más información sobre Alertmanager acceda a la documentación oficial:
 
 * * *
 
-## Grafana Loki
+### Graffana Loki
+
+* * *
+
+### Hora de Grafana
+
+* * *
+
+### Aleación de Grafana
 
 * * *
 
@@ -242,7 +397,7 @@ Distribuido bajo la licencia MIT. Ver[`LICENSE`](LICENSE)para más información.
 -   Marcos Silvestrini -[@mrsilvestrini](https://twitter.com/mrsilvestrini)
 -   [marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)
 
-Project Link: <https://github.com/marcossilvestrini/kubernetes-observability>
+Enlace del proyecto:<https://github.com/marcossilvestrini/kubernetes-observability>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -253,6 +408,8 @@ Project Link: <https://github.com/marcossilvestrini/kubernetes-observability>
 ## Expresiones de gratitud
 
 -   [Prometeo](https://prometheus.io/docs/introduction/overview/)
+-   [Exportador de nodos](https://github.com/prometheus/node_exporter)
+-   [Asignaciones de puertos predeterminadas de Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Pila de Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
