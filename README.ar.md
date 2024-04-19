@@ -104,7 +104,7 @@
 
 <!-- GETTING STARTED -->
 
-## ابدء
+## Getting Started
 
 يهدف هذا المشروع إلى البدء باستخدام أدوات مراقبة kubernetes وأفضل الممارسات.
 
@@ -114,6 +114,8 @@
 -   مدير التنبيه
 -   جرافانا
 -   جرافانا لوكي
+-   توقيت غرافانا
+-   سبائك جرافانا
 
 * * *
 
@@ -157,7 +159,7 @@ cd kubernetes-observability || exit
 -   [ ] مدير التنبيه
 -   [ ] جرافانا
 -   [ ] جرافانا لوكي
--   [ ] توقيت جرافانا
+-   [ ] توقيت غرافانا
 -   [ ] سبائك جرافانا
 -   [ ] أدوات أخرى
 
@@ -187,9 +189,154 @@ Prometheus عبارة عن مجموعة أدوات مراقبة وتنبيه ل�
 لمزيد من المعلومات حول الوصول إلى الوثائق الرسمية لبروميثيوس:  
 [هتبص://بروميثيوس.إيه/دكس/انطردكت/فرفو/](https://prometheus.io/docs/introduction/overview/)
 
+### تثبيت بروميثيوس
+
+```sh
+# Download files - https://prometheus.io/download/
+wget https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+
+# Extract files
+tar xvfz prometheus-*.tar.gz
+rm  prometheus-*.tar.gz
+cd prometheus-*
+
+# Check version
+./prometheus --version
+```
+
+### تكوين بروميثيوس
+
+```sh
+vim prometheus.yaml
+```
+
+```yaml
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+```
+
+### ابدأ بروميثيوس
+
+```sh
+# Start
+./prometheus --config.file=prometheus.yml
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
+```
+
+### نقاط النهاية الهامة
+
+```sh
+http://localhost:9090 # all endpoints
+http://localhost:9090/graph # PromQL expressions
+http://localhost:9090/metrics # metrics
+```
+
+### باستخدام متصفح التعبير
+
+يمكنك استخدام التعبير في وضع الجدول أو الرسم البياني.
+
+افتح الصفحة http&#x3A;//localhost:9090
+
+```sh
+# Check all http metrics
+promhttp_metric_handler_requests_total
+
+# Check http metrics with http status code 200
+promhttp_metric_handler_requests_total{code="200"}
+
+# Count http metrics
+count(promhttp_metric_handler_requests_total)
+
+# Rate function
+rate(promhttp_metric_handler_requests_total{code="200"}[1m])
+```
+
+### المصدرين بروميثيوس
+
+#### مصدر العقدة
+
+يعرض Prometheus Node Exporter مجموعة واسعة من المقاييس المتعلقة بالأجهزة والنواة.
+
+##### تثبيت مصدر العقدة
+
+```sh
+# Download - https://prometheus.io/download#node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+```
+
+##### بدء تشغيل مُصدِّر العقدة
+
+```sh
+# Start
+./node_exporter
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start node_exporter --name node_exporter
+```
+
+##### مصدر عقدة نقاط النهاية
+
+```sh
+# Access metrics
+http://localhost:9100/metrics
+```
+
+##### تكوين مصدر العقدة
+
+For enable scrap for node exporter, you can configure prometheus.
+
+```sh
+# Edit prometheus file and add job node
+vim prometheus.yaml
+```
+
+```yaml
+...
+scrape_configs:
+- job_name: node
+  static_configs:
+  - targets: ['localhost:9100']
+...
+```
+
+أعد تشغيل خدمة بروميثيوس لتطبيق وظيفة جديدة.
+
 * * *
 
-## مدير التنبيه
+### مدير التنبيه
 
 ![alertmanager](images/alertmanager.png)
 
@@ -202,7 +349,15 @@ Prometheus عبارة عن مجموعة أدوات مراقبة وتنبيه ل�
 
 * * *
 
-## جرافانا لوكي
+### جرافانا لوكي
+
+* * *
+
+### توقيت غرافانا
+
+* * *
+
+### سبائك جرافانا
 
 * * *
 
@@ -242,7 +397,7 @@ Prometheus عبارة عن مجموعة أدوات مراقبة وتنبيه ل�
 -   ماركوس سيلفستريني -[@mrsilvestrini](https://twitter.com/mrsilvestrini)
 -   [ماركوس.سيلفسترن@جميل.كوم](mailto:marcos.silvestrini@gmail.com)
 
-رابط المشروع:[هتبص://جذب.كوم/ماركسيلفصترن/كوبرنتصبصرفبلت](https://github.com/marcossilvestrini/kubernetes-observability)
+Project Link: [هتبص://جذب.كوم/ماركسيلفصترن/كوبرنتصبصرفبلت](https://github.com/marcossilvestrini/kubernetes-observability)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -250,9 +405,11 @@ Prometheus عبارة عن مجموعة أدوات مراقبة وتنبيه ل�
 
 <!-- ACKNOWLEDGMENTS -->
 
-## شكر وتقدير
+## Acknowledgments
 
 -   [بروميثيوس](https://prometheus.io/docs/introduction/overview/)
+-   [مصدر العقدة](https://github.com/prometheus/node_exporter)
+-   [بروميثيوس تخصيصات المنفذ الافتراضي](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [كوبي بروميثيوس ستاك](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
