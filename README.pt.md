@@ -114,6 +114,8 @@ Algumas ferramentas para aprender:
 -   Gerenciador de alertas
 -   Grafana
 -   Graffana Loki
+-   Grafana Tempo
+-   Liga Grafana
 
 * * *
 
@@ -187,9 +189,154 @@ O ecossistema Prometheus consiste em vários componentes, muitos dos quais são 
 Para mais informações sobre o Prometheus acesse a documentação oficial:  
 <https://prometheus.io/docs/introduction/overview/>
 
+### Instale o Prometheus
+
+```sh
+# Download files - https://prometheus.io/download/
+wget https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
+
+# Extract files
+tar xvfz prometheus-*.tar.gz
+rm  prometheus-*.tar.gz
+cd prometheus-*
+
+# Check version
+./prometheus --version
+```
+
+### Configurar o Prometheus
+
+```sh
+vim prometheus.yaml
+```
+
+```yaml
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+```
+
+### Inicie o Prometeu
+
+```sh
+# Start
+./prometheus --config.file=prometheus.yml
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
+```
+
+### Pontos finais importantes
+
+```sh
+http://localhost:9090 # all endpoints
+http://localhost:9090/graph # PromQL expressions
+http://localhost:9090/metrics # metrics
+```
+
+### Usando o navegador de expressões
+
+Você pode usar a expressão no modo Tabela ou Gráfico.
+
+Abra a página http&#x3A;//localhost:9090
+
+```sh
+# Check all http metrics
+promhttp_metric_handler_requests_total
+
+# Check http metrics with http status code 200
+promhttp_metric_handler_requests_total{code="200"}
+
+# Count http metrics
+count(promhttp_metric_handler_requests_total)
+
+# Rate function
+rate(promhttp_metric_handler_requests_total{code="200"}[1m])
+```
+
+### Prometheus Exportadores
+
+#### Exportador de nós
+
+O Prometheus Node Exporter expõe uma ampla variedade de métricas relacionadas a hardware e kernel.
+
+##### Exportador de nó de instalação
+
+```sh
+# Download - https://prometheus.io/download#node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+```
+
+##### Iniciar exportador de nós
+
+```sh
+# Start
+./node_exporter
+
+# Start with PM2 - npm install pm2@latest -g
+pm2 start node_exporter --name node_exporter
+```
+
+##### Exportador de nós de endpoints
+
+```sh
+# Access metrics
+http://localhost:9100/metrics
+```
+
+##### Configurar exportador de nós
+
+Para ativar o scrap para o exportador de nós, você pode configurar o prometheus.
+
+```sh
+# Edit prometheus file and add job node
+vim prometheus.yaml
+```
+
+```yaml
+...
+scrape_configs:
+- job_name: node
+  static_configs:
+  - targets: ['localhost:9100']
+...
+```
+
+Reinicie o serviço Prometheus para aplicar um novo trabalho.
+
 * * *
 
-## Gerenciador de alertas
+### Gerenciador de alertas
 
 ![alertmanager](images/alertmanager.png)
 
@@ -202,7 +349,15 @@ Para mais informações sobre o Alertmanager acesse a documentação oficial:
 
 * * *
 
-## Graffana Loki
+### Graffana Loki
+
+* * *
+
+### Grafana Tempo
+
+* * *
+
+### Liga Grafana
 
 * * *
 
@@ -252,7 +407,9 @@ Link do projeto:<https://github.com/marcossilvestrini/kubernetes-observability>
 
 ## Agradecimentos
 
--   [Prometeu](https://prometheus.io/docs/introduction/overview/)
+-   [Prometheus](https://prometheus.io/docs/introduction/overview/)
+-   [Exportador de nós](https://github.com/prometheus/node_exporter)
+-   [Alocações de porta padrão do Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Pilha Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
