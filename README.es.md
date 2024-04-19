@@ -157,6 +157,8 @@ Publico algunos ejemplos para su uso en este repositorio.
 -   [ ] Administrador de alertas
 -   [ ] Grafana
 -   [ ] Graffana Loki
+-   [ ] Hora de Grafana
+-   [ ] Aleación de Grafana
 -   [ ] Otras herramientas
 
 Ver el[problemas abiertos](https://github.com/marcossilvestrini/kubernetes-observability/issues)para obtener una lista completa de las características propuestas (y problemas conocidos).
@@ -180,7 +182,7 @@ El ecosistema Prometheus consta de múltiples componentes, muchos de los cuales 
 -   una puerta de enlace push para respaldar trabajos de corta duración
 -   exportadores de propósito especial para servicios como HAProxy, StatsD, Graphite, etc.
 -   un administrador de alertas para manejar alertas
--   varias herramientas de apoyo
+-   various support tools
 
 Para más información sobre Prometheus acceda a la documentación oficial:  
 <https://prometheus.io/docs/introduction/overview/>
@@ -200,7 +202,7 @@ Para más información sobre Alertmanager acceda a la documentación oficial:
 
 * * *
 
-## Graffana Loki
+## Grafana Loki
 
 * * *
 
@@ -240,7 +242,7 @@ Distribuido bajo la licencia MIT. Ver[`LICENSE`](LICENSE)para más información.
 -   Marcos Silvestrini -[@mrsilvestrini](https://twitter.com/mrsilvestrini)
 -   [marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)
 
-Enlace del proyecto:<https://github.com/marcossilvestrini/kubernetes-observability>
+Project Link: <https://github.com/marcossilvestrini/kubernetes-observability>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
