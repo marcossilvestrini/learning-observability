@@ -186,6 +186,20 @@ L'écosystème Prometheus se compose de plusieurs composants, dont beaucoup sont
 -   un gestionnaire d'alertes pour gérer les alertes
 -   divers outils d'assistance
 
+### Noms et étiquettes des métriques
+
+**Example metric name:**
+
+```yaml
+<metric name>{<label name>=<label value>, ...}
+```
+
+**Exemple de nom de métrique avec des étiquettes :**
+
+```yaml
+api_http_requests_total{method="POST", handler="/messages"}
+```
+
 Pour plus d’informations sur Prometheus, accédez à la documentation officielle :  
 <https://prometheus.io/docs/introduction/overview/>
 
@@ -205,6 +219,8 @@ cd prometheus-*
 ```
 
 ### Configurer Prometheus
+
+Voir mon fichier de configuration[prometheus.yaml](./prometheus/configs/prometheus.yml)
 
 ```sh
 vim prometheus.yaml
@@ -258,6 +274,7 @@ pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
 http://localhost:9090 # all endpoints
 http://localhost:9090/graph # PromQL expressions
 http://localhost:9090/metrics # metrics
+http://localhost:9090/targets # scrape_configs jobs
 ```
 
 ### Utilisation du navigateur d'expressions
@@ -281,6 +298,9 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
 ### Exportateurs de Prométhée
+
+Un exportateur est un binaire exécuté parallèlement à l’application à partir de laquelle vous souhaitez obtenir des métriques.  
+L'exportateur expose les métriques Prometheus, généralement en convertissant les métriques exposées dans un format non Prometheus dans un format pris en charge par Prometheus.
 
 #### Exportateur de nœuds
 
@@ -336,12 +356,75 @@ Redémarrez le service Prometheus pour appliquer un nouvel emploi.
 
 * * *
 
+### Passerelle Push
+
+Prometheus Pushgateway est un service intermédiaire qui permet aux tâches éphémères et par lots d'exposer leurs métriques à Prometheus.  
+Étant donné que ces types de tâches n’existent peut-être pas assez longtemps pour être supprimés, ils peuvent plutôt transmettre leurs métriques à un Pushgateway.  
+Le Pushgateway agit alors comme un magasin de métriques temporaire que Prometheus récupère.
+
+Cette configuration est particulièrement utile pour capturer le résultat d'une tâche qui ne s'exécute pas en continu, comme une tâche par lots dans un système CI ou un script de sauvegarde s'exécutant à une heure planifiée.  
+Cela simplifie la surveillance de ces types de tâches sans avoir besoin d'exécuter une instance Prometheus de longue durée qui pourrait survivre aux tâches elles-mêmes.
+
+#### Installer PushGateway
+
+```sh
+# Download 
+wget -q https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz pushgateway-*.*-amd64.tar.gz
+cd pushgateway-*.*-amd64
+
+# Start 
+# Start with PM2 - npm install pm2@latest -g
+pm2 start pushgateway --name pushgateway -- --web.listen-address "192.168.0.130:9091"
+```
+
+#### Configurer PushGateway
+
+```sh
+# Edit prometheus file and add job pushgateway
+vim prometheus.yaml
+```
+
+```yaml
+scrape_configs:
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['192.168.0.130:9091'] # prometheus server for scraping
+```
+
+```sh
+# Restart prometheus
+
+# restart with pm2
+pm2 restart prometheus-server
+```
+
+#### Créer des métriques pour tester pushgateway
+
+```sh
+echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
+echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
+echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
+curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+```
+
+#### Utilisez PromQL pour rechercher la cible pushgateway des métriques
+
+![promql-pushgateway](images/promql-pushgateway.png)
+
+* * *
+
 ### Gestionnaire d'alertes
 
 ![alertmanager](images/alertmanager.png)
 
 Pour plus d’informations sur Alertmanager, accédez à la documentation officielle :  
 <https://github.com/prometheus/alertmanager>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 * * *
 
@@ -358,6 +441,8 @@ Pour plus d’informations sur Alertmanager, accédez à la documentation offici
 * * *
 
 ### Alliage Grafana
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 * * *
 
@@ -384,7 +469,7 @@ N'oubliez pas de donner une étoile au projet ! Merci encore!
 
 ## Licence
 
-Distribué sous licence MIT. Voir[`LICENSE`](LICENSE)pour plus d'informations.
+Distributed under the MIT License. See [`LICENSE`](LICENSE)pour plus d'informations.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -410,7 +495,8 @@ Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
 -   [Prométhée](https://prometheus.io/docs/introduction/overview/)
 -   [Exportateur de nœuds](https://github.com/prometheus/node_exporter)
 -   [Allocations de ports par défaut de Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
--   [Pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [Passerelle Push](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [Article sur la pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
