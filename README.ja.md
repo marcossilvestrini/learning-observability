@@ -186,6 +186,20 @@ Prometheus エコシステムは複数のコンポーネントで構成されて
 -   アラートを処理するためのアラートマネージャー
 -   各種サポートツール
 
+### メトリック名とラベル
+
+**メトリクス名の例:**
+
+```yaml
+<metric name>{<label name>=<label value>, ...}
+```
+
+**ラベル付きのメトリック名の例:**
+
+```yaml
+api_http_requests_total{method="POST", handler="/messages"}
+```
+
 Prometheus の詳細については、公式ドキュメントにアクセスしてください。  
 [ｈっｔｐｓ：／／ｐろめてぇうｓ。いお／どｃｓ／いんｔろづｃちおん／おゔぇｒゔぃえｗ／](https://prometheus.io/docs/introduction/overview/)
 
@@ -205,6 +219,8 @@ cd prometheus-*
 ```
 
 ### プロメテウスの構成
+
+私の設定ファイルを参照してください[プロメテウス.yaml](./prometheus/configs/prometheus.yml)
 
 ```sh
 vim prometheus.yaml
@@ -258,6 +274,7 @@ pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
 http://localhost:9090 # all endpoints
 http://localhost:9090/graph # PromQL expressions
 http://localhost:9090/metrics # metrics
+http://localhost:9090/targets # scrape_configs jobs
 ```
 
 ### 式ブラウザの使用
@@ -281,6 +298,9 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
 ### プロメテウスエクスポーター
+
+エクスポータは、メトリクスを取得するアプリケーションと一緒に実行されるバイナリです。  
+エクスポータは、通常、非 Prometheus 形式で公開されているメトリクスを Prometheus がサポートする形式に変換することによって、Prometheus メトリクスを公開します。
 
 #### ノードエクスポーター
 
@@ -336,12 +356,75 @@ scrape_configs:
 
 * * *
 
+### プッシュゲートウェイ
+
+Prometheus Pushgateway は、一時ジョブやバッチ ジョブがメトリクスを Prometheus に公開できるようにする中間サービスです。  
+この種のジョブはスクレイピングできるほど長く存在しない可能性があるため、代わりにメトリクスを Pushgateway にプッシュできます。  
+Pushgateway は、Prometheus が収集する一時的なメトリクス ストアとして機能します。
+
+この設定は、CI システムのバッチ ジョブや、スケジュールされた時間に実行されるバックアップ スクリプトなど、継続的に実行されないジョブの結果を取得する場合に特に役立ちます。  
+これにより、ジョブ自体よりも存続する可能性がある長寿命の Prometheus インスタンスを実行する必要がなく、この種のジョブの監視が簡素化されます。
+
+#### プッシュゲートウェイのインストール
+
+```sh
+# Download 
+wget -q https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz pushgateway-*.*-amd64.tar.gz
+cd pushgateway-*.*-amd64
+
+# Start 
+# Start with PM2 - npm install pm2@latest -g
+pm2 start pushgateway --name pushgateway -- --web.listen-address "192.168.0.130:9091"
+```
+
+#### プッシュゲートウェイの構成
+
+```sh
+# Edit prometheus file and add job pushgateway
+vim prometheus.yaml
+```
+
+```yaml
+scrape_configs:
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['192.168.0.130:9091'] # prometheus server for scraping
+```
+
+```sh
+# Restart prometheus
+
+# restart with pm2
+pm2 restart prometheus-server
+```
+
+#### テストプッシュゲートウェイのメトリクスを作成する
+
+```sh
+echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
+echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
+echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
+curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+```
+
+#### PromQL を使用してメトリクスのプッシュゲートウェイ ターゲットを検索する
+
+![promql-pushgateway](images/promql-pushgateway.png)
+
+* * *
+
 ### アラートマネージャー
 
 ![alertmanager](images/alertmanager.png)
 
 Alertmanager の詳細については、公式ドキュメントにアクセスしてください。  
 [ｈっｔｐｓ：／／ぎてゅｂ。こｍ／ｐろめてぇうｓ／あぇｒｔまなげｒ](https://github.com/prometheus/alertmanager)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 * * *
 
@@ -359,13 +442,15 @@ Alertmanager の詳細については、公式ドキュメントにアクセス�
 
 ### グラファナ合金
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 * * *
 
 <!-- CONTRIBUTING -->
 
 ## 貢献する
 
-オープンソース コミュニティは、貢献によって、学び、インスピレーションを与え、創造するための素晴らしい場所になります。あなたが行う貢献はすべて、**とても感謝しています**。
+オープンソース コミュニティを学び、インスピレーションを与え、創造するための素晴らしい場所にするのは、貢献のおかげです。あなたが行う貢献はすべて、**とても感謝しています**。
 
 これを改善するための提案がある場合は、リポジトリをフォークしてプル リクエストを作成してください。 「拡張」タグを付けて問題を開くこともできます。
 プロジェクトにスターを付けることを忘れないでください。再度、感謝します！
@@ -410,7 +495,8 @@ MIT ライセンスに基づいて配布されます。見る[`LICENSE`](LICENSE
 -   [プロメテウス](https://prometheus.io/docs/introduction/overview/)
 -   [ノードエクスポーター](https://github.com/prometheus/node_exporter)
 -   [Prometheus のデフォルトのポート割り当て](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
--   [キューブプロメテウス スタック](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [プッシュゲートウェイ](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [Kube Prometheus スタックの記事](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
