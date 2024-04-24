@@ -183,6 +183,20 @@ The Prometheus ecosystem consists of multiple components, many of which are opti
 * an alertmanager to handle alerts
 * various support tools
 
+### Metric names and labels
+
+**Example metric name:**
+
+```yaml
+<metric name>{<label name>=<label value>, ...}
+```
+
+**Example metric name with labels:**
+
+```yaml
+api_http_requests_total{method="POST", handler="/messages"}
+```
+
 For more information about Prometheus access official documentation:  
 <https://prometheus.io/docs/introduction/overview/>
 
@@ -202,6 +216,8 @@ cd prometheus-*
 ```
 
 ### Configure Prometheus
+
+See my  configuration file [prometheus.yaml](./prometheus/configs/prometheus.yml)
 
 ```sh
 vim prometheus.yaml
@@ -255,6 +271,7 @@ pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
 http://localhost:9090 # all endpoints
 http://localhost:9090/graph # PromQL expressions
 http://localhost:9090/metrics # metrics
+http://localhost:9090/targets # scrape_configs jobs
 ```
 
 ### Using the expression browser
@@ -278,6 +295,9 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
 ### Prometheus Exporters
+
+An exporter is a binary running alongside the application you want to obtain metrics from.  
+The exporter exposes Prometheus metrics, commonly by converting metrics that are exposed in a non-Prometheus format into a format that Prometheus supports.
 
 #### Node Exporter
 
@@ -333,12 +353,75 @@ Restart prometheus service for apply new job.
 
 ---
 
+### PushGateway
+
+The Prometheus Pushgateway is an intermediary service which allows ephemeral and batch jobs to expose their metrics to Prometheus.  
+Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway.  
+The Pushgateway then acts as a temporary metrics store which Prometheus scrapes.
+
+This setup is particularly useful for capturing the outcome of a job that does not run continuously, such as a batch job in a CI system, or a backup script running at a scheduled time.  
+It simplifies monitoring these kinds of jobs without needing to run a long-lived Prometheus instance that might outlive the jobs themselves.
+
+#### Install PushGateway
+
+```sh
+# Download 
+wget -q https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz pushgateway-*.*-amd64.tar.gz
+cd pushgateway-*.*-amd64
+
+# Start 
+# Start with PM2 - npm install pm2@latest -g
+pm2 start pushgateway --name pushgateway -- --web.listen-address "192.168.0.130:9091"
+```
+
+#### Configure PushGateway
+
+```sh
+# Edit prometheus file and add job pushgateway
+vim prometheus.yaml
+```
+
+```yaml
+scrape_configs:
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['192.168.0.130:9091'] # prometheus server for scraping
+```
+
+```sh
+# Restart prometheus
+
+# restart with pm2
+pm2 restart prometheus-server
+```
+
+#### Create metrics for test pushgateway
+
+```sh
+echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
+echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
+echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
+curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+```
+
+#### Use PromQL for find metrics pushgateway target
+
+![promql-pushgateway](images/promql-pushgateway.png)
+
+---
+
 ### Alertmanager
 
 ![alertmanager](images/alertmanager.png)
 
 For more information about Alertmanager access official documentation:  
 <https://github.com/prometheus/alertmanager>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
@@ -355,6 +438,8 @@ For more information about Alertmanager access official documentation:
 ---
 
 ### Grafana Alloy
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
@@ -403,7 +488,8 @@ Project Link: [https://github.com/marcossilvestrini/kubernetes-observability](ht
 * [Prometheus](https://prometheus.io/docs/introduction/overview/)
 * [Node Exporter](https://github.com/prometheus/node_exporter)
 * [Prometheus Default port allocations](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
-* [Kube Prometheus Stack](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+* [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
+* [Kube Prometheus Stack Article](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
