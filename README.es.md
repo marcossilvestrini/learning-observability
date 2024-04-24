@@ -20,7 +20,8 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-[![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
+[![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)
+[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
 [![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -83,7 +84,7 @@
 
 ## Sobre el proyecto
 
-Este proyecto es para aprender sobre la observabilidad de Kubernetes.
+This project is for learning about kubernetes observability.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -180,11 +181,25 @@ Desde su inicio en 2012, muchas empresas y organizaciones han adoptado Prometheu
 El ecosistema Prometheus consta de múltiples componentes, muchos de los cuales son opcionales:
 
 -   el servidor principal de Prometheus que extrae y almacena datos de series de tiempo
--   Bibliotecas cliente para instrumentar el código de la aplicación.
+-   bibliotecas cliente para instrumentar el código de la aplicación
 -   una puerta de enlace push para respaldar trabajos de corta duración
 -   exportadores de propósito especial para servicios como HAProxy, StatsD, Graphite, etc.
 -   un administrador de alertas para manejar alertas
 -   varias herramientas de apoyo
+
+### Nombres y etiquetas de métricas
+
+**Nombre de métrica de ejemplo:**
+
+```yaml
+<metric name>{<label name>=<label value>, ...}
+```
+
+**Ejemplo de nombre de métrica con etiquetas:**
+
+```yaml
+api_http_requests_total{method="POST", handler="/messages"}
+```
 
 Para más información sobre Prometheus acceda a la documentación oficial:  
 <https://prometheus.io/docs/introduction/overview/>
@@ -205,6 +220,8 @@ cd prometheus-*
 ```
 
 ### Configurar Prometeo
+
+Ver mi archivo de configuración[prometheus.yaml](./prometheus/configs/prometheus.yml)
 
 ```sh
 vim prometheus.yaml
@@ -258,6 +275,7 @@ pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
 http://localhost:9090 # all endpoints
 http://localhost:9090/graph # PromQL expressions
 http://localhost:9090/metrics # metrics
+http://localhost:9090/targets # scrape_configs jobs
 ```
 
 ### Usando el navegador de expresiones
@@ -281,6 +299,9 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
 ### Exportadores de Prometeo
+
+Un exportador es un binario que se ejecuta junto con la aplicación de la que desea obtener métricas.  
+El exportador expone las métricas de Prometheus, normalmente convirtiendo las métricas que se exponen en un formato que no es de Prometheus a un formato compatible con Prometheus.
 
 #### Exportador de nodos
 
@@ -336,12 +357,75 @@ Reinicie el servicio Prometheus para solicitar un nuevo trabajo.
 
 * * *
 
+### PushGateway
+
+Prometheus Pushgateway es un servicio intermediario que permite que trabajos efímeros y por lotes expongan sus métricas a Prometheus.  
+Dado que es posible que este tipo de trabajos no existan el tiempo suficiente para ser eliminados, en su lugar pueden llevar sus métricas a un Pushgateway.  
+Luego, Pushgateway actúa como un almacén de métricas temporal que Prometheus extrae.
+
+Esta configuración es particularmente útil para capturar el resultado de un trabajo que no se ejecuta continuamente, como un trabajo por lotes en un sistema CI o un script de respaldo que se ejecuta a una hora programada.  
+Simplifica el monitoreo de este tipo de trabajos sin necesidad de ejecutar una instancia de Prometheus de larga duración que podría sobrevivir a los trabajos en sí.
+
+#### Instalar PushGateway
+
+```sh
+# Download 
+wget -q https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz pushgateway-*.*-amd64.tar.gz
+cd pushgateway-*.*-amd64
+
+# Start 
+# Start with PM2 - npm install pm2@latest -g
+pm2 start pushgateway --name pushgateway -- --web.listen-address "192.168.0.130:9091"
+```
+
+#### Configurar PushGateway
+
+```sh
+# Edit prometheus file and add job pushgateway
+vim prometheus.yaml
+```
+
+```yaml
+scrape_configs:
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['192.168.0.130:9091'] # prometheus server for scraping
+```
+
+```sh
+# Restart prometheus
+
+# restart with pm2
+pm2 restart prometheus-server
+```
+
+#### Crear métricas para la puerta de enlace de prueba
+
+```sh
+echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
+echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
+echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
+curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+```
+
+#### Utilice PromQL para encontrar el objetivo de pushgateway de métricas
+
+![promql-pushgateway](images/promql-pushgateway.png)
+
+* * *
+
 ### Administrador de alertas
 
 ![alertmanager](images/alertmanager.png)
 
 Para más información sobre Alertmanager acceda a la documentación oficial:  
 <https://github.com/prometheus/alertmanager>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 * * *
 
@@ -359,6 +443,8 @@ Para más información sobre Alertmanager acceda a la documentación oficial:
 
 ### Aleación de Grafana
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 * * *
 
 <!-- CONTRIBUTING -->
@@ -372,7 +458,7 @@ Si tiene alguna sugerencia que pueda mejorar esto, bifurque el repositorio y cre
 
 1.  Bifurcar el proyecto
 2.  Crea tu rama de funciones (`git checkout -b feature/AmazingFeature`)
-3.  Confirme sus cambios (`git commit -m 'Add some AmazingFeature'`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4.  Empujar a la rama (`git push origin feature/AmazingFeature`)
 5.  Abrir una solicitud de extracción
 
@@ -410,7 +496,8 @@ Enlace del proyecto:<https://github.com/marcossilvestrini/kubernetes-observabili
 -   [Prometeo](https://prometheus.io/docs/introduction/overview/)
 -   [Exportador de nodos](https://github.com/prometheus/node_exporter)
 -   [Asignaciones de puertos predeterminadas de Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
--   [Pila de Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [puerta de enlace](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [Artículo de la pila Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
