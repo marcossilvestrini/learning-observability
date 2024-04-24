@@ -291,6 +291,15 @@ cd kubernetes-observability || exit
       <li>an alertmanager to handle alerts</li>
       <li>various support tools</li>
     </ul>
+    <h3 id="metric-names-and-labels"><a class="anchor" aria-hidden="true" tabindex="-1" href="#metric-names-and-labels"><span class="octicon octicon-link"></span></a>Metric names and labels</h3>
+    <p><strong>Example metric name:</strong></p>
+    <pre class="language-yaml"><code class="language-yaml code-highlight"><span class="code-line line-number" line="1">&#x3C;metric name<span class="token punctuation">></span><span class="token punctuation">{</span>&#x3C;label name<span class="token punctuation">></span>=&#x3C;label value<span class="token punctuation">></span><span class="token punctuation">,</span> <span class="token punctuation">...</span><span class="token punctuation">}</span>
+</span></code><div onclick="copied(this)" data-code="<metric name>{<label name>=<label value>, ...}
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <p><strong>Example metric name with labels:</strong></p>
+    <pre class="language-yaml"><code class="language-yaml code-highlight"><span class="code-line line-number" line="1">api_http_requests_total<span class="token punctuation">{</span>method="POST"<span class="token punctuation">,</span> handler="/messages"<span class="token punctuation">}</span>
+</span></code><div onclick="copied(this)" data-code="api_http_requests_total{method=&#x22;POST&#x22;, handler=&#x22;/messages&#x22;}
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <p>For more information about Prometheus access official documentation:<br><a href="https://prometheus.io/docs/introduction/overview/">https://prometheus.io/docs/introduction/overview/</a></p>
     <h3 id="install-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-prometheus"><span class="octicon octicon-link"></span></a>Install Prometheus</h3>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download files - https://prometheus.io/download/</span>
@@ -315,6 +324,7 @@ cd prometheus-*
 ./prometheus --version
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h3 id="configure-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#configure-prometheus"><span class="octicon octicon-link"></span></a>Configure Prometheus</h3>
+    <p>See my configuration file <a href="./prometheus/configs/prometheus.yml">prometheus.yaml</a></p>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token function">vim</span> prometheus.yaml
 </span></code><div onclick="copied(this)" data-code="vim prometheus.yaml
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
@@ -393,9 +403,11 @@ pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1">http://localhost:9090 <span class="token comment"># all endpoints</span>
 </span><span class="code-line line-number" line="2">http://localhost:9090/graph <span class="token comment"># PromQL expressions</span>
 </span><span class="code-line line-number" line="3">http://localhost:9090/metrics <span class="token comment"># metrics</span>
+</span><span class="code-line line-number" line="4">http://localhost:9090/targets <span class="token comment"># scrape_configs jobs</span>
 </span></code><div onclick="copied(this)" data-code="http://localhost:9090 # all endpoints
 http://localhost:9090/graph # PromQL expressions
 http://localhost:9090/metrics # metrics
+http://localhost:9090/targets # scrape_configs jobs
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h3 id="using-the-expression-browser"><a class="anchor" aria-hidden="true" tabindex="-1" href="#using-the-expression-browser"><span class="octicon octicon-link"></span></a>Using the expression browser</h3>
     <p>You can use the expression in Table or Graph mode.</p>
@@ -424,6 +436,7 @@ count(promhttp_metric_handler_requests_total)
 rate(promhttp_metric_handler_requests_total{code=&#x22;200&#x22;}[1m])
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h3 id="prometheus-exporters"><a class="anchor" aria-hidden="true" tabindex="-1" href="#prometheus-exporters"><span class="octicon octicon-link"></span></a>Prometheus Exporters</h3>
+    <p>An exporter is a binary running alongside the application you want to obtain metrics from.<br>The exporter exposes Prometheus metrics, commonly by converting metrics that are exposed in a non-Prometheus format into a format that Prometheus supports.</p>
     <h4 id="node-exporter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#node-exporter"><span class="octicon octicon-link"></span></a>Node Exporter</h4>
     <p>The Prometheus Node Exporter exposes a wide variety of hardware- and kernel-related metrics.</p>
     <h5 id="instal-node-exporter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#instal-node-exporter"><span class="octicon octicon-link"></span></a>Instal Node Exporter</h5>
@@ -480,11 +493,78 @@ scrape_configs:
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <p>Restart prometheus service for apply new job.</p>
     <hr>
+    <h3 id="pushgateway"><a class="anchor" aria-hidden="true" tabindex="-1" href="#pushgateway"><span class="octicon octicon-link"></span></a>PushGateway</h3>
+    <p>The Prometheus Pushgateway is an intermediary service which allows ephemeral and batch jobs to expose their metrics to Prometheus.<br>Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway.<br>The Pushgateway then acts as a temporary metrics store which Prometheus scrapes.</p>
+    <p>This setup is particularly useful for capturing the outcome of a job that does not run continuously, such as a batch job in a CI system, or a backup script running at a scheduled time.<br>It simplifies monitoring these kinds of jobs without needing to run a long-lived Prometheus instance that might outlive the jobs themselves.</p>
+    <h4 id="install-pushgateway"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-pushgateway"><span class="octicon octicon-link"></span></a>Install PushGateway</h4>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download </span>
+</span><span class="code-line line-number" line="2"><span class="token function">wget</span> <span class="token parameter variable">-q</span> https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># Extract</span>
+</span><span class="code-line line-number" line="5"><span class="token function">tar</span> xvfz pushgateway-*.*-amd64.tar.gz
+</span><span class="code-line line-number" line="6"><span class="token builtin class-name">cd</span> pushgateway-*.*-amd64
+</span><span class="code-line line-number" line="7">
+</span><span class="code-line line-number" line="8"><span class="token comment"># Start </span>
+</span><span class="code-line line-number" line="9"><span class="token comment"># Start with PM2 - npm install pm2@latest -g</span>
+</span><span class="code-line line-number" line="10">pm2 start pushgateway <span class="token parameter variable">--name</span> pushgateway -- --web.listen-address <span class="token string">"192.168.0.130:9091"</span>
+</span></code><div onclick="copied(this)" data-code="# Download 
+wget -q https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz pushgateway-*.*-amd64.tar.gz
+cd pushgateway-*.*-amd64
+
+# Start 
+# Start with PM2 - npm install pm2@latest -g
+pm2 start pushgateway --name pushgateway -- --web.listen-address &#x22;192.168.0.130:9091&#x22;
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h4 id="configure-pushgateway"><a class="anchor" aria-hidden="true" tabindex="-1" href="#configure-pushgateway"><span class="octicon octicon-link"></span></a>Configure PushGateway</h4>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Edit prometheus file and add job pushgateway</span>
+</span><span class="code-line line-number" line="2"><span class="token function">vim</span> prometheus.yaml
+</span></code><div onclick="copied(this)" data-code="# Edit prometheus file and add job pushgateway
+vim prometheus.yaml
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <pre class="language-yaml"><code class="language-yaml code-highlight"><span class="code-line line-number" line="1"><span class="token key atrule">scrape_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="2">  <span class="token punctuation">-</span> <span class="token key atrule">job_name</span><span class="token punctuation">:</span> <span class="token string">'pushgateway'</span>
+</span><span class="code-line line-number" line="3">    <span class="token key atrule">honor_labels</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+</span><span class="code-line line-number" line="4">    <span class="token key atrule">static_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="5">      <span class="token punctuation">-</span> <span class="token key atrule">targets</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'192.168.0.130:9091'</span><span class="token punctuation">]</span> <span class="token comment"># prometheus server for scraping</span>
+</span></code><div onclick="copied(this)" data-code="scrape_configs:
+  - job_name: &#x27;pushgateway&#x27;
+    honor_labels: true
+    static_configs:
+      - targets: [&#x27;192.168.0.130:9091&#x27;] # prometheus server for scraping
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Restart prometheus</span>
+</span><span class="code-line line-number" line="2">
+</span><span class="code-line line-number" line="3"><span class="token comment"># restart with pm2</span>
+</span><span class="code-line line-number" line="4">pm2 restart prometheus-server
+</span></code><div onclick="copied(this)" data-code="# Restart prometheus
+
+# restart with pm2
+pm2 restart prometheus-server
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h4 id="create-metrics-for-test-pushgateway"><a class="anchor" aria-hidden="true" tabindex="-1" href="#create-metrics-for-test-pushgateway"><span class="octicon octicon-link"></span></a>Create metrics for test pushgateway</h4>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token builtin class-name">echo</span> <span class="token string">'training_completion{course="CKA", status="complete"} 1'</span> <span class="token operator">></span> metrics.txt
+</span><span class="code-line line-number" line="2"><span class="token builtin class-name">echo</span> <span class="token string">'training_completion{course="CKS", status="in_progress"} 0.5'</span> <span class="token operator">>></span> metrics.txt
+</span><span class="code-line line-number" line="3"><span class="token builtin class-name">echo</span> <span class="token string">'training_completion{course="LPIC2", status="not_started"} 0'</span> <span class="token operator">>></span> metrics.txt
+</span><span class="code-line line-number" line="4"><span class="token function">curl</span> --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+</span></code><div onclick="copied(this)" data-code="echo &#x27;training_completion{course=&#x22;CKA&#x22;, status=&#x22;complete&#x22;} 1&#x27; > metrics.txt
+echo &#x27;training_completion{course=&#x22;CKS&#x22;, status=&#x22;in_progress&#x22;} 0.5&#x27; >> metrics.txt
+echo &#x27;training_completion{course=&#x22;LPIC2&#x22;, status=&#x22;not_started&#x22;} 0&#x27; >> metrics.txt
+curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h4 id="use-promql-for-find-metrics-pushgateway-target"><a class="anchor" aria-hidden="true" tabindex="-1" href="#use-promql-for-find-metrics-pushgateway-target"><span class="octicon octicon-link"></span></a>Use PromQL for find metrics pushgateway target</h4>
+    <p>
+      <img src="images/promql-pushgateway.png" alt="promql-pushgateway">
+    </p>
+    <hr>
     <h3 id="alertmanager"><a class="anchor" aria-hidden="true" tabindex="-1" href="#alertmanager"><span class="octicon octicon-link"></span></a>Alertmanager</h3>
     <p>
       <img src="images/alertmanager.png" alt="alertmanager">
     </p>
     <p>For more information about Alertmanager access official documentation:<br><a href="https://github.com/prometheus/alertmanager">https://github.com/prometheus/alertmanager</a></p>
+    <p align="right">(<a href="#readme-top">back to top</a>)</p>
     <hr>
     <h2 id="grafana"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana"><span class="octicon octicon-link"></span></a>Grafana</h2>
     <hr>
@@ -493,6 +573,7 @@ scrape_configs:
     <h3 id="grafana-tempo"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana-tempo"><span class="octicon octicon-link"></span></a>Grafana Tempo</h3>
     <hr>
     <h3 id="grafana-alloy"><a class="anchor" aria-hidden="true" tabindex="-1" href="#grafana-alloy"><span class="octicon octicon-link"></span></a>Grafana Alloy</h3>
+    <p align="right">(<a href="#readme-top">back to top</a>)</p>
     <hr><!-- CONTRIBUTING -->
     <h2 id="contributing"><a class="anchor" aria-hidden="true" tabindex="-1" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
     <p>Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are <strong>greatly appreciated</strong>.</p>
@@ -526,7 +607,8 @@ scrape_configs:
       <li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus</a></li>
       <li><a href="https://github.com/prometheus/node_exporter">Node Exporter</a></li>
       <li><a href="https://github.com/prometheus/prometheus/wiki/Default-port-allocations">Prometheus Default port allocations</a></li>
-      <li><a href="https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/">Kube Prometheus Stack</a></li>
+      <li><a href="https://github.com/prometheus/pushgateway/blob/master/README.md">Pushgateway</a></li>
+      <li><a href="https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/">Kube Prometheus Stack Article</a></li>
     </ul>
     <p align="right">(<a href="#readme-top">back to top</a>)</p><!-- MARKDOWN LINKS & IMAGES --><!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
   <style>markdown-style pre .copied {
