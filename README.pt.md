@@ -186,6 +186,20 @@ O ecossistema Prometheus consiste em vários componentes, muitos dos quais são 
 -   um gerenciador de alertas para lidar com alertas
 -   diversas ferramentas de suporte
 
+### Nomes e rótulos de métricas
+
+**Exemplo de nome de métrica:**
+
+```yaml
+<metric name>{<label name>=<label value>, ...}
+```
+
+**Exemplo de nome de métrica com rótulos:**
+
+```yaml
+api_http_requests_total{method="POST", handler="/messages"}
+```
+
 Para mais informações sobre o Prometheus acesse a documentação oficial:  
 <https://prometheus.io/docs/introduction/overview/>
 
@@ -205,6 +219,8 @@ cd prometheus-*
 ```
 
 ### Configurar o Prometheus
+
+Veja meu arquivo de configuração[prometheus.yaml](./prometheus/configs/prometheus.yml)
 
 ```sh
 vim prometheus.yaml
@@ -258,6 +274,7 @@ pm2 start prometheus --name prometheus-server -- --config.file=prometheus.yml
 http://localhost:9090 # all endpoints
 http://localhost:9090/graph # PromQL expressions
 http://localhost:9090/metrics # metrics
+http://localhost:9090/targets # scrape_configs jobs
 ```
 
 ### Usando o navegador de expressões
@@ -281,6 +298,9 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
 ### Prometheus Exportadores
+
+Um exportador é um binário executado junto com o aplicativo do qual você deseja obter métricas.  
+O exportador expõe métricas do Prometheus, geralmente convertendo métricas expostas em um formato não Prometheus em um formato compatível com o Prometheus.
 
 #### Exportador de nós
 
@@ -336,12 +356,75 @@ Reinicie o serviço Prometheus para aplicar um novo trabalho.
 
 * * *
 
+### PushGateway
+
+O Prometheus Pushgateway é um serviço intermediário que permite que trabalhos efêmeros e em lote exponham suas métricas ao Prometheus.  
+Como esses tipos de trabalhos podem não existir por tempo suficiente para serem eliminados, eles podem, em vez disso, enviar suas métricas para um Pushgateway.  
+O Pushgateway atua então como um armazenamento temporário de métricas que o Prometheus coleta.
+
+Essa configuração é particularmente útil para capturar o resultado de uma tarefa que não é executada continuamente, como uma tarefa em lote em um sistema de CI ou um script de backup em execução em um horário agendado.  
+Ele simplifica o monitoramento desses tipos de trabalhos sem a necessidade de executar uma instância do Prometheus de longa duração que pode sobreviver aos próprios trabalhos.
+
+#### Instale o PushGateway
+
+```sh
+# Download 
+wget -q https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
+
+# Extract
+tar xvfz pushgateway-*.*-amd64.tar.gz
+cd pushgateway-*.*-amd64
+
+# Start 
+# Start with PM2 - npm install pm2@latest -g
+pm2 start pushgateway --name pushgateway -- --web.listen-address "192.168.0.130:9091"
+```
+
+#### Configurar PushGateway
+
+```sh
+# Edit prometheus file and add job pushgateway
+vim prometheus.yaml
+```
+
+```yaml
+scrape_configs:
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['192.168.0.130:9091'] # prometheus server for scraping
+```
+
+```sh
+# Restart prometheus
+
+# restart with pm2
+pm2 restart prometheus-server
+```
+
+#### Crie métricas para teste pushgateway
+
+```sh
+echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
+echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
+echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
+curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+```
+
+#### Use PromQL para encontrar o alvo do pushgateway de métricas
+
+![promql-pushgateway](images/promql-pushgateway.png)
+
+* * *
+
 ### Gerenciador de alertas
 
 ![alertmanager](images/alertmanager.png)
 
 Para mais informações sobre o Alertmanager acesse a documentação oficial:  
 <https://github.com/prometheus/alertmanager>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 * * *
 
@@ -358,6 +441,8 @@ Para mais informações sobre o Alertmanager acesse a documentação oficial:
 * * *
 
 ### Liga Grafana
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 * * *
 
@@ -407,10 +492,11 @@ Link do projeto:<https://github.com/marcossilvestrini/kubernetes-observability>
 
 ## Agradecimentos
 
--   [Prometheus](https://prometheus.io/docs/introduction/overview/)
+-   [Prometeu](https://prometheus.io/docs/introduction/overview/)
 -   [Exportador de nós](https://github.com/prometheus/node_exporter)
 -   [Alocações de porta padrão do Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
--   [Pilha Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [Artigo da pilha Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
