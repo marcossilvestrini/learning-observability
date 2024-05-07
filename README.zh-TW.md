@@ -40,7 +40,7 @@
     <a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability">View Demo</a>
+    <a href="https://marcossilvestrini.github.io/kubernetes-observability">Project Page</a>
     -
     <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
     -
@@ -203,6 +203,50 @@ api_http_requests_total{method="POST", handler="/messages"}
 有關 Prometheus 的更多資訊請訪問官方文件：  
 <https://prometheus.io/docs/introduction/overview/>
 
+### 指標類型
+
+![Metrics Type](images/metrics_type.png)
+
+**[櫃檯](https://prometheus.io/docs/concepts/metric_types/#counter)**– 僅接受並儲存那些隨時間增加的值。  
+**[測量](https://prometheus.io/docs/concepts/metric_types/#gauge)**– 儲存可以取不同值的值，這些值既可以增加也可以減少。  
+**[直方圖](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 對觀察結果（通常是請求持續時間或回應大小）進行取樣，並將其計數到可設定的儲存桶中。它還提供所有觀察值的總和，使您可以計算平均值。  
+**[概括](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 使用附加統計資料（分位數）提供更詳細資料表示的直方圖。
+
+### 作業和實例
+
+![Jobs](images/jobs_instances.png)
+
+In Prometheus terms, an endpoint you can scrape is called an instance, usually corresponding to a single process.  
+具有相同目的的實例的集合，例如為了可擴展性或可靠性而複製的進程，稱為作業。
+
+### Prometheus 遠端寫入規範
+
+遠端寫入協定旨在能夠將樣本從發送方即時可靠地傳播到接收方，而不會遺失。
+
+-   「發送者」是發送 Prometheus 遠端寫入資料的東西。
+-   「接收器」是接收 Prometheus 遠端寫入資料的東西。
+-   「樣本」是一對（時間戳，值）。
+-   「標籤」是一對（鍵，值）。
+-   「系列」是樣本列表，由一組唯一的標籤標識。
+
+#### 相容的發送器和接收器
+
+該規範旨在描述以下元件如何交互作用：
+
+-   普羅米修斯（作為“發送者”和“接收者”）
+-   Avalanche（作為“發送者”）- 負載測試工具 Prometheus Metrics。
+-   皮質（作為“接收器”）
+-   彈性代理（作為「接收者」）
+-   Grafana Agent（既作為「發送者」又作為「接收者」）
+-   GreptimeDB（作為「接收者」）
+-   InfluxData 的 Telegraf 代理程式。 （作為發送者和接收者）
+-   M3（作為「接收器」）
+-   密米爾（作為「接收者」）
+-   OpenTelemetry Collector（作為「發送者」並最終作為「接收者」）
+-   薩諾斯（作為「接收者」）
+-   向量（作為“發送者”和“接收者”）
+-   VictoriaMetrics（作為「接收者」）
+
 ### 安裝普羅米修斯
 
 ```sh
@@ -358,7 +402,7 @@ scrape_configs:
 
 ### 推播網關
 
-Prometheus Pushgateway 是一項中間服務，可讓臨時作業和批次作業將其指標公開給 Prometheus。  
+Prometheus Pushgateway 是一項中間服務，允許臨時作業和批次作業將其指標公開給 Prometheus。  
 由於此類工作可能存在的時間不夠長而無法刪除，因此他們可以將其指標推送到 Pushgateway。  
 然後，Pushgateway 充當 Prometheus 抓取的臨時指標儲存。
 
@@ -409,6 +453,13 @@ echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
 echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
 echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+```
+
+##### 端點推送網關
+
+```sh
+# Access metrics
+http://localhost:9091
 ```
 
 #### 使用 PromQL 找出指標 Pushgateway 目標
@@ -493,9 +544,13 @@ curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_m
 ## 致謝
 
 -   [普羅米修斯](https://prometheus.io/docs/introduction/overview/)
--   [節點導出器](https://github.com/prometheus/node_exporter)
 -   [Prometheus 預設連接埠分配](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [推播網關](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [出口商](https://prometheus.io/docs/instrumenting/exporters/)
+-   [節點導出器](https://github.com/prometheus/node_exporter)
+-   [PromQL 文章](https://www.metricfire.com/blog/getting-started-with-promql/)
+-   普羅米修斯文章
+    -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
 -   [Kube Prometheus 堆疊文章](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
