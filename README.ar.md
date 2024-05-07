@@ -40,7 +40,7 @@
     <a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability">View Demo</a>
+    <a href="https://marcossilvestrini.github.io/kubernetes-observability">Project Page</a>
     -
     <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
     -
@@ -123,7 +123,7 @@
 
 -   رفع نظام لينكس
 -   مجموعة Kubernetes لأعلى
--   شخص سخيف
+-   Git
 
 * * *
 
@@ -202,6 +202,50 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 لمزيد من المعلومات حول الوصول إلى الوثائق الرسمية لبروميثيوس:  
 [هتبص://بروميثيوس.إيه/دكس/انطردكت/فرفو/](https://prometheus.io/docs/introduction/overview/)
+
+### أنواع المقاييس
+
+![Metrics Type](images/metrics_type.png)
+
+**[عداد](https://prometheus.io/docs/concepts/metric_types/#counter)**- يقبل ويخزن فقط تلك القيم التي ستزداد مع مرور الوقت.  
+**[كَيّل](https://prometheus.io/docs/concepts/metric_types/#gauge)**- يخزن القيم التي يمكن أن تأخذ قيمًا مختلفة، والتي يمكن أن تزيد أو تنقص.  
+**[الرسم البياني](https://prometheus.io/docs/concepts/metric_types/#histogram)**- عينات من الملاحظات (عادةً أشياء مثل فترات الطلب أو أحجام الاستجابة) واحتسابها في مجموعات قابلة للتكوين. كما يوفر أيضًا مجموعًا لجميع القيم التي تمت ملاحظتها، مما يسمح لك بحساب المتوسطات.  
+**[ملخص](https://prometheus.io/docs/concepts/metric_types/#histogram)**– رسم بياني مع تمثيل بيانات أكثر تفصيلاً باستخدام إحصائيات إضافية (كميات).
+
+### الوظائف والمثيلات
+
+![Jobs](images/jobs_instances.png)
+
+في مصطلحات بروميثيوس، تسمى نقطة النهاية التي يمكنك استخلاصها بمثيل، وعادةً ما تتوافق مع عملية واحدة.  
+مجموعة من الحالات التي لها نفس الغرض، وهي عملية يتم تكرارها من أجل قابلية التوسع أو الموثوقية على سبيل المثال، تسمى وظيفة.
+
+### مواصفات بروميثيوس للكتابة عن بعد
+
+تم تصميم بروتوكول الكتابة عن بعد لتمكين نشر العينات بشكل موثوق في الوقت الفعلي من المرسل إلى المتلقي، دون خسارة.
+
+-   "المرسل" هو الشيء الذي يرسل بيانات Prometheus Remote Write.
+-   "المستقبل" هو شيء يستقبل بيانات الكتابة عن بعد من Prometheus.
+-   "العينة" هي زوج من (الطابع الزمني، القيمة).
+-   "التسمية" هي زوج من (المفتاح، القيمة).
+-   "السلسلة" هي قائمة من العينات، التي تم تحديدها بواسطة مجموعة فريدة من التصنيفات.
+
+#### المرسلون والمستقبلون المتوافقون
+
+تهدف المواصفات إلى وصف كيفية تفاعل المكونات التالية:
+
+-   بروميثيوس (كالمرسل والمستقبل)
+-   الانهيار الجليدي (بصفته "المرسل") - أداة اختبار الحمل بمقاييس بروميثيوس.
+-   القشرة (بوصفها "المتلقي")
+-   العامل المرن (بوصفه "المستقبل")
+-   وكيل Grafana (بوصفه "مرسلًا" و"مستقبلًا")
+-   GreptimeDB (بوصفه "المتلقي")
+-   وكيل Telegraf الخاص بـ InfluxData. (كمرسل وكمستقبل)
+-   M3 (بوصفه "المتلقي")
+-   ميمير (بصفته "المتلقي")
+-   OpenTelemetry Collector (بصفته "مرسلًا" وفي النهاية "كمستقبلًا")
+-   ثانوس (بوصفه "المتلقي")
+-   المتجه (بوصفه "المرسل" و"المتلقي")
+-   VictoriaMetrics (بوصفها "المتلقي")
 
 ### تثبيت بروميثيوس
 
@@ -411,6 +455,13 @@ echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.tx
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 ```
 
+##### نقاط النهاية
+
+```sh
+# Access metrics
+http://localhost:9091
+```
+
 #### استخدم PromQL للعثور على هدف بوابة الدفع للمقاييس
 
 ![promql-pushgateway](images/promql-pushgateway.png)
@@ -453,7 +504,7 @@ curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_m
 المساهمات هي ما يجعل مجتمع المصادر المفتوحة مكانًا رائعًا للتعلم والإلهام والإبداع. أي مساهمات تقدمها هي**اقدر هذا جدا**.
 
 إذا كان لديك اقتراح من شأنه أن يجعل هذا الأمر أفضل، فيرجى شوكة الريبو وإنشاء طلب سحب. يمكنك أيضًا ببساطة فتح مشكلة بالعلامة "التحسين".
-لا تنسى أن تعطي المشروع نجمة! شكرًا لك مرة أخرى!
+لا تنس أن تعطي المشروع نجمة! شكرًا لك مرة أخرى!
 
 1.  شوكة المشروع
 2.  قم بإنشاء فرع الميزات الخاص بك (`git checkout -b feature/AmazingFeature`)
@@ -493,9 +544,13 @@ curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_m
 ## شكر وتقدير
 
 -   [بروميثيوس](https://prometheus.io/docs/introduction/overview/)
--   [مصدر العقدة](https://github.com/prometheus/node_exporter)
--   [Prometheus Default port allocations](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
+-   [بروميثيوس تخصيصات المنفذ الافتراضي](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [بوابة الدفع](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [المصدرين](https://prometheus.io/docs/instrumenting/exporters/)
+-   [مصدر العقدة](https://github.com/prometheus/node_exporter)
+-   [مقالة PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
+-   مقالات بروميثيوس
+    -   [هتبص://دفشنكتد.كوم/ثي-ديفينيتيفي-جويدي-تو-بروميثيوس-ين-٢٠١٩/](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
 -   [مقالة كوب بروميثيوس ستاك](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
