@@ -184,7 +184,7 @@ customElements.define('markdown-style', MarkdownStyle);</script><markdown-style 
     <div align="center"><a href="https://github.com/marcossilvestrini/kubernetes-observability"><img src="images/observability.png" alt="observability"></a>
       <h3 align="center" id="kubernetes-observability"><a class="anchor" aria-hidden="true" tabindex="-1" href="#kubernetes-observability"><span class="octicon octicon-link"></span></a>Kubernetes Observability</h3>
       <p align="center">
-        Project for learning about Kubernetes observability.<br><a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a><br><br><a href="https://github.com/marcossilvestrini/kubernetes-observability">View Demo</a>
+        Project for learning about Kubernetes observability.<br><a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a><br><br><a href="https://marcossilvestrini.github.io/kubernetes-observability">Project Page</a>
         -
         <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
         -
@@ -301,6 +301,42 @@ cd kubernetes-observability || exit
 </span></code><div onclick="copied(this)" data-code="api_http_requests_total{method=&#x22;POST&#x22;, handler=&#x22;/messages&#x22;}
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <p>For more information about Prometheus access official documentation:<br><a href="https://prometheus.io/docs/introduction/overview/">https://prometheus.io/docs/introduction/overview/</a></p>
+    <h3 id="metrics-types"><a class="anchor" aria-hidden="true" tabindex="-1" href="#metrics-types"><span class="octicon octicon-link"></span></a>Metrics Types</h3>
+    <p>
+      <img src="images/metrics_type.png" alt="Metrics Type">
+    </p>
+    <p><strong><a href="https://prometheus.io/docs/concepts/metric_types/#counter">Counter</a></strong> – accepts and stores only those values that will increase with time.<br><strong><a href="https://prometheus.io/docs/concepts/metric_types/#gauge">Gauge</a></strong> – stores the values that can take different values, that can both increase and decrease.<br><strong><a href="https://prometheus.io/docs/concepts/metric_types/#histogram">Histogram</a></strong> – samples observations (usually things like request durations or response sizes) and counts them in configurable buckets. It also provides a sum of all observed values, allowing you to calculate averages.<br><strong><a href="https://prometheus.io/docs/concepts/metric_types/#histogram">Summary</a></strong> – histogram with a more detailed data representation using additional statistics (quantiles).</p>
+    <h3 id="jobs-and-instances"><a class="anchor" aria-hidden="true" tabindex="-1" href="#jobs-and-instances"><span class="octicon octicon-link"></span></a>Jobs and Instances</h3>
+    <p>
+      <img src="images/jobs_instances.png" alt="Jobs">
+    </p>
+    <p>In Prometheus terms, an endpoint you can scrape is called an instance, usually corresponding to a single process.<br>A collection of instances with the same purpose, a process replicated for scalability or reliability for example, is called a job.</p>
+    <h3 id="prometheus-remote-write-specification"><a class="anchor" aria-hidden="true" tabindex="-1" href="#prometheus-remote-write-specification"><span class="octicon octicon-link"></span></a>Prometheus remote-write Specification</h3>
+    <p>The remote write protocol is designed to make it possible to reliably propagate samples in real-time from a sender to a receiver, without loss.</p>
+    <ul>
+      <li>a "Sender" is something that sends Prometheus Remote Write data.</li>
+      <li>a "Receiver" is something that receives Prometheus Remote Write data.</li>
+      <li>a "Sample" is a pair of (timestamp, value).</li>
+      <li>a "Label" is a pair of (key, value).</li>
+      <li>a "Series" is a list of samples, identified by a unique set of labels.</li>
+    </ul>
+    <h4 id="compatible-senders-and-receivers"><a class="anchor" aria-hidden="true" tabindex="-1" href="#compatible-senders-and-receivers"><span class="octicon octicon-link"></span></a>Compatible Senders and Receivers</h4>
+    <p>The spec is intended to describe how the following components interact:</p>
+    <ul>
+      <li>Prometheus (as both a "sender" and a "receiver")</li>
+      <li>Avalanche (as a "sender") - A Load Testing Tool Prometheus Metrics.</li>
+      <li>Cortex (as a "receiver")</li>
+      <li>Elastic Agent (as a "receiver")</li>
+      <li>Grafana Agent (as both a "sender" and a "receiver")</li>
+      <li>GreptimeDB (as a "receiver")</li>
+      <li>InfluxData’s Telegraf agent. (as a sender, and as a receiver)</li>
+      <li>M3 (as a "receiver")</li>
+      <li>Mimir (as a "receiver")</li>
+      <li>OpenTelemetry Collector (as a "sender" and eventually as a "receiver")</li>
+      <li>Thanos (as a "receiver")</li>
+      <li>Vector (as a "sender" and a "receiver")</li>
+      <li>VictoriaMetrics (as a "receiver")</li>
+    </ul>
     <h3 id="install-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-prometheus"><span class="octicon octicon-link"></span></a>Install Prometheus</h3>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download files - https://prometheus.io/download/</span>
 </span><span class="code-line line-number" line="2"><span class="token function">wget</span> https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
@@ -554,6 +590,12 @@ echo &#x27;training_completion{course=&#x22;CKS&#x22;, status=&#x22;in_progress&
 echo &#x27;training_completion{course=&#x22;LPIC2&#x22;, status=&#x22;not_started&#x22;} 0&#x27; >> metrics.txt
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h5 id="endpoints-pushgateway"><a class="anchor" aria-hidden="true" tabindex="-1" href="#endpoints-pushgateway"><span class="octicon octicon-link"></span></a>Endpoints Pushgateway</h5>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Access metrics</span>
+</span><span class="code-line line-number" line="2">http://localhost:9091
+</span></code><div onclick="copied(this)" data-code="# Access metrics
+http://localhost:9091
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h4 id="use-promql-for-find-metrics-pushgateway-target"><a class="anchor" aria-hidden="true" tabindex="-1" href="#use-promql-for-find-metrics-pushgateway-target"><span class="octicon octicon-link"></span></a>Use PromQL for find metrics pushgateway target</h4>
     <p>
       <img src="images/promql-pushgateway.png" alt="promql-pushgateway">
@@ -605,9 +647,16 @@ curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_m
     <h2 id="acknowledgments"><a class="anchor" aria-hidden="true" tabindex="-1" href="#acknowledgments"><span class="octicon octicon-link"></span></a>Acknowledgments</h2>
     <ul>
       <li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus</a></li>
-      <li><a href="https://github.com/prometheus/node_exporter">Node Exporter</a></li>
       <li><a href="https://github.com/prometheus/prometheus/wiki/Default-port-allocations">Prometheus Default port allocations</a></li>
       <li><a href="https://github.com/prometheus/pushgateway/blob/master/README.md">Pushgateway</a></li>
+      <li><a href="https://prometheus.io/docs/instrumenting/exporters/">Exporters</a></li>
+      <li><a href="https://github.com/prometheus/node_exporter">Node Exporter</a></li>
+      <li><a href="https://www.metricfire.com/blog/getting-started-with-promql/">PromQL Article</a></li>
+      <li>Prometheus Articles
+        <ul>
+          <li><a href="https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/">https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/</a></li>
+        </ul>
+      </li>
       <li><a href="https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/">Kube Prometheus Stack Article</a></li>
     </ul>
     <p align="right">(<a href="#readme-top">back to top</a>)</p><!-- MARKDOWN LINKS & IMAGES --><!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
