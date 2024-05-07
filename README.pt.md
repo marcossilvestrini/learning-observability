@@ -40,7 +40,7 @@
     <a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability">View Demo</a>
+    <a href="https://marcossilvestrini.github.io/kubernetes-observability">Project Page</a>
     -
     <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
     -
@@ -203,6 +203,50 @@ api_http_requests_total{method="POST", handler="/messages"}
 Para mais informações sobre o Prometheus acesse a documentação oficial:  
 <https://prometheus.io/docs/introduction/overview/>
 
+### Tipos de métricas
+
+![Metrics Type](images/metrics_type.png)
+
+**[Contador](https://prometheus.io/docs/concepts/metric_types/#counter)**– aceita e armazena apenas os valores que aumentarão com o tempo.  
+**[Medidor](https://prometheus.io/docs/concepts/metric_types/#gauge)**– armazena os valores que podem assumir valores diferentes, que podem aumentar e diminuir.  
+**[Histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– coleta amostras de observações (geralmente coisas como durações de solicitações ou tamanhos de respostas) e as conta em intervalos configuráveis. Também fornece uma soma de todos os valores observados, permitindo calcular médias.  
+**[Resumo](https://prometheus.io/docs/concepts/metric_types/#histogram)**– histograma com representação mais detalhada dos dados utilizando estatísticas adicionais (quantis).
+
+### Empregos e instâncias
+
+![Jobs](images/jobs_instances.png)
+
+Nos termos do Prometheus, um endpoint que você pode raspar é chamado de instância, geralmente correspondendo a um único processo.  
+Uma coleção de instâncias com a mesma finalidade, um processo replicado para escalabilidade ou confiabilidade, por exemplo, é chamada de trabalho.
+
+### Especificação de gravação remota do Prometheus
+
+O protocolo de gravação remota foi projetado para possibilitar a propagação confiável de amostras em tempo real de um remetente para um destinatário, sem perdas.
+
+-   um "Remetente" é algo que envia dados de gravação remota do Prometheus.
+-   um "Receptor" é algo que recebe dados de gravação remota do Prometheus.
+-   uma "amostra" é um par de (timestamp, valor).
+-   um "Rótulo" é um par de (chave, valor).
+-   uma "Série" é uma lista de amostras, identificadas por um conjunto exclusivo de rótulos.
+
+#### Remetentes e destinatários compatíveis
+
+A especificação pretende descrever como os seguintes componentes interagem:
+
+-   Prometeu (como "remetente" e "receptor")
+-   Avalanche (como um "remetente") - Uma ferramenta de teste de carga Prometheus Metrics.
+-   Cortex (como um "receptor")
+-   Agente Elástico (como um "receptor")
+-   Agente Grafana (como "remetente" e "destinatário")
+-   GreptimeDB (como um "receptor")
+-   Agente Telegraf da InfluxData. (como remetente e como destinatário)
+-   M3 (como um "receptor")
+-   Mimir (como um "receptor")
+-   OpenTelemetry Collector (como "remetente" e eventualmente como "receptor")
+-   Thanos (como um "receptor")
+-   Vetor (como "remetente" e "destinatário")
+-   VictoriaMetrics (como um "receptor")
+
 ### Instale o Prometheus
 
 ```sh
@@ -297,7 +341,7 @@ count(promhttp_metric_handler_requests_total)
 rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
-### Prometheus Exportadores
+### Exportadores Prometheus
 
 Um exportador é um binário executado junto com o aplicativo do qual você deseja obter métricas.  
 O exportador expõe métricas do Prometheus, geralmente convertendo métricas expostas em um formato não Prometheus em um formato compatível com o Prometheus.
@@ -411,6 +455,13 @@ echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.tx
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 ```
 
+##### Pushgateway de terminais
+
+```sh
+# Access metrics
+http://localhost:9091
+```
+
 #### Use PromQL para encontrar o alvo do pushgateway de métricas
 
 ![promql-pushgateway](images/promql-pushgateway.png)
@@ -493,9 +544,13 @@ Link do projeto:<https://github.com/marcossilvestrini/kubernetes-observability>
 ## Agradecimentos
 
 -   [Prometeu](https://prometheus.io/docs/introduction/overview/)
--   [Exportador de nós](https://github.com/prometheus/node_exporter)
 -   [Alocações de porta padrão do Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [Exportadores](https://prometheus.io/docs/instrumenting/exporters/)
+-   [Exportador de nós](https://github.com/prometheus/node_exporter)
+-   [Artigo PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
+-   Artigos do Prometeu
+    -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
 -   [Artigo da pilha Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
