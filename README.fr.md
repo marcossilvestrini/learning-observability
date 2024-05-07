@@ -40,7 +40,7 @@
     <a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability">View Demo</a>
+    <a href="https://marcossilvestrini.github.io/kubernetes-observability">Project Page</a>
     -
     <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
     -
@@ -188,7 +188,7 @@ L'écosystème Prometheus se compose de plusieurs composants, dont beaucoup sont
 
 ### Noms et étiquettes des métriques
 
-**Example metric name:**
+**Exemple de nom de métrique :**
 
 ```yaml
 <metric name>{<label name>=<label value>, ...}
@@ -202,6 +202,50 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 Pour plus d’informations sur Prometheus, accédez à la documentation officielle :  
 <https://prometheus.io/docs/introduction/overview/>
+
+### Types de métriques
+
+![Metrics Type](images/metrics_type.png)
+
+**[Comptoir](https://prometheus.io/docs/concepts/metric_types/#counter)**– accepte et stocke uniquement les valeurs qui augmenteront avec le temps.  
+**[Jauge](https://prometheus.io/docs/concepts/metric_types/#gauge)**– stocke les valeurs qui peuvent prendre des valeurs différentes, qui peuvent à la fois augmenter et diminuer.  
+**[Histogramme](https://prometheus.io/docs/concepts/metric_types/#histogram)**– échantillonne les observations (généralement des éléments tels que la durée des requêtes ou la taille des réponses) et les compte dans des compartiments configurables. Il fournit également une somme de toutes les valeurs observées, vous permettant de calculer des moyennes.  
+**[Résumé](https://prometheus.io/docs/concepts/metric_types/#histogram)**– histogramme avec une représentation plus détaillée des données utilisant des statistiques supplémentaires (quantiles).
+
+### Emplois et instances
+
+![Jobs](images/jobs_instances.png)
+
+En termes Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
+Un ensemble d'instances ayant le même objectif, un processus répliqué à des fins d'évolutivité ou de fiabilité par exemple, est appelé un travail.
+
+### Spécification d'écriture à distance Prometheus
+
+Le protocole d'écriture à distance est conçu pour permettre de propager de manière fiable et en temps réel des échantillons d'un émetteur à un récepteur, sans perte.
+
+-   un « expéditeur » est quelque chose qui envoie des données Prometheus Remote Write.
+-   un « récepteur » est quelque chose qui reçoit des données Prometheus Remote Write.
+-   un « échantillon » est une paire de (horodatage, valeur).
+-   un "Label" est une paire de (clé, valeur).
+-   une « série » est une liste d'échantillons, identifiés par un ensemble unique d'étiquettes.
+
+#### Émetteurs et récepteurs compatibles
+
+La spécification est destinée à décrire comment les composants suivants interagissent :
+
+-   Prométhée (à la fois en tant qu'"expéditeur" et "récepteur")
+-   Avalanche (en tant qu'"expéditeur") - Un outil de test de charge Prometheus Metrics.
+-   Cortex (en tant que « récepteur »)
+-   Agent Elastic (en tant que "récepteur")
+-   Agent Grafana (en tant qu'"expéditeur" et "destinataire")
+-   GreptimeDB (en tant que "récepteur")
+-   Agent Telegraf d'InfluxData. (en tant qu'expéditeur et en tant que destinataire)
+-   M3 (en tant que "récepteur")
+-   Mimir (en tant que "récepteur")
+-   OpenTelemetry Collector (en tant qu'"expéditeur" et éventuellement en tant que "récepteur")
+-   Thanos (en tant que "récepteur")
+-   Vecteur (en tant qu'"expéditeur" et "récepteur")
+-   VictoriaMetrics (en tant que "récepteur")
 
 ### Installer Prometheus
 
@@ -402,13 +446,20 @@ scrape_configs:
 pm2 restart prometheus-server
 ```
 
-#### Créer des métriques pour tester pushgateway
+#### Create metrics for test pushgateway
 
 ```sh
 echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
 echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
 echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+```
+
+##### Passerelle push des points de terminaison
+
+```sh
+# Access metrics
+http://localhost:9091
 ```
 
 #### Utilisez PromQL pour rechercher la cible pushgateway des métriques
@@ -469,7 +520,7 @@ N'oubliez pas de donner une étoile au projet ! Merci encore!
 
 ## Licence
 
-Distributed under the MIT License. See [`LICENSE`](LICENSE)pour plus d'informations.
+Distribué sous licence MIT. Voir[`LICENSE`](LICENSE)pour plus d'informations.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -479,7 +530,7 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE)pour plus d'informati
 
 ## Contact
 
--   Marcos Silvestrini - [@mrsilvestrini](https://twitter.com/mrsilvestrini)
+-   Marcos Sylvestrini -[@mrsilvestrini](https://twitter.com/mrsilvestrini)
 -   [marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)
 
 Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
@@ -493,9 +544,13 @@ Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
 ## Remerciements
 
 -   [Prométhée](https://prometheus.io/docs/introduction/overview/)
--   [Exportateur de nœuds](https://github.com/prometheus/node_exporter)
 -   [Allocations de ports par défaut de Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Passerelle Push](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [Exportateurs](https://prometheus.io/docs/instrumenting/exporters/)
+-   [Exportateur de nœuds](https://github.com/prometheus/node_exporter)
+-   [Article PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
+-   Articles sur Prométhée
+    -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
 -   [Article sur la pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
