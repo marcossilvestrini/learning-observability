@@ -42,7 +42,7 @@
     <a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability">View Demo</a>
+    <a href="https://marcossilvestrini.github.io/kubernetes-observability">Project Page</a>
     -
     <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
     -
@@ -199,6 +199,50 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 For more information about Prometheus access official documentation:  
 <https://prometheus.io/docs/introduction/overview/>
+
+### Metrics Types
+
+![Metrics Type](images/metrics_type.png)
+
+**[Counter](https://prometheus.io/docs/concepts/metric_types/#counter)** – accepts and stores only those values that will increase with time.  
+**[Gauge](https://prometheus.io/docs/concepts/metric_types/#gauge)** – stores the values that can take different values, that can both increase and decrease.  
+**[Histogram](https://prometheus.io/docs/concepts/metric_types/#histogram)** – samples observations (usually things like request durations or response sizes) and counts them in configurable buckets. It also provides a sum of all observed values, allowing you to calculate averages.  
+**[Summary](https://prometheus.io/docs/concepts/metric_types/#histogram )** – histogram with a more detailed data representation using additional statistics (quantiles).
+
+### Jobs and Instances
+
+![Jobs](images/jobs_instances.png)
+
+In Prometheus terms, an endpoint you can scrape is called an instance, usually corresponding to a single process.  
+A collection of instances with the same purpose, a process replicated for scalability or reliability for example, is called a job.
+
+### Prometheus remote-write Specification
+
+The remote write protocol is designed to make it possible to reliably propagate samples in real-time from a sender to a receiver, without loss.
+
+* a "Sender" is something that sends Prometheus Remote Write data.
+* a "Receiver" is something that receives Prometheus Remote Write data.
+* a "Sample" is a pair of (timestamp, value).
+* a "Label" is a pair of (key, value).
+* a "Series" is a list of samples, identified by a unique set of labels.
+
+#### Compatible Senders and Receivers
+
+The spec is intended to describe how the following components interact:
+
+* Prometheus (as both a "sender" and a "receiver")
+* Avalanche (as a "sender") - A Load Testing Tool Prometheus Metrics.
+* Cortex (as a "receiver")
+* Elastic Agent (as a "receiver")
+* Grafana Agent (as both a "sender" and a "receiver")
+* GreptimeDB (as a "receiver")
+* InfluxData’s Telegraf agent. (as a sender, and as a receiver)
+* M3 (as a "receiver")
+* Mimir (as a "receiver")
+* OpenTelemetry Collector (as a "sender" and eventually as a "receiver")
+* Thanos (as a "receiver")
+* Vector (as a "sender" and a "receiver")
+* VictoriaMetrics (as a "receiver")
 
 ### Install Prometheus
 
@@ -408,6 +452,13 @@ echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.tx
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 ```
 
+##### Endpoints Pushgateway
+
+```sh
+# Access metrics
+http://localhost:9091
+```
+
 #### Use PromQL for find metrics pushgateway target
 
 ![promql-pushgateway](images/promql-pushgateway.png)
@@ -486,9 +537,13 @@ Project Link: [https://github.com/marcossilvestrini/kubernetes-observability](ht
 ## Acknowledgments
 
 * [Prometheus](https://prometheus.io/docs/introduction/overview/)
-* [Node Exporter](https://github.com/prometheus/node_exporter)
 * [Prometheus Default port allocations](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 * [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
+* [Exporters](https://prometheus.io/docs/instrumenting/exporters/)
+* [Node Exporter](https://github.com/prometheus/node_exporter)
+* [PromQL Article](https://www.metricfire.com/blog/getting-started-with-promql/)
+* Prometheus Articles
+   * https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/
 * [Kube Prometheus Stack Article](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

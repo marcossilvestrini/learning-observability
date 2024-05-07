@@ -73,8 +73,14 @@ cd pushgateway-*.*-amd64 || exit
 echo "Starting PushingGateway..."
 pm2 start pushgateway --name pushgateway -- --web.listen-address "192.168.0.130:9091"
 
+
+echo "Create as Push metrics to PushGateway..."
+echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
+echo 'training_completion{course="CKS", status="in_progress"} 0.5' >> metrics.txt
+echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.txt
+curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
+
 echo "Restarting Prometheus..."
 pm2 restart prometheus-server
 
-echo "Create as Push metrics to PushGateway..."
 
