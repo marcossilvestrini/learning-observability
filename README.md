@@ -244,6 +244,14 @@ The spec is intended to describe how the following components interact:
 * Vector (as a "sender" and a "receiver")
 * VictoriaMetrics (as a "receiver")
 
+### [PromQL](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+
+![promql](images/promql.png)
+
+Prometheus provides a functional query language called PromQL (Prometheus Query Language) that lets the user select and aggregate time series data in real time. The result of an expression can either be shown as a graph, viewed as tabular data in Prometheus's expression browser, or consumed by external systems via the HTTP API.
+
+[Query examples](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
 ### Install Prometheus
 
 ```sh
@@ -462,6 +470,33 @@ http://localhost:9091
 #### Use PromQL for find metrics pushgateway target
 
 ![promql-pushgateway](images/promql-pushgateway.png)
+
+### Promlens
+
+#### Install Promlens
+
+```sh	
+echo "Downloading Promlens..."
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo "Extracting Promlens..."
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo "Starting Promlens..."
+pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
+cd || exit
+```
+
+#### Promlens endpoints
+
+```sh
+# Access query builder
+http://192.168.0.130:8081
+```
+
+![promlens](images/promlens.png)
 
 ---
 
