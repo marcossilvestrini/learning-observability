@@ -247,6 +247,14 @@ A especificação pretende descrever como os seguintes componentes interagem:
 -   Vetor (como "remetente" e "destinatário")
 -   VictoriaMetrics (como um "receptor")
 
+### [Lavado](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+
+![promql](images/promql.png)
+
+O Prometheus fornece uma linguagem de consulta funcional chamada PromQL (Prometheus Query Language) que permite ao usuário selecionar e agregar dados de séries temporais em tempo real. O resultado de uma expressão pode ser mostrado como um gráfico, visualizado como dados tabulares no navegador de expressões do Prometheus ou consumido por sistemas externos por meio da API HTTP.
+
+[Exemplos de consulta](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
 ### Instale o Prometheus
 
 ```sh
@@ -465,6 +473,33 @@ http://localhost:9091
 #### Use PromQL para encontrar o alvo do pushgateway de métricas
 
 ![promql-pushgateway](images/promql-pushgateway.png)
+
+### Promlens
+
+#### Instalar Promlens
+
+```sh
+echo "Downloading Promlens..."
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo "Extracting Promlens..."
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo "Starting Promlens..."
+pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
+cd || exit
+```
+
+#### Pontos de extremidade do Promlens
+
+```sh
+# Access query builder
+http://192.168.0.130:8081
+```
+
+![promlens](images/promlens.png)
 
 * * *
 
