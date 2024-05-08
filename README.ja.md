@@ -247,6 +247,14 @@ Prometheus の用語では、スクレイピングできるエンドポイント
 -   ベクトル (「送信者」および「受信者」として)
 -   VictoriaMetrics (「受信者」として)
 
+### [洗い流された](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+
+![promql](images/promql.png)
+
+Prometheus は、ユーザーがリアルタイムで時系列データを選択して集計できるようにする PromQL (Prometheus Query Language) と呼ばれる関数型クエリ言語を提供します。式の結果は、グラフとして表示したり、Prometheus の式ブラウザで表形式のデータとして表示したり、HTTP API を介して外部システムで使用したりできます。
+
+[クエリの例](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
 ### プロメテウスをインストールする
 
 ```sh
@@ -465,6 +473,33 @@ http://localhost:9091
 #### PromQL を使用してメトリクスのプッシュゲートウェイ ターゲットを検索する
 
 ![promql-pushgateway](images/promql-pushgateway.png)
+
+### プロムレンス
+
+#### プロムレンズのインストール
+
+```sh
+echo "Downloading Promlens..."
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo "Extracting Promlens..."
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo "Starting Promlens..."
+pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
+cd || exit
+```
+
+#### プロムレンスのエンドポイント
+
+```sh
+# Access query builder
+http://192.168.0.130:8081
+```
+
+![promlens](images/promlens.png)
 
 * * *
 
