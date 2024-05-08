@@ -216,7 +216,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![Jobs](images/jobs_instances.png)
 
-In Prometheus terms, an endpoint you can scrape is called an instance, usually corresponding to a single process.  
+在 Prometheus 術語中，您可以抓取的端點稱為實例，通常對應於單一進程。  
 具有相同目的的實例的集合，例如為了可擴展性或可靠性而複製的進程，稱為作業。
 
 ### Prometheus 遠端寫入規範
@@ -246,6 +246,14 @@ In Prometheus terms, an endpoint you can scrape is called an instance, usually c
 -   薩諾斯（作為「接收者」）
 -   向量（作為“發送者”和“接收者”）
 -   VictoriaMetrics（作為「接收者」）
+
+### [洗掉了](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+
+![promql](images/promql.png)
+
+Prometheus 提供了一種名為 PromQL（Prometheus Query Language）的功能查詢語言，可讓使用者即時選擇和聚合時間序列資料。表達式的結果可以顯示為圖表，在 Prometheus 表達式瀏覽器中以表格資料形式查看，或由外部系統透過 HTTP API 使用。
+
+[查詢範例](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
 ### 安裝普羅米修斯
 
@@ -406,7 +414,7 @@ Prometheus Pushgateway 是一項中間服務，允許臨時作業和批次作業
 由於此類工作可能存在的時間不夠長而無法刪除，因此他們可以將其指標推送到 Pushgateway。  
 然後，Pushgateway 充當 Prometheus 抓取的臨時指標儲存。
 
-此設定對於擷取不連續執行的作業的結果特別有用，例如 CI 系統中的批次作業或在排程時間執行的備份腳本。  
+This setup is particularly useful for capturing the outcome of a job that does not run continuously, such as a batch job in a CI system, or a backup script running at a scheduled time.  
 它簡化了對此類作業的監控，而無需運行可能比作業本身壽命長的長期 Prometheus 實例。
 
 #### 安裝推播網關
@@ -465,6 +473,33 @@ http://localhost:9091
 #### 使用 PromQL 找出指標 Pushgateway 目標
 
 ![promql-pushgateway](images/promql-pushgateway.png)
+
+### 普羅倫斯
+
+#### 安裝 Promlens
+
+```sh
+echo "Downloading Promlens..."
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo "Extracting Promlens..."
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo "Starting Promlens..."
+pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
+cd || exit
+```
+
+#### Promlens 端點
+
+```sh
+# Access query builder
+http://192.168.0.130:8081
+```
+
+![promlens](images/promlens.png)
 
 * * *
 
