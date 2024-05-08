@@ -337,6 +337,12 @@ cd kubernetes-observability || exit
       <li>Vector (as a "sender" and a "receiver")</li>
       <li>VictoriaMetrics (as a "receiver")</li>
     </ul>
+    <h3 id="promql"><a class="anchor" aria-hidden="true" tabindex="-1" href="#promql"><span class="octicon octicon-link"></span></a><a href="https://prometheus.io/docs/prometheus/latest/querying/basics/">PromQL</a></h3>
+    <p>
+      <img src="images/promql.png" alt="promql">
+    </p>
+    <p>Prometheus provides a functional query language called PromQL (Prometheus Query Language) that lets the user select and aggregate time series data in real time. The result of an expression can either be shown as a graph, viewed as tabular data in Prometheus's expression browser, or consumed by external systems via the HTTP API.</p>
+    <p><a href="https://prometheus.io/docs/prometheus/latest/querying/examples/">Query examples</a></p>
     <h3 id="install-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-prometheus"><span class="octicon octicon-link"></span></a>Install Prometheus</h3>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download files - https://prometheus.io/download/</span>
 </span><span class="code-line line-number" line="2"><span class="token function">wget</span> https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
@@ -599,6 +605,40 @@ http://localhost:9091
     <h4 id="use-promql-for-find-metrics-pushgateway-target"><a class="anchor" aria-hidden="true" tabindex="-1" href="#use-promql-for-find-metrics-pushgateway-target"><span class="octicon octicon-link"></span></a>Use PromQL for find metrics pushgateway target</h4>
     <p>
       <img src="images/promql-pushgateway.png" alt="promql-pushgateway">
+    </p>
+    <h3 id="promlens"><a class="anchor" aria-hidden="true" tabindex="-1" href="#promlens"><span class="octicon octicon-link"></span></a>Promlens</h3>
+    <h4 id="install-promlens"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-promlens"><span class="octicon octicon-link"></span></a>Install Promlens</h4>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token builtin class-name">echo</span> <span class="token string">"Downloading Promlens..."</span>
+</span><span class="code-line line-number" line="2"><span class="token function">wget</span> <span class="token parameter variable">-q</span> https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token builtin class-name">echo</span> <span class="token string">"Extracting Promlens..."</span>
+</span><span class="code-line line-number" line="5"><span class="token function">tar</span> xvfz promlens-*.*-amd64.tar.gz
+</span><span class="code-line line-number" line="6"><span class="token function">rm</span> promlens-*.*-amd64.tar.gz
+</span><span class="code-line line-number" line="7"><span class="token builtin class-name">cd</span> promlens-*.*-amd64 <span class="token operator">||</span> <span class="token builtin class-name">exit</span>
+</span><span class="code-line line-number" line="8">
+</span><span class="code-line line-number" line="9"><span class="token builtin class-name">echo</span> <span class="token string">"Starting Promlens..."</span>
+</span><span class="code-line line-number" line="10">pm2 start promlens <span class="token parameter variable">--name</span> promlens -- --web.listen-address <span class="token string">"192.168.0.130:8081"</span>
+</span><span class="code-line line-number" line="11"><span class="token builtin class-name">cd</span> <span class="token operator">||</span> <span class="token builtin class-name">exit</span>
+</span></code><div onclick="copied(this)" data-code="echo &#x22;Downloading Promlens...&#x22;
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo &#x22;Extracting Promlens...&#x22;
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo &#x22;Starting Promlens...&#x22;
+pm2 start promlens --name promlens -- --web.listen-address &#x22;192.168.0.130:8081&#x22;
+cd || exit
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h4 id="promlens-endpoints"><a class="anchor" aria-hidden="true" tabindex="-1" href="#promlens-endpoints"><span class="octicon octicon-link"></span></a>Promlens endpoints</h4>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Access query builder</span>
+</span><span class="code-line line-number" line="2">http://192.168.0.130:8081
+</span></code><div onclick="copied(this)" data-code="# Access query builder
+http://192.168.0.130:8081
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <p>
+      <img src="images/promlens.png" alt="promlens">
     </p>
     <hr>
     <h3 id="alertmanager"><a class="anchor" aria-hidden="true" tabindex="-1" href="#alertmanager"><span class="octicon octicon-link"></span></a>Alertmanager</h3>
