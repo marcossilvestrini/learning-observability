@@ -247,6 +247,14 @@ La spécification est destinée à décrire comment les composants suivants inte
 -   Vecteur (en tant qu'"expéditeur" et "récepteur")
 -   VictoriaMetrics (en tant que "récepteur")
 
+### [Lavé](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+
+![promql](images/promql.png)
+
+Prometheus fournit un langage de requête fonctionnel appelé PromQL (Prometheus Query Language) qui permet à l'utilisateur de sélectionner et d'agréger des données de séries chronologiques en temps réel. Le résultat d'une expression peut être affiché sous forme de graphique, visualisé sous forme de données tabulaires dans le navigateur d'expressions de Prometheus, ou consommé par des systèmes externes via l'API HTTP.
+
+[Exemples de requêtes](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
 ### Installer Prometheus
 
 ```sh
@@ -446,7 +454,7 @@ scrape_configs:
 pm2 restart prometheus-server
 ```
 
-#### Create metrics for test pushgateway
+#### Créer des métriques pour tester pushgateway
 
 ```sh
 echo 'training_completion{course="CKA", status="complete"} 1' > metrics.txt
@@ -465,6 +473,33 @@ http://localhost:9091
 #### Utilisez PromQL pour rechercher la cible pushgateway des métriques
 
 ![promql-pushgateway](images/promql-pushgateway.png)
+
+### Promlens
+
+#### Installer Promlens
+
+```sh
+echo "Downloading Promlens..."
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo "Extracting Promlens..."
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo "Starting Promlens..."
+pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
+cd || exit
+```
+
+#### Points de terminaison Promlens
+
+```sh
+# Access query builder
+http://192.168.0.130:8081
+```
+
+![promlens](images/promlens.png)
 
 * * *
 
@@ -549,7 +584,7 @@ Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
 -   [Exportateurs](https://prometheus.io/docs/instrumenting/exporters/)
 -   [Exportateur de nœuds](https://github.com/prometheus/node_exporter)
 -   [Article PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
--   Articles sur Prométhée
+-   Prometheus Articles
     -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
 -   [Article sur la pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
