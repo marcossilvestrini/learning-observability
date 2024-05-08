@@ -22,7 +22,8 @@
 
 [![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
-[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
+[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 
@@ -231,7 +232,7 @@ El protocolo de escritura remota está diseñado para permitir la propagación c
 
 #### Remitentes y receptores compatibles
 
-La especificación pretende describir cómo interactúan los siguientes componentes:
+The spec is intended to describe how the following components interact:
 
 -   Prometeo (como "remitente" y "receptor")
 -   Avalanche (como "remitente"): una herramienta de prueba de carga Métricas de Prometheus.
@@ -246,6 +247,14 @@ La especificación pretende describir cómo interactúan los siguientes componen
 -   Thanos (como "receptor")
 -   Vector (como "remitente" y "receptor")
 -   VictoriaMetrics (como "receptor")
+
+### [Lavado](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+
+![promql](images/promql.png)
+
+Prometheus proporciona un lenguaje de consulta funcional llamado PromQL (Prometheus Query Language) que permite al usuario seleccionar y agregar datos de series temporales en tiempo real. El resultado de una expresión puede mostrarse como un gráfico, verse como datos tabulares en el navegador de expresiones de Prometheus o ser consumido por sistemas externos a través de la API HTTP.
+
+[Ejemplos de consulta](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
 ### Instalar Prometeo
 
@@ -466,6 +475,33 @@ http://localhost:9091
 
 ![promql-pushgateway](images/promql-pushgateway.png)
 
+### prolens
+
+#### Instalar Promlens
+
+```sh
+echo "Downloading Promlens..."
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo "Extracting Promlens..."
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo "Starting Promlens..."
+pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
+cd || exit
+```
+
+#### Puntos finales de Promlens
+
+```sh
+# Access query builder
+http://192.168.0.130:8081
+```
+
+![promlens](images/promlens.png)
+
 * * *
 
 ### Administrador de alertas
@@ -508,7 +544,7 @@ Si tiene alguna sugerencia que pueda mejorar esto, bifurque el repositorio y cre
 
 1.  Bifurcar el proyecto
 2.  Crea tu rama de funciones (`git checkout -b feature/AmazingFeature`)
-3.  Confirme sus cambios (`git commit -m 'Add some AmazingFeature'`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4.  Empujar a la rama (`git push origin feature/AmazingFeature`)
 5.  Abrir una solicitud de extracción
 
