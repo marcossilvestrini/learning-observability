@@ -123,7 +123,7 @@
 
 -   رفع نظام لينكس
 -   مجموعة Kubernetes لأعلى
--   Git
+-   شخص سخيف
 
 * * *
 
@@ -246,6 +246,14 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   ثانوس (بوصفه "المتلقي")
 -   المتجه (بوصفه "المرسل" و"المتلقي")
 -   VictoriaMetrics (بوصفها "المتلقي")
+
+### [مغسولة](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+
+![promql](images/promql.png)
+
+توفر Prometheus لغة استعلام وظيفية تسمى PromQL (لغة استعلام Prometheus) التي تتيح للمستخدم تحديد وتجميع بيانات السلاسل الزمنية في الوقت الفعلي. يمكن عرض نتيجة التعبير كرسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
+
+[أمثلة الاستعلام](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
 ### تثبيت بروميثيوس
 
@@ -465,6 +473,33 @@ http://localhost:9091
 #### استخدم PromQL للعثور على هدف بوابة الدفع للمقاييس
 
 ![promql-pushgateway](images/promql-pushgateway.png)
+
+### بروملينز
+
+#### قم بتثبيت بروملينز
+
+```sh
+echo "Downloading Promlens..."
+wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
+
+echo "Extracting Promlens..."
+tar xvfz promlens-*.*-amd64.tar.gz
+rm promlens-*.*-amd64.tar.gz
+cd promlens-*.*-amd64 || exit
+
+echo "Starting Promlens..."
+pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
+cd || exit
+```
+
+#### نقاط النهاية بروملينس
+
+```sh
+# Access query builder
+http://192.168.0.130:8081
+```
+
+![promlens](images/promlens.png)
 
 * * *
 
