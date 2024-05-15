@@ -8,6 +8,5 @@
 # Usernames and passwords required to connect to Prometheus.
 # Passwords are hashed with bcrypt: https://github.com/prometheus/exporter-toolkit/blob/master/docs/web-configuration.md#about-bcrypt
 #htpasswd -nBC 10 "" | tr -d ':\n' - prometheus
-basic_auth_users:
-  silvestrini: $2y$10$rKQJxWDxl4J0Xw21mII/o.AnnNXwgO2kE5L11H7vB4b5ythzeWb5i
+basic_auth_users:  
   skynet: $2y$10$rKQJxWDxl4J0Xw21mII/o.AnnNXwgO2kE5L11H7vB4b5ythzeWb5i

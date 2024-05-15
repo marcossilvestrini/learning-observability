@@ -183,6 +183,9 @@ The Prometheus ecosystem consists of multiple components, many of which are opti
 * an alertmanager to handle alerts
 * various support tools
 
+For more information about Prometheus access official documentation:  
+<https://prometheus.io/docs/introduction/overview/>
+
 ### Metric names and labels
 
 **Example metric name:**
@@ -196,9 +199,6 @@ The Prometheus ecosystem consists of multiple components, many of which are opti
 ```yaml
 api_http_requests_total{method="POST", handler="/messages"}
 ```
-
-For more information about Prometheus access official documentation:  
-<https://prometheus.io/docs/introduction/overview/>
 
 ### Metrics Types
 

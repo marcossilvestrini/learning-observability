@@ -14,7 +14,7 @@ alerting:
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  # - "first_rules.yml"
+  - "rules.yml"
   # - "second_rules.yml"
 
 # A scrape configuration containing exactly one endpoint to scrape:
@@ -29,6 +29,10 @@ scrape_configs:
     static_configs:
       #- targets: ["localhost:9090"]
       - targets: ["192.168.0.130:9090"]
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+      #password_file: /home/vagrant/prometheus-server/web-config.yml
 
   # Node exporter
   - job_name: node
