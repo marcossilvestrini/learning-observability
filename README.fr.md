@@ -186,6 +186,9 @@ L'écosystème Prometheus se compose de plusieurs composants, dont beaucoup sont
 -   un gestionnaire d'alertes pour gérer les alertes
 -   divers outils d'assistance
 
+Pour plus d’informations sur Prometheus, accédez à la documentation officielle :  
+<https://prometheus.io/docs/introduction/overview/>
+
 ### Noms et étiquettes des métriques
 
 **Exemple de nom de métrique :**
@@ -200,9 +203,6 @@ L'écosystème Prometheus se compose de plusieurs composants, dont beaucoup sont
 api_http_requests_total{method="POST", handler="/messages"}
 ```
 
-Pour plus d’informations sur Prometheus, accédez à la documentation officielle :  
-<https://prometheus.io/docs/introduction/overview/>
-
 ### Types de métriques
 
 ![Metrics Type](images/metrics_type.png)
@@ -216,7 +216,7 @@ Pour plus d’informations sur Prometheus, accédez à la documentation officiel
 
 ![Jobs](images/jobs_instances.png)
 
-En termes Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
+En termes de Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
 Un ensemble d'instances ayant le même objectif, un processus répliqué à des fins d'évolutivité ou de fiabilité par exemple, est appelé un travail.
 
 ### Spécification d'écriture à distance Prometheus
@@ -253,7 +253,7 @@ La spécification est destinée à décrire comment les composants suivants inte
 
 Prometheus fournit un langage de requête fonctionnel appelé PromQL (Prometheus Query Language) qui permet à l'utilisateur de sélectionner et d'agréger des données de séries chronologiques en temps réel. Le résultat d'une expression peut être affiché sous forme de graphique, visualisé sous forme de données tabulaires dans le navigateur d'expressions de Prometheus, ou consommé par des systèmes externes via l'API HTTP.
 
-[Exemples de requêtes](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+[Exemples de requête](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
 ### Installer Prometheus
 
@@ -414,7 +414,7 @@ Prometheus Pushgateway est un service intermédiaire qui permet aux tâches éph
 Étant donné que ces types de tâches n’existent peut-être pas assez longtemps pour être supprimés, ils peuvent plutôt transmettre leurs métriques à un Pushgateway.  
 Le Pushgateway agit alors comme un magasin de métriques temporaire que Prometheus récupère.
 
-Cette configuration est particulièrement utile pour capturer le résultat d'une tâche qui ne s'exécute pas en continu, comme une tâche par lots dans un système CI ou un script de sauvegarde s'exécutant à une heure planifiée.  
+Cette configuration est particulièrement utile pour capturer le résultat d'une tâche qui ne s'exécute pas en continu, comme une tâche par lots dans un système CI ou un script de sauvegarde exécuté à une heure planifiée.  
 Cela simplifie la surveillance de ces types de tâches sans avoir besoin d'exécuter une instance Prometheus de longue durée qui pourrait survivre aux tâches elles-mêmes.
 
 #### Installer PushGateway
@@ -584,7 +584,7 @@ Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
 -   [Exportateurs](https://prometheus.io/docs/instrumenting/exporters/)
 -   [Exportateur de nœuds](https://github.com/prometheus/node_exporter)
 -   [Article PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
--   Prometheus Articles
+-   Articles sur Prométhée
     -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
 -   [Article sur la pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
