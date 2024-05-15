@@ -113,7 +113,7 @@
 -   普羅米修斯
 -   警報管理器
 -   格拉法納
--   格拉法娜·洛基
+-   Grafana Loki
 -   格拉法納時間
 -   格拉法納合金
 
@@ -177,7 +177,7 @@ Prometheus 是一個開源系統監控和警報工具包，最初是在 SoundClo
 
 自2012年推出以來，許多公司和組織都採用了Prometheus，該專案擁有非常活躍的開發者和用戶社群。
 
-Prometheus 生態系統由多個組件組成，其中許多組件是可選的：
+The Prometheus ecosystem consists of multiple components, many of which are optional:
 
 -   主要的 Prometheus 伺服器，用於抓取和儲存時間序列數據
 -   用於檢測應用程式程式碼的客戶端庫
@@ -185,6 +185,9 @@ Prometheus 生態系統由多個組件組成，其中許多組件是可選的：
 -   HAProxy、StatsD、Graphite 等服務的特殊用途導出器。
 -   處理警報的警報管理器
 -   各種支援工具
+
+有關 Prometheus 的更多資訊請訪問官方文件：  
+<https://prometheus.io/docs/introduction/overview/>
 
 ### 指標名稱和標籤
 
@@ -200,16 +203,13 @@ Prometheus 生態系統由多個組件組成，其中許多組件是可選的：
 api_http_requests_total{method="POST", handler="/messages"}
 ```
 
-有關 Prometheus 的更多資訊請訪問官方文件：  
-<https://prometheus.io/docs/introduction/overview/>
-
 ### 指標類型
 
 ![Metrics Type](images/metrics_type.png)
 
 **[櫃檯](https://prometheus.io/docs/concepts/metric_types/#counter)**– 僅接受並儲存那些隨時間增加的值。  
 **[測量](https://prometheus.io/docs/concepts/metric_types/#gauge)**– 儲存可以取不同值的值，這些值既可以增加也可以減少。  
-**[直方圖](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 對觀察結果（通常是請求持續時間或回應大小）進行取樣，並將其計數到可設定的儲存桶中。它還提供所有觀察值的總和，使您可以計算平均值。  
+**[直方圖](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 對觀察結果進行取樣（通常是請求持續時間或回應大小等）並將其計數到可設定的儲存桶中。它還提供所有觀察值的總和，使您可以計算平均值。  
 **[概括](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 使用附加統計資料（分位數）提供更詳細資料表示的直方圖。
 
 ### 作業和實例
@@ -410,11 +410,11 @@ scrape_configs:
 
 ### 推播網關
 
-Prometheus Pushgateway 是一項中間服務，允許臨時作業和批次作業將其指標公開給 Prometheus。  
+Prometheus Pushgateway 是一項中間服務，可讓臨時作業和批次作業將其指標公開給 Prometheus。  
 由於此類工作可能存在的時間不夠長而無法刪除，因此他們可以將其指標推送到 Pushgateway。  
 然後，Pushgateway 充當 Prometheus 抓取的臨時指標儲存。
 
-This setup is particularly useful for capturing the outcome of a job that does not run continuously, such as a batch job in a CI system, or a backup script running at a scheduled time.  
+此設定對於擷取不連續執行的作業的結果特別有用，例如 CI 系統中的批次作業或在排程時間執行的備份腳本。  
 它簡化了對此類作業的監控，而無需運行可能比作業本身壽命長的長期 Prometheus 實例。
 
 #### 安裝推播網關
