@@ -186,6 +186,9 @@ O ecossistema Prometheus consiste em vários componentes, muitos dos quais são 
 -   um gerenciador de alertas para lidar com alertas
 -   diversas ferramentas de suporte
 
+Para mais informações sobre o Prometheus acesse a documentação oficial:  
+<https://prometheus.io/docs/introduction/overview/>
+
 ### Nomes e rótulos de métricas
 
 **Exemplo de nome de métrica:**
@@ -199,9 +202,6 @@ O ecossistema Prometheus consiste em vários componentes, muitos dos quais são 
 ```yaml
 api_http_requests_total{method="POST", handler="/messages"}
 ```
-
-Para mais informações sobre o Prometheus acesse a documentação oficial:  
-<https://prometheus.io/docs/introduction/overview/>
 
 ### Tipos de métricas
 
@@ -349,7 +349,7 @@ count(promhttp_metric_handler_requests_total)
 rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
-### Exportadores Prometheus
+### Prometheus Exportadores
 
 Um exportador é um binário executado junto com o aplicativo do qual você deseja obter métricas.  
 O exportador expõe métricas do Prometheus, geralmente convertendo métricas expostas em um formato não Prometheus em um formato compatível com o Prometheus.
