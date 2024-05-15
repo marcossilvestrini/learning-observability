@@ -22,8 +22,7 @@
 
 [![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
-[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
+[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 
@@ -187,6 +186,9 @@ El ecosistema Prometheus consta de múltiples componentes, muchos de los cuales 
 -   un administrador de alertas para manejar alertas
 -   varias herramientas de apoyo
 
+Para más información sobre Prometheus acceda a la documentación oficial:  
+<https://prometheus.io/docs/introduction/overview/>
+
 ### Nombres y etiquetas de métricas
 
 **Nombre de métrica de ejemplo:**
@@ -201,16 +203,13 @@ El ecosistema Prometheus consta de múltiples componentes, muchos de los cuales 
 api_http_requests_total{method="POST", handler="/messages"}
 ```
 
-Para más información sobre Prometheus acceda a la documentación oficial:  
-<https://prometheus.io/docs/introduction/overview/>
-
 ### Tipos de métricas
 
 ![Metrics Type](images/metrics_type.png)
 
 **[Encimera](https://prometheus.io/docs/concepts/metric_types/#counter)**– acepta y almacena sólo aquellos valores que aumentarán con el tiempo.  
 **[Indicador](https://prometheus.io/docs/concepts/metric_types/#gauge)**– almacena los valores que pueden tomar diferentes valores, que pueden tanto aumentar como disminuir.  
-**[histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
+**[Histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
 **[Resumen](https://prometheus.io/docs/concepts/metric_types/#histogram)**– histograma con una representación de datos más detallada utilizando estadísticas adicionales (cuantiles).
 
 ### Trabajos e instancias
@@ -232,7 +231,7 @@ El protocolo de escritura remota está diseñado para permitir la propagación c
 
 #### Remitentes y receptores compatibles
 
-The spec is intended to describe how the following components interact:
+La especificación pretende describir cómo interactúan los siguientes componentes:
 
 -   Prometeo (como "remitente" y "receptor")
 -   Avalanche (como "remitente"): una herramienta de prueba de carga Métricas de Prometheus.
@@ -544,7 +543,7 @@ Si tiene alguna sugerencia que pueda mejorar esto, bifurque el repositorio y cre
 
 1.  Bifurcar el proyecto
 2.  Crea tu rama de funciones (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+3.  Confirme sus cambios (`git commit -m 'Add some AmazingFeature'`)
 4.  Empujar a la rama (`git push origin feature/AmazingFeature`)
 5.  Abrir una solicitud de extracción
 
