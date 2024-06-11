@@ -115,7 +115,6 @@ Algumas ferramentas para aprender:
 -   Grafana
 -   Graffana Loki
 -   Grafana Tempo
--   Liga Grafana
 
 * * *
 
@@ -181,7 +180,7 @@ O ecossistema Prometheus consiste em vários componentes, muitos dos quais são 
 
 -   o principal servidor Prometheus que coleta e armazena dados de séries temporais
 -   bibliotecas de cliente para instrumentação de código de aplicativo
--   um gateway push para apoiar empregos de curta duração
+-   a push gateway for supporting short-lived jobs
 -   exportadores para fins especiais de serviços como HAProxy, StatsD, Graphite, etc.
 -   um gerenciador de alertas para lidar com alertas
 -   diversas ferramentas de suporte
@@ -272,7 +271,7 @@ cd prometheus-*
 
 ### Configurar o Prometheus
 
-Veja meu arquivo de configuração[prometheus.yaml](./prometheus/configs/prometheus.yml)
+Veja meu arquivo de configuração[prometheus.yaml](./prometheus/configs/prometheus_1.yml)
 
 ```sh
 vim prometheus.yaml
@@ -349,7 +348,7 @@ count(promhttp_metric_handler_requests_total)
 rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
-### Prometheus Exportadores
+### Exportadores Prometheus
 
 Um exportador é um binário executado junto com o aplicativo do qual você deseja obter métricas.  
 O exportador expõe métricas do Prometheus, geralmente convertendo métricas expostas em um formato não Prometheus em um formato compatível com o Prometheus.
@@ -411,7 +410,7 @@ Reinicie o serviço Prometheus para aplicar um novo trabalho.
 ### PushGateway
 
 O Prometheus Pushgateway é um serviço intermediário que permite que trabalhos efêmeros e em lote exponham suas métricas ao Prometheus.  
-Como esses tipos de trabalhos podem não existir por tempo suficiente para serem eliminados, eles podem, em vez disso, enviar suas métricas para um Pushgateway.  
+Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway.  
 O Pushgateway atua então como um armazenamento temporário de métricas que o Prometheus coleta.
 
 Essa configuração é particularmente útil para capturar o resultado de uma tarefa que não é executada continuamente, como uma tarefa em lote em um sistema de CI ou um script de backup em execução em um horário agendado.  
@@ -470,7 +469,7 @@ curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_m
 http://localhost:9091
 ```
 
-#### Use PromQL para encontrar o alvo do pushgateway de métricas
+#### Use PromQL for find metrics pushgateway target
 
 ![promql-pushgateway](images/promql-pushgateway.png)
 
