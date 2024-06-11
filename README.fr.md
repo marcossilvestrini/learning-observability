@@ -22,7 +22,8 @@
 
 [![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
-[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
+[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 
@@ -115,7 +116,6 @@ Quelques outils pour apprendre :
 -   Grafana
 -   Graffana Loki
 -   Heure de Grafana
--   Alliage Grafana
 
 * * *
 
@@ -253,7 +253,7 @@ La spécification est destinée à décrire comment les composants suivants inte
 
 Prometheus fournit un langage de requête fonctionnel appelé PromQL (Prometheus Query Language) qui permet à l'utilisateur de sélectionner et d'agréger des données de séries chronologiques en temps réel. Le résultat d'une expression peut être affiché sous forme de graphique, visualisé sous forme de données tabulaires dans le navigateur d'expressions de Prometheus, ou consommé par des systèmes externes via l'API HTTP.
 
-[Exemples de requête](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+[Exemples de requêtes](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
 ### Installer Prometheus
 
@@ -272,7 +272,7 @@ cd prometheus-*
 
 ### Configurer Prometheus
 
-Voir mon fichier de configuration[prometheus.yaml](./prometheus/configs/prometheus.yml)
+Voir mon fichier de configuration[prometheus.yaml](./prometheus/configs/prometheus_1.yml)
 
 ```sh
 vim prometheus.yaml
@@ -414,7 +414,7 @@ Prometheus Pushgateway est un service intermédiaire qui permet aux tâches éph
 Étant donné que ces types de tâches n’existent peut-être pas assez longtemps pour être supprimés, ils peuvent plutôt transmettre leurs métriques à un Pushgateway.  
 Le Pushgateway agit alors comme un magasin de métriques temporaire que Prometheus récupère.
 
-Cette configuration est particulièrement utile pour capturer le résultat d'une tâche qui ne s'exécute pas en continu, comme une tâche par lots dans un système CI ou un script de sauvegarde exécuté à une heure planifiée.  
+Cette configuration est particulièrement utile pour capturer le résultat d'une tâche qui ne s'exécute pas en continu, comme une tâche par lots dans un système CI ou un script de sauvegarde s'exécutant à une heure planifiée.  
 Cela simplifie la surveillance de ces types de tâches sans avoir besoin d'exécuter une instance Prometheus de longue durée qui pourrait survivre aux tâches elles-mêmes.
 
 #### Installer PushGateway
