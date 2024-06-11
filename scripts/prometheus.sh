@@ -47,7 +47,7 @@ cd || exit
 # Descobrir o IP local da máquina
 local_ip=$(hostname -I | tr ' ' '\n' | grep '192.168.0.')
 
-# Verificar o IP e configurar o Prometheus de acordo
+# Verificar o IP e configurar o Prometheus
 if [ "$local_ip" = "192.168.0.130" ]; then
     # Configurações para Prometheus-1
     if [ -d /var/lib/prometheus ]; then
@@ -75,8 +75,8 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     #pm2 start prometheus --name prometheus-server -- --config.file="$configFile"
     pm2 start prometheus \
     --name prometheus-server -- \
-    --config.file=prometheus.yml \
     --web.config.file=web-config.yml \
+    --config.file=prometheus.yml \
     --web.enable-remote-write-receiver \
     --storage.tsdb.path=/var/lib/prometheus \
     --storage.tsdb.retention.time=15d
@@ -84,8 +84,7 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     
     # PushGateway installation and setup
     echo "Setting up PushingGateway..."
-    cd || exit
-    
+        
     echo "Downloading PushingGateway..."
     wget -q https://github.com/prometheus/pushgateway/releases/download/v1.8.0/pushgateway-1.8.0.linux-amd64.tar.gz
     
@@ -105,20 +104,23 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     
     echo "Restarting Prometheus..."
     pm2 restart prometheus-server
+    cd || exit
     
     # Promlens installation and setup
     echo "Downloading Promlens..."
     wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
     
+    # Promlens not supported prometheus with basic authentication enable!!! - https://github.com/prometheus/promlens/issues/38
     echo "Extracting Promlens..."
     tar xvfz promlens-*.*-amd64.tar.gz
     rm promlens-*.*-amd64.tar.gz
     cd promlens-*.*-amd64 || exit
     
     echo "Starting Promlens..."
-    pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
-    cd || exit
-    
+    pm2 start promlens \
+    --name promlens -- \
+    --web.listen-address "192.168.0.130:8081"
+    cd || exit    
     
     elif [ "$local_ip" = "192.168.0.131" ]; then
     # Configurações para Prometheus-2
@@ -135,7 +137,8 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     
     echo "Starting Prometheus..."
     cd prometheus-server || exit
-    pm2 start prometheus --name prometheus-server -- \
+    pm2 start prometheus \
+    --name prometheus-server -- \
     --config.file=prometheus.yml \
     --web.config.file=web-config.yml
     cd || exit
@@ -150,7 +153,9 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     cd promlens-*.*-amd64 || exit
     
     echo "Starting Promlens..."
-    pm2 start promlens --name promlens -- --web.listen-address "192.168.0.131:8081"
+    pm2 start promlens \
+    --name promlens -- \
+    --web.listen-address "192.168.0.131:8081"
     cd || exit
     
 fi

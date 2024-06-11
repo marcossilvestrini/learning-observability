@@ -114,7 +114,6 @@ Some tools for learning:
 * Grafana
 * Grafana Loki
 * Grafana Tempo
-* Grafana Alloy
 
 ---
 
@@ -269,7 +268,7 @@ cd prometheus-*
 
 ### Configure Prometheus
 
-See my  configuration file [prometheus.yaml](./prometheus/configs/prometheus.yml)
+See my configuration file [prometheus.yaml](./prometheus/configs/prometheus_1.yml)
 
 ```sh
 vim prometheus.yaml
