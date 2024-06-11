@@ -112,10 +112,9 @@
 
 -   普羅米修斯
 -   警報管理器
--   格拉法納
--   Grafana Loki
+-   Grafana
+-   格拉法娜·洛基
 -   格拉法納時間
--   格拉法納合金
 
 * * *
 
@@ -177,7 +176,7 @@ Prometheus 是一個開源系統監控和警報工具包，最初是在 SoundClo
 
 自2012年推出以來，許多公司和組織都採用了Prometheus，該專案擁有非常活躍的開發者和用戶社群。
 
-The Prometheus ecosystem consists of multiple components, many of which are optional:
+Prometheus 生態系統由多個組件組成，其中許多組件是可選的：
 
 -   主要的 Prometheus 伺服器，用於抓取和儲存時間序列數據
 -   用於檢測應用程式程式碼的客戶端庫
@@ -272,7 +271,7 @@ cd prometheus-*
 
 ### 配置普羅米修斯
 
-看我的設定檔[普羅米修斯.yaml](./prometheus/configs/prometheus.yml)
+看我的設定檔[普羅米修斯.yaml](./prometheus/configs/prometheus_1.yml)
 
 ```sh
 vim prometheus.yaml
@@ -410,7 +409,7 @@ scrape_configs:
 
 ### 推播網關
 
-Prometheus Pushgateway 是一項中間服務，可讓臨時作業和批次作業將其指標公開給 Prometheus。  
+Prometheus Pushgateway 是一項中間服務，允許臨時作業和批次作業將其指標公開給 Prometheus。  
 由於此類工作可能存在的時間不夠長而無法刪除，因此他們可以將其指標推送到 Pushgateway。  
 然後，Pushgateway 充當 Prometheus 抓取的臨時指標儲存。
 
