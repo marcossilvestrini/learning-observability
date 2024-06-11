@@ -115,7 +115,6 @@ Algunas herramientas para aprender:
 -   Grafana
 -   Graffana Loki
 -   Hora de Grafana
--   Aleación de Grafana
 
 * * *
 
@@ -209,7 +208,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 **[Encimera](https://prometheus.io/docs/concepts/metric_types/#counter)**– acepta y almacena sólo aquellos valores que aumentarán con el tiempo.  
 **[Indicador](https://prometheus.io/docs/concepts/metric_types/#gauge)**– almacena los valores que pueden tomar diferentes valores, que pueden tanto aumentar como disminuir.  
-**[Histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
+**[histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
 **[Resumen](https://prometheus.io/docs/concepts/metric_types/#histogram)**– histograma con una representación de datos más detallada utilizando estadísticas adicionales (cuantiles).
 
 ### Trabajos e instancias
@@ -272,7 +271,7 @@ cd prometheus-*
 
 ### Configurar Prometeo
 
-Ver mi archivo de configuración[prometheus.yaml](./prometheus/configs/prometheus.yml)
+Ver mi archivo de configuración[prometheus.yaml](./prometheus/configs/prometheus_1.yml)
 
 ```sh
 vim prometheus.yaml
@@ -351,7 +350,7 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 
 ### Exportadores de Prometeo
 
-Un exportador es un binario que se ejecuta junto con la aplicación de la que desea obtener métricas.  
+An exporter is a binary running alongside the application you want to obtain metrics from.  
 El exportador expone las métricas de Prometheus, normalmente convirtiendo las métricas que se exponen en un formato que no es de Prometheus a un formato compatible con Prometheus.
 
 #### Exportador de nodos
@@ -492,7 +491,7 @@ pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
 cd || exit
 ```
 
-#### Puntos finales de Promlens
+#### Promlens endpoints
 
 ```sh
 # Access query builder
