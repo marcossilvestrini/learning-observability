@@ -115,7 +115,6 @@
 -   グラファナ
 -   グラファナ ロキ
 -   グラファナ時間
--   グラファナ合金
 
 * * *
 
@@ -272,7 +271,7 @@ cd prometheus-*
 
 ### プロメテウスの構成
 
-私の設定ファイルを参照してください[プロメテウス.yaml](./prometheus/configs/prometheus.yml)
+私の設定ファイルを参照してください[プロメテウス.yaml](./prometheus/configs/prometheus_1.yml)
 
 ```sh
 vim prometheus.yaml
@@ -356,7 +355,7 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 
 #### ノードエクスポーター
 
-Prometheus Node Exporter は、さまざまなハードウェアおよびカーネル関連のメトリクスを公開します。
+Prometheus Node Exporter は、ハードウェアおよびカーネル関連のさまざまなメトリクスを公開します。
 
 ##### ノードエクスポーターのインストール
 
@@ -415,7 +414,7 @@ Prometheus Pushgateway は、一時ジョブやバッチ ジョブがメトリ�
 Pushgateway は、Prometheus が収集する一時的なメトリクス ストアとして機能します。
 
 この設定は、CI システムのバッチ ジョブや、スケジュールされた時間に実行されるバックアップ スクリプトなど、継続的に実行されないジョブの結果を取得する場合に特に役立ちます。  
-これにより、ジョブ自体よりも存続する可能性がある長寿命の Prometheus インスタンスを実行する必要がなく、この種のジョブの監視が簡素化されます。
+これにより、ジョブ自体が存続する可能性がある長寿命の Prometheus インスタンスを実行する必要がなく、この種のジョブの監視が簡素化されます。
 
 #### プッシュゲートウェイのインストール
 
@@ -544,7 +543,7 @@ Alertmanager の詳細については、公式ドキュメントにアクセス�
 1.  プロジェクトをフォークする
 2.  機能ブランチを作成します (`git checkout -b feature/AmazingFeature`）
 3.  変更をコミットします (`git commit -m 'Add some AmazingFeature'`）
-4.  ブランチにプッシュ (`git push origin feature/AmazingFeature`）
+4.  Push to the Branch (`git push origin feature/AmazingFeature`）
 5.  プルリクエストを開く
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
