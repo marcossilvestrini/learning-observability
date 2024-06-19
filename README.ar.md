@@ -114,7 +114,7 @@
 -   مدير التنبيه
 -   جرافانا
 -   جرافانا لوكي
--   توقيت غرافانا
+-   توقيت جرافانا
 
 * * *
 
@@ -158,7 +158,7 @@ cd kubernetes-observability || exit
 -   [ ] مدير التنبيه
 -   [ ] جرافانا
 -   [ ] جرافانا لوكي
--   [ ] توقيت غرافانا
+-   [ ] توقيت جرافانا
 -   [ ] سبائك جرافانا
 -   [ ] أدوات أخرى
 
@@ -240,8 +240,8 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   GreptimeDB (بوصفه "المتلقي")
 -   وكيل Telegraf الخاص بـ InfluxData. (كمرسل وكمستقبل)
 -   M3 (بوصفه "المتلقي")
--   ميمير (بوصفه "المتلقي")
--   OpenTelemetry Collector (بصفته "مرسلًا" وفي النهاية "مستقبلًا")
+-   ميمير (بصفته "المتلقي")
+-   OpenTelemetry Collector (بصفته "مرسلًا" وفي النهاية "كمستقبلًا")
 -   ثانوس (بوصفه "المتلقي")
 -   المتجه (بوصفه "المرسل" و"المتلقي")
 -   VictoriaMetrics (بوصفها "المتلقي")
@@ -250,9 +250,40 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![promql](images/promql.png)
 
-توفر Prometheus لغة استعلام وظيفية تسمى PromQL (لغة استعلام Prometheus) التي تتيح للمستخدم تحديد وتجميع بيانات السلاسل الزمنية في الوقت الفعلي. يمكن عرض نتيجة التعبير إما كرسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
+توفر Prometheus لغة استعلام وظيفية تسمى PromQL (لغة استعلام Prometheus) التي تتيح للمستخدم تحديد وتجميع بيانات السلاسل الزمنية في الوقت الفعلي.  
+يمكن عرض نتيجة التعبير إما كرسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
 
 [أمثلة الاستعلام](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+### [الاتحاد](https://prometheus.io/docs/prometheus/latest/federation/#federation)
+
+![federation](images/federation.png)
+
+يسمح الاتحاد لخادم Prometheus باستخلاص السلاسل الزمنية المحددة من خادم Prometheus آخر.
+
+#### الاتحاد الهرمي
+
+يسمح الاتحاد الهرمي لشركة Prometheus بالتوسع في البيئات التي تحتوي على عشرات مراكز البيانات وملايين العقد.
+
+في حالة الاستخدام هذه، تشبه طوبولوجيا الاتحاد شجرة، حيث تقوم خوادم Prometheus ذات المستوى الأعلى بجمع بيانات السلاسل الزمنية المجمعة من عدد أكبر من الخوادم الثانوية.
+
+وهذا يعني أن لدينا خوادم Prometheus أكبر حجمًا تقوم بجمع بيانات السلاسل الزمنية من الخوادم الأصغر حجمًا. لدينا نهج من أعلى إلى أسفل حيث يتم جمع البيانات من مستويات مختلفة.
+
+![federation-hierarchical](images/federation-hierarchical.png)
+
+#### الاتحاد عبر الخدمات
+
+تتضمن هذه الطريقة خادم Prometheus الذي يراقب خدمة معينة أو مجموعة من الخدمات، ويجمع بيانات سلاسل زمنية محددة من خادم آخر يراقب مجموعة مختلفة من الخدمات.
+
+على سبيل المثال، قد يعرض برنامج جدولة نظام المجموعة الذي يقوم بتشغيل خدمات متعددة معلومات استخدام الموارد (مثل الذاكرة واستخدام وحدة المعالجة المركزية) حول مثيلات الخدمة التي تعمل على نظام المجموعة.
+
+ومن ناحية أخرى، فإن الخدمة التي يتم تشغيلها على تلك المجموعة ستكشف فقط عن مقاييس الخدمة الخاصة بالتطبيق.
+
+في كثير من الأحيان، يتم جمع هاتين المجموعتين من المقاييس بواسطة خوادم Prometheus منفصلة. باستخدام الاتحاد، قد يقوم خادم Prometheus الذي يحتوي على مقاييس مستوى الخدمة بسحب مقاييس استخدام موارد المجموعة حول خدمته المحددة من مجموعة Prometheus، بحيث يمكن استخدام مجموعتي المقاييس داخل ذلك الخادم.
+
+ومن خلال القيام بذلك، يمكننا تشغيل الاستعلامات والتنبيهات على البيانات المدمجة من كلا الخادمين.
+
+![cross-service-federation](images/cross-service-federation.png)
 
 ### تثبيت بروميثيوس
 
@@ -521,7 +552,7 @@ http://192.168.0.130:8081
 
 * * *
 
-### توقيت غرافانا
+### توقيت جرافانا
 
 * * *
 
@@ -538,7 +569,7 @@ http://192.168.0.130:8081
 المساهمات هي ما يجعل مجتمع المصادر المفتوحة مكانًا رائعًا للتعلم والإلهام والإبداع. أي مساهمات تقدمها هي**اقدر هذا جدا**.
 
 إذا كان لديك اقتراح من شأنه أن يجعل هذا الأمر أفضل، فيرجى شوكة الريبو وإنشاء طلب سحب. يمكنك أيضًا ببساطة فتح مشكلة بالعلامة "التحسين".
-لا تنس أن تعطي المشروع نجمة! شكرًا لك مرة أخرى!
+لا تنسى أن تعطي المشروع نجمة! شكرًا لك مرة أخرى!
 
 1.  شوكة المشروع
 2.  قم بإنشاء فرع الميزات الخاص بك (`git checkout -b feature/AmazingFeature`)
@@ -578,14 +609,16 @@ http://192.168.0.130:8081
 ## شكر وتقدير
 
 -   [بروميثيوس](https://prometheus.io/docs/introduction/overview/)
+-   [تكوينات بروميثيوس](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [بروميثيوس تخصيصات المنفذ الافتراضي](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [بوابة الدفع](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [المصدرين](https://prometheus.io/docs/instrumenting/exporters/)
 -   [مصدر العقدة](https://github.com/prometheus/node_exporter)
 -   [مقالة PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
--   مقالات بروميثيوس
-    -   [هتبص://دفشنكتد.كوم/ثي-ديفينيتيفي-جويدي-تو-بروميثيوس-ين-٢٠١٩/](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
--   [مقالة كوب بروميثيوس ستاك](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [مقالات بروميثيوس](./README.md)
+    -   [Prometheus Federation](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+    -   [مراقبة بروميثيوس: الدليل النهائي في عام 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [مقالة كوب بروميثيوس ستاك](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
