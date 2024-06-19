@@ -113,7 +113,7 @@ Algumas ferramentas para aprender:
 -   Prometeu
 -   Gerenciador de alertas
 -   Grafana
--   Graffana Loki
+-   Grafana Loki
 -   Grafana Tempo
 
 * * *
@@ -157,7 +157,7 @@ Publico alguns exemplos para uso neste repositório.
 -   [ ] Prometeu
 -   [ ] Gerenciador de alertas
 -   [ ] Grafana
--   [ ] Graffana Loki
+-   [ ] Grafana Loki
 -   [ ] Grafana Tempo
 -   [ ] Liga Grafana
 -   [ ] Outras ferramentas
@@ -180,7 +180,7 @@ O ecossistema Prometheus consiste em vários componentes, muitos dos quais são 
 
 -   o principal servidor Prometheus que coleta e armazena dados de séries temporais
 -   bibliotecas de cliente para instrumentação de código de aplicativo
--   a push gateway for supporting short-lived jobs
+-   um gateway push para apoiar empregos de curta duração
 -   exportadores para fins especiais de serviços como HAProxy, StatsD, Graphite, etc.
 -   um gerenciador de alertas para lidar com alertas
 -   diversas ferramentas de suporte
@@ -250,9 +250,40 @@ A especificação pretende descrever como os seguintes componentes interagem:
 
 ![promql](images/promql.png)
 
-O Prometheus fornece uma linguagem de consulta funcional chamada PromQL (Prometheus Query Language) que permite ao usuário selecionar e agregar dados de séries temporais em tempo real. O resultado de uma expressão pode ser mostrado como um gráfico, visualizado como dados tabulares no navegador de expressões do Prometheus ou consumido por sistemas externos por meio da API HTTP.
+O Prometheus fornece uma linguagem de consulta funcional chamada PromQL (Prometheus Query Language) que permite ao usuário selecionar e agregar dados de séries temporais em tempo real.  
+O resultado de uma expressão pode ser mostrado como um gráfico, visualizado como dados tabulares no navegador de expressões do Prometheus ou consumido por sistemas externos por meio da API HTTP.
 
 [Exemplos de consulta](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+### [Federação](https://prometheus.io/docs/prometheus/latest/federation/#federation)
+
+![federation](images/federation.png)
+
+A federação permite que um servidor Prometheus extraia séries temporais selecionadas de outro servidor Prometheus.
+
+#### Federação Hierárquica
+
+A federação hierárquica permite que o Prometheus seja dimensionado para ambientes com dezenas de data centers e milhões de nós.
+
+Nesse caso de uso, a topologia de federação se assemelha a uma árvore, com servidores Prometheus de nível superior coletando dados agregados de séries temporais de um número maior de servidores subordinados.
+
+Isso significa que temos servidores Prometheus maiores que coletam dados de séries temporais de servidores menores. Temos uma abordagem de cima para baixo, onde os dados são coletados em diferentes níveis.
+
+![federation-hierarchical](images/federation-hierarchical.png)
+
+#### Federação entre serviços
+
+Este método envolve um servidor Prometheus monitorando um determinado serviço ou grupo de serviços, coletando dados de série temporal específicos de outro servidor que está monitorando um conjunto diferente de serviços.
+
+Por exemplo, um agendador de cluster que executa vários serviços pode expor informações de uso de recursos (como uso de memória e CPU) sobre instâncias de serviço em execução no cluster.
+
+Por outro lado, um serviço em execução nesse cluster exporá apenas métricas de serviço específicas do aplicativo.
+
+Freqüentemente, esses dois conjuntos de métricas são coletados por servidores Prometheus separados. Usando a federação, o servidor Prometheus que contém métricas de nível de serviço pode extrair as métricas de uso de recursos do cluster sobre seu serviço específico do cluster Prometheus, para que ambos os conjuntos de métricas possam ser usados ​​nesse servidor.
+
+Ao fazer isso, podemos executar consultas e alertas nos dados mesclados de ambos os servidores.
+
+![cross-service-federation](images/cross-service-federation.png)
 
 ### Instale o Prometheus
 
@@ -410,7 +441,7 @@ Reinicie o serviço Prometheus para aplicar um novo trabalho.
 ### PushGateway
 
 O Prometheus Pushgateway é um serviço intermediário que permite que trabalhos efêmeros e em lote exponham suas métricas ao Prometheus.  
-Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway.  
+Como esses tipos de trabalhos podem não existir por tempo suficiente para serem eliminados, eles podem, em vez disso, enviar suas métricas para um Pushgateway.  
 O Pushgateway atua então como um armazenamento temporário de métricas que o Prometheus coleta.
 
 Essa configuração é particularmente útil para capturar o resultado de uma tarefa que não é executada continuamente, como uma tarefa em lote em um sistema de CI ou um script de backup em execução em um horário agendado.  
@@ -469,7 +500,7 @@ curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_m
 http://localhost:9091
 ```
 
-#### Use PromQL for find metrics pushgateway target
+#### Use PromQL para encontrar o alvo do pushgateway de métricas
 
 ![promql-pushgateway](images/promql-pushgateway.png)
 
@@ -517,7 +548,7 @@ Para mais informações sobre o Alertmanager acesse a documentação oficial:
 
 * * *
 
-### Graffana Loki
+### Grafana Loki
 
 * * *
 
@@ -578,14 +609,16 @@ Link do projeto:<https://github.com/marcossilvestrini/kubernetes-observability>
 ## Agradecimentos
 
 -   [Prometeu](https://prometheus.io/docs/introduction/overview/)
+-   [Configurações do Prometheus](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [Alocações de porta padrão do Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [Exportadores](https://prometheus.io/docs/instrumenting/exporters/)
 -   [Exportador de nós](https://github.com/prometheus/node_exporter)
 -   [Artigo PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
--   Artigos do Prometeu
-    -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
--   [Artigo da pilha Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [Artigos do Prometeu](./README.md)
+    -   [Federação Prometeu](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+    -   [Monitoramento Prometheus: o guia definitivo em 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Artigo da pilha Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
