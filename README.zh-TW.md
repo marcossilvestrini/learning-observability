@@ -112,7 +112,7 @@
 
 -   普羅米修斯
 -   警報管理器
--   Grafana
+-   格拉法納
 -   格拉法娜·洛基
 -   格拉法納時間
 
@@ -158,7 +158,7 @@ cd kubernetes-observability || exit
 -   [ ] 警報管理器
 -   [ ] 格拉法納
 -   [ ] 格拉法娜·洛基
--   [ ] 格拉法納時間
+-   [ ] Grafana Tempo
 -   [ ] 格拉法納合金
 -   [ ] 其他工具
 
@@ -228,14 +228,14 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   「標籤」是一對（鍵，值）。
 -   「系列」是樣本列表，由一組唯一的標籤標識。
 
-#### 相容的發送器和接收器
+#### Compatible Senders and Receivers
 
 該規範旨在描述以下元件如何交互作用：
 
 -   普羅米修斯（作為“發送者”和“接收者”）
 -   Avalanche（作為“發送者”）- 負載測試工具 Prometheus Metrics。
 -   皮質（作為“接收器”）
--   彈性代理（作為「接收者」）
+-   彈性代理（作為“接收器”）
 -   Grafana Agent（既作為「發送者」又作為「接收者」）
 -   GreptimeDB（作為「接收者」）
 -   InfluxData 的 Telegraf 代理程式。 （作為發送者和接收者）
@@ -250,9 +250,40 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![promql](images/promql.png)
 
-Prometheus 提供了一種名為 PromQL（Prometheus Query Language）的功能查詢語言，可讓使用者即時選擇和聚合時間序列資料。表達式的結果可以顯示為圖表，在 Prometheus 表達式瀏覽器中以表格資料形式查看，或由外部系統透過 HTTP API 使用。
+Prometheus 提供了一種名為 PromQL（Prometheus Query Language）的功能查詢語言，可讓使用者即時選擇和聚合時間序列資料。  
+表達式的結果可以顯示為圖形，在 Prometheus 表達式瀏覽器中以表格資料形式查看，或由外部系統透過 HTTP API 使用。
 
-[查詢範例](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+[Query examples](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+### [聯邦](https://prometheus.io/docs/prometheus/latest/federation/#federation)
+
+![federation](images/federation.png)
+
+聯合允許 Prometheus 伺服器從另一個 Prometheus 伺服器抓取選定的時間序列。
+
+#### 等級聯邦
+
+分層聯合允許 Prometheus 擴展到具有數十個資料中心和數百萬個節點的環境。
+
+在此用例中，聯合拓撲類似於樹，較高層級的 Prometheus 伺服器從大量從屬伺服器收集聚合時間序列資料。
+
+這意味著我們擁有更大的 Prometheus 伺服器，可以從較小的伺服器收集時間序列資料。我們採用自上而下的方法，從不同層級收集資料。
+
+![federation-hierarchical](images/federation-hierarchical.png)
+
+#### 跨服務聯合
+
+此方法涉及一個 Prometheus 伺服器監視特定服務或一組服務，從監視另一組不同服務的另一台伺服器收集特定的時間序列資料。
+
+例如，執行多個服務的叢集調度程序可能會公開有關叢集上執行的服務執行個體的資源使用資訊（例如記憶體和 CPU 使用情況）。
+
+另一方面，在該叢集上運行的服務將僅公開特定於應用程式的服務指標。
+
+通常，這兩組指標是由單獨的 Prometheus 伺服器抓取的。使用聯合，包含服務等級指標的 Prometheus 伺服器可以從叢集 Prometheus 中提取有關其特定服務的叢集資源使用指標，以便兩組指標都可以在該伺服器內使用。
+
+透過這樣做，我們可以對來自兩台伺服器的合併資料執行查詢和警報。
+
+![cross-service-federation](images/cross-service-federation.png)
 
 ### 安裝普羅米修斯
 
@@ -578,14 +609,16 @@ http://192.168.0.130:8081
 ## 致謝
 
 -   [普羅米修斯](https://prometheus.io/docs/introduction/overview/)
+-   [普羅米修斯配置](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [Prometheus 預設連接埠分配](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [推播網關](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [出口商](https://prometheus.io/docs/instrumenting/exporters/)
 -   [節點導出器](https://github.com/prometheus/node_exporter)
 -   [PromQL 文章](https://www.metricfire.com/blog/getting-started-with-promql/)
--   普羅米修斯文章
-    -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
--   [Kube Prometheus 堆疊文章](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [普羅米修斯文章](./README.md)
+    -   [普羅米修斯聯邦](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+    -   [Prometheus 監控：2019 年權威指南](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Kube Prometheus 堆疊文章](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
