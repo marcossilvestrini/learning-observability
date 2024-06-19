@@ -108,12 +108,12 @@ Este proyecto es para aprender sobre la observabilidad de Kubernetes.
 
 Este proyecto es para comenzar con las mejores prácticas y herramientas de observabilidad de Kubernetes.
 
-Algunas herramientas para aprender:
+Some tools for learning:
 
 -   Prometeo
 -   Administrador de alertas
 -   Grafana
--   Graffana Loki
+-   Grafana Loki
 -   Hora de Grafana
 
 * * *
@@ -157,7 +157,7 @@ Publico algunos ejemplos para su uso en este repositorio.
 -   [ ] Prometeo
 -   [ ] Administrador de alertas
 -   [ ] Grafana
--   [ ] Graffana Loki
+-   [ ] Grafana Loki
 -   [ ] Hora de Grafana
 -   [ ] Aleación de Grafana
 -   [ ] Otras herramientas
@@ -208,7 +208,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 **[Encimera](https://prometheus.io/docs/concepts/metric_types/#counter)**– acepta y almacena sólo aquellos valores que aumentarán con el tiempo.  
 **[Indicador](https://prometheus.io/docs/concepts/metric_types/#gauge)**– almacena los valores que pueden tomar diferentes valores, que pueden tanto aumentar como disminuir.  
-**[histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
+**[histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)** – samples observations (usually things like request durations or response sizes) and counts them in configurable buckets. It also provides a sum of all observed values, allowing you to calculate averages.  
 **[Resumen](https://prometheus.io/docs/concepts/metric_types/#histogram)**– histograma con una representación de datos más detallada utilizando estadísticas adicionales (cuantiles).
 
 ### Trabajos e instancias
@@ -250,9 +250,40 @@ La especificación pretende describir cómo interactúan los siguientes componen
 
 ![promql](images/promql.png)
 
-Prometheus proporciona un lenguaje de consulta funcional llamado PromQL (Prometheus Query Language) que permite al usuario seleccionar y agregar datos de series temporales en tiempo real. El resultado de una expresión puede mostrarse como un gráfico, verse como datos tabulares en el navegador de expresiones de Prometheus o ser consumido por sistemas externos a través de la API HTTP.
+Prometheus proporciona un lenguaje de consulta funcional llamado PromQL (Prometheus Query Language) que permite al usuario seleccionar y agregar datos de series temporales en tiempo real.  
+El resultado de una expresión puede mostrarse como un gráfico, verse como datos tabulares en el navegador de expresiones de Prometheus o ser consumido por sistemas externos a través de la API HTTP.
 
 [Ejemplos de consulta](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+### [Federación](https://prometheus.io/docs/prometheus/latest/federation/#federation)
+
+![federation](images/federation.png)
+
+La federación permite que un servidor Prometheus extraiga series temporales seleccionadas de otro servidor Prometheus.
+
+#### Federación Jerárquica
+
+La federación jerárquica permite a Prometheus escalar a entornos con decenas de centros de datos y millones de nodos.
+
+En este caso de uso, la topología de la federación se asemeja a un árbol, con servidores Prometheus de nivel superior recopilando datos de series temporales agregadas de una mayor cantidad de servidores subordinados.
+
+Esto significa que tenemos servidores Prometheus más grandes que recopilan datos de series temporales de servidores más pequeños. Tenemos un enfoque de arriba hacia abajo en el que se recopilan datos de diferentes niveles.
+
+![federation-hierarchical](images/federation-hierarchical.png)
+
+#### Federación de servicios cruzados
+
+Este método implica que un servidor Prometheus monitoree un servicio o grupo de servicios en particular, recopilando datos de series temporales específicas de otro servidor que monitorea un conjunto diferente de servicios.
+
+Por ejemplo, un programador de clúster que ejecuta varios servicios podría exponer información sobre el uso de recursos (como el uso de memoria y CPU) sobre las instancias de servicio que se ejecutan en el clúster.
+
+Por otro lado, un servicio que se ejecuta en ese clúster solo expondrá métricas de servicio específicas de la aplicación.
+
+A menudo, estos dos conjuntos de métricas son seleccionados por servidores Prometheus separados. Al utilizar la federación, el servidor Prometheus que contiene métricas de nivel de servicio puede extraer las métricas de uso de recursos del clúster sobre su servicio específico del clúster Prometheus, de modo que ambos conjuntos de métricas se puedan usar dentro de ese servidor.
+
+Al hacer esto, podemos ejecutar consultas y alertas sobre los datos combinados de ambos servidores.
+
+![cross-service-federation](images/cross-service-federation.png)
 
 ### Instalar Prometeo
 
@@ -350,7 +381,7 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 
 ### Exportadores de Prometeo
 
-An exporter is a binary running alongside the application you want to obtain metrics from.  
+Un exportador es un binario que se ejecuta junto con la aplicación de la que desea obtener métricas.  
 El exportador expone las métricas de Prometheus, normalmente convirtiendo las métricas que se exponen en un formato que no es de Prometheus a un formato compatible con Prometheus.
 
 #### Exportador de nodos
@@ -491,7 +522,7 @@ pm2 start promlens --name promlens -- --web.listen-address "192.168.0.130:8081"
 cd || exit
 ```
 
-#### Promlens endpoints
+#### Puntos finales de Promlens
 
 ```sh
 # Access query builder
@@ -517,7 +548,7 @@ Para más información sobre Alertmanager acceda a la documentación oficial:
 
 * * *
 
-### Graffana Loki
+### Grafana Loki
 
 * * *
 
@@ -578,14 +609,16 @@ Enlace del proyecto:<https://github.com/marcossilvestrini/kubernetes-observabili
 ## Expresiones de gratitud
 
 -   [Prometeo](https://prometheus.io/docs/introduction/overview/)
+-   [Configuraciones de Prometeo](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [Asignaciones de puertos predeterminadas de Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [puerta de enlace](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [Exportadores](https://prometheus.io/docs/instrumenting/exporters/)
 -   [Exportador de nodos](https://github.com/prometheus/node_exporter)
 -   [Artículo de PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
--   Artículos de Prometeo
-    -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
--   [Artículo de la pila Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [Artículos de Prometeo](./README.md)
+    -   [Federación Prometeo](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+    -   [Monitoreo de Prometheus: la guía definitiva en 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Artículo de la pila Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
