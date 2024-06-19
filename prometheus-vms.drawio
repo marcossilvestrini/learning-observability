@@ -1,0 +1,43 @@
+<mxfile host="65bd71144e">
+    <diagram id="atcnTGiamIbbUrSkdkgM" name="Page-1">
+        <mxGraphModel dx="1127" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="5" value="federation" style="edgeStyle=none;html=1;" edge="1" parent="1" source="2" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="2" target="8">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;div style=&quot;color: rgb(248, 248, 242); background-color: rgb(40, 42, 54); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;span style=&quot;color: #f1fa8c;&quot;&gt;rock9-prometheus-1&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(248, 248, 242); background-color: rgb(40, 42, 54); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;span style=&quot;color: #f1fa8c;&quot;&gt;192.168.0.130&lt;/span&gt;&lt;/div&gt;" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Virtual_Machine_2.svg;" vertex="1" parent="1">
+                    <mxGeometry x="264" y="390" width="50" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="remote-write" style="edgeStyle=none;html=1;" edge="1" parent="1" source="3" target="2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="federation" style="edgeStyle=none;html=1;" edge="1" parent="1" source="3" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="3" target="10">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;div style=&quot;color: rgb(248, 248, 242); background-color: rgb(40, 42, 54); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;span style=&quot;color: #f1fa8c;&quot;&gt;rock9-prometheus-2&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(248, 248, 242); background-color: rgb(40, 42, 54); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;span style=&quot;color: rgb(241, 250, 140);&quot;&gt;192.168.0.131&lt;/span&gt;&lt;span style=&quot;color: #f1fa8c;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Virtual_Machine_2.svg;" vertex="1" parent="1">
+                    <mxGeometry x="534" y="390" width="50" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;div style=&quot;color: rgb(248, 248, 242); background-color: rgb(40, 42, 54); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;span style=&quot;color: #f1fa8c;&quot;&gt;rock9-prometheus-3&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(248, 248, 242); background-color: rgb(40, 42, 54); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;span style=&quot;color: rgb(241, 250, 140);&quot;&gt;192.168.0.132&lt;/span&gt;&lt;span style=&quot;color: #f1fa8c;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Virtual_Machine_2.svg;" vertex="1" parent="1">
+                    <mxGeometry x="404" y="190" width="50" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="node-exporter&lt;br&gt;pushgateway&lt;br&gt;promlens" style="whiteSpace=wrap;html=1;verticalAlign=top;sketch=0;labelBackgroundColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="244" y="509" width="90" height="51" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="node-exporter&lt;br&gt;promlens" style="whiteSpace=wrap;html=1;verticalAlign=top;sketch=0;labelBackgroundColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="511.5" y="509" width="95" height="51" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="Vagrant File VMs" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=22;" vertex="1" parent="1">
+                    <mxGeometry x="330" y="40" width="190" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

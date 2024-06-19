@@ -1,14 +1,14 @@
 # CHANGELOG
 
-## [v1.0.0](link_of_tag)
+## [v0.1.0](https://github.com/marcossilvestrini/kubernetes-observability/releases/tag/v0.1.0)
 
-> Release Date: 2023-11-16
+> Release Date: 2024-05-06
 
 :boom: **Enhancement**:
 
-- add social media in README
-- add start count in README
-- add issues count in README
+- add prometheus examples
+- add grafana examples
+- add kubernetes examples
 
 :bug: **Bugfix**:
 

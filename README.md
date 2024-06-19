@@ -247,9 +247,40 @@ The spec is intended to describe how the following components interact:
 
 ![promql](images/promql.png)
 
-Prometheus provides a functional query language called PromQL (Prometheus Query Language) that lets the user select and aggregate time series data in real time. The result of an expression can either be shown as a graph, viewed as tabular data in Prometheus's expression browser, or consumed by external systems via the HTTP API.
+Prometheus provides a functional query language called PromQL (Prometheus Query Language) that lets the user select and aggregate time series data in real time.  
+The result of an expression can either be shown as a graph, viewed as tabular data in Prometheus's expression browser, or consumed by external systems via the HTTP API.
 
 [Query examples](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+### [Federation](https://prometheus.io/docs/prometheus/latest/federation/#federation)
+
+![federation](images/federation.png)
+
+Federation allows a Prometheus server to scrape selected time series from another Prometheus server.
+
+#### Hierarchical Federation
+
+Hierarchical federation allows Prometheus to scale to environments with tens of data centers and millions of nodes.
+
+In this use case, the federation topology resembles a tree, with higher-level Prometheus servers collecting aggregated time series data from a larger number of subordinated servers.
+
+This means we have bigger Prometheus servers that collect time-series data from smaller ones. We have a top-down approach where data is gathered from different levels.
+
+![federation-hierarchical](images/federation-hierarchical.png)
+
+#### Cross-service federation
+
+This method involves one Prometheus server monitoring a particular service or group of services, gathering specific time-series data from another server that is monitoring a different set of services.
+
+For example, a cluster scheduler running multiple services might expose resource usage information (like memory and CPU usage) about service instances running on the cluster.
+
+On the other hand, a service running on that cluster will only expose application-specific service metrics.
+
+Often, these two sets of metrics are scraped by separate Prometheus servers. Using federation, the Prometheus server containing service-level metrics may pull in the cluster resource usage metrics about its specific service from the cluster Prometheus, so that both sets of metrics can be used within that server.
+
+By doing this, we can run queries and alerts on the merged data from both servers.
+
+![cross-service-federation](images/cross-service-federation.png)
 
 ### Install Prometheus
 
@@ -571,14 +602,16 @@ Project Link: [https://github.com/marcossilvestrini/kubernetes-observability](ht
 ## Acknowledgments
 
 * [Prometheus](https://prometheus.io/docs/introduction/overview/)
+* [Prometheus Configs](https://github.com/alerta/prometheus-config/tree/master/config)
 * [Prometheus Default port allocations](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 * [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
 * [Exporters](https://prometheus.io/docs/instrumenting/exporters/)
 * [Node Exporter](https://github.com/prometheus/node_exporter)
 * [PromQL Article](https://www.metricfire.com/blog/getting-started-with-promql/)
-* Prometheus Articles
-   * https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/
-* [Kube Prometheus Stack Article](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+* [Prometheus Articles](./README.md)
+  * [Prometheus Federation](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+  * [Prometheus Monitoring : The Definitive Guide in 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+  * [Kube Prometheus Stack Article](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

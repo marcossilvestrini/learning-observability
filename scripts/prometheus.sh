@@ -105,7 +105,26 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     echo "Restarting Prometheus..."
     pm2 restart prometheus-server
     cd || exit
+
     
+    # Node Exporter installation and setup
+    echo "Setting up Node Exporter..."
+
+    echo "Downloading Node Exporter..."
+    wget -q https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+    echo "Extracting Node Exporter..."
+    tar xvfz node_exporter-*.*-amd64.tar.gz
+    rm node_exporter-*.*-amd64.tar.gz
+    cd node_exporter-*.*-amd64 || exit
+
+    echo "Starting Node Exporter..."
+    pm2 start node_exporter --name node-exporter
+
+    echo "Restarting Prometheus..."
+    pm2 restart prometheus-server
+    cd || exit
+        
     # Promlens installation and setup
     echo "Downloading Promlens..."
     wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
@@ -122,7 +141,7 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     --web.listen-address "192.168.0.130:8081"
     cd || exit    
     
-    elif [ "$local_ip" = "192.168.0.131" ]; then
+elif [ "$local_ip" = "192.168.0.131" ]; then
     # Configurações para Prometheus-2
     
     echo "Updating configuration file: prometheus.yml"
@@ -131,10 +150,59 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     
     # basic auth
     cp prometheus/configs/web-config.yml prometheus-server/
+        
+    echo "Starting Prometheus..."
+    cd prometheus-server || exit
+    pm2 start prometheus \
+    --name prometheus-server -- \
+    --config.file=prometheus.yml \
+    --web.config.file=web-config.yml
+    cd || exit
+
     
-    # Rules
-    cp prometheus/configs/rules.yml prometheus-server/
+    # Node Exporter installation and setup
+    echo "Setting up Node Exporter..."
+
+    echo "Downloading Node Exporter..."
+    wget -q https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+
+    echo "Extracting Node Exporter..."
+    tar xvfz node_exporter-*.*-amd64.tar.gz
+    rm node_exporter-*.*-amd64.tar.gz
+    cd node_exporter-*.*-amd64 || exit
+
+    echo "Starting Node Exporter..."
+    pm2 start node_exporter --name node-exporter
+
+    echo "Restarting Prometheus..."
+    pm2 restart prometheus-server
+    cd || exit
+        
+    # Promlens installation and setup
+    echo "Downloading Promlens..."
+    wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
     
+    echo "Extracting Promlens..."
+    tar xvfz promlens-*.*-amd64.tar.gz
+    rm promlens-*.*-amd64.tar.gz
+    cd promlens-*.*-amd64 || exit
+    
+    echo "Starting Promlens..."
+    pm2 start promlens \
+    --name promlens -- \
+    --web.listen-address "192.168.0.131:8081"
+    cd || exit
+
+elif [ "$local_ip" = "192.168.0.132" ]; then
+    # Configurações para Prometheus-3
+    
+    echo "Updating configuration file: prometheus.yml"
+    cp prometheus/configs/prometheus_3.yml  prometheus-server/prometheus.yml
+    chmod 644 prometheus-server/prometheus.yml
+    
+    # basic auth
+    cp prometheus/configs/web-config.yml prometheus-server/
+        
     echo "Starting Prometheus..."
     cd prometheus-server || exit
     pm2 start prometheus \
@@ -155,28 +223,11 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     echo "Starting Promlens..."
     pm2 start promlens \
     --name promlens -- \
-    --web.listen-address "192.168.0.131:8081"
+    --web.listen-address "192.168.0.132:8081"
     cd || exit
     
 fi
 
-# Node Exporter installation and setup
-echo "Setting up Node Exporter..."
-
-echo "Downloading Node Exporter..."
-wget -q https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
-
-echo "Extracting Node Exporter..."
-tar xvfz node_exporter-*.*-amd64.tar.gz
-rm node_exporter-*.*-amd64.tar.gz
-cd node_exporter-*.*-amd64 || exit
-
-echo "Starting Node Exporter..."
-pm2 start node_exporter --name node-exporter
-
-echo "Restarting Prometheus..."
-pm2 restart prometheus-server
-cd || exit
 
 
 

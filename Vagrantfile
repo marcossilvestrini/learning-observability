@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "prometheus/", "/home/vagrant/prometheus"
   config.vm.synced_folder "scripts/", "/home/vagrant/scripts"
 
-  # Definições da primeira VM
+  # Definições da primeira VM - Prometheus 1 - PushGateway
   config.vm.define "#{VM_NAME}-1" do |vm_config|
     vm_config.vm.provider "vmware_workstation" do |vm|
       vm.linked_clone = true
@@ -20,8 +20,8 @@ Vagrant.configure("2") do |config|
       vm.whitelist_verified = true
       vm.vmx["virtualHW.version"] = "10"
       vm.vmx["displayName"] = "#{VM_NAME}-1"
-      vm.vmx["memsize"] = "8192"
-      vm.vmx["numvcpus"] = "6"
+      vm.vmx["memsize"] = "4096"
+      vm.vmx["numvcpus"] = "3"
       vm.vmx["cpuid.coresPerSocket"] = "1"
     end
 
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
     vm_config.vm.provision "shell", name: "[SCRIPT: scripts/prometheus.sh]", path: "scripts/prometheus.sh", privileged: false
   end
 
-  # Definições da segunda VM
+  # Definições da segunda VM - Prometheus 2 - Remote Write
   config.vm.define "#{VM_NAME}-2" do |vm_config|
     vm_config.vm.provider "vmware_workstation" do |vm|
       vm.linked_clone = true
@@ -41,12 +41,32 @@ Vagrant.configure("2") do |config|
       vm.whitelist_verified = true
       vm.vmx["virtualHW.version"] = "10"
       vm.vmx["displayName"] = "#{VM_NAME}-2"
-      vm.vmx["memsize"] = "8192"
-      vm.vmx["numvcpus"] = "6"
+      vm.vmx["memsize"] = "4096"
+      vm.vmx["numvcpus"] = "3"
       vm.vmx["cpuid.coresPerSocket"] = "1"
     end
 
     vm_config.vm.network "public_network", ip: "192.168.0.131", netmask: "255.255.255.0", mode: "bridge", bridge: [
+                                             "Intel(R) I211 Gigabit Network Connection",
+                                             "MediaTek Wi-Fi 6 MT7921 Wireless LAN",
+                                           ]
+
+    vm_config.vm.provision "shell", name: "[SCRIPT: scripts/prometheus.sh]", path: "scripts/prometheus.sh", privileged: false
+  end
+  # Definições da terceira VM - Prometheus Federation
+  config.vm.define "#{VM_NAME}-3" do |vm_config|
+    vm_config.vm.provider "vmware_workstation" do |vm|
+      vm.linked_clone = true
+      vm.clone_directory = "E:\\Servers\\VMWare\\#{VM_NAME}-3"
+      vm.whitelist_verified = true
+      vm.vmx["virtualHW.version"] = "10"
+      vm.vmx["displayName"] = "#{VM_NAME}-3"
+      vm.vmx["memsize"] = "4096"
+      vm.vmx["numvcpus"] = "3"
+      vm.vmx["cpuid.coresPerSocket"] = "1"
+    end
+
+    vm_config.vm.network "public_network", ip: "192.168.0.132", netmask: "255.255.255.0", mode: "bridge", bridge: [
                                              "Intel(R) I211 Gigabit Network Connection",
                                              "MediaTek Wi-Fi 6 MT7921 Wireless LAN",
                                            ]
