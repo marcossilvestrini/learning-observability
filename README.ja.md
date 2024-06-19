@@ -113,7 +113,7 @@
 -   プロメテウス
 -   アラートマネージャー
 -   グラファナ
--   グラファナ ロキ
+-   グラファナ・ロキ
 -   グラファナ時間
 
 * * *
@@ -157,9 +157,9 @@ cd kubernetes-observability || exit
 -   [ ] プロメテウス
 -   [ ] アラートマネージャー
 -   [ ] グラファナ
--   [ ] グラファナ ロキ
+-   [ ] グラファナ・ロキ
 -   [ ] グラファナ時間
--   [ ] グラファナ合金
+-   [ ] Grafana Alloy
 -   [ ] その他のツール
 
 を参照してください。[未解決の問題](https://github.com/marcossilvestrini/kubernetes-observability/issues)提案された機能 (および既知の問題) の完全なリストについては、こちらをご覧ください。
@@ -250,9 +250,40 @@ Prometheus の用語では、スクレイピングできるエンドポイント
 
 ![promql](images/promql.png)
 
-Prometheus は、ユーザーがリアルタイムで時系列データを選択して集計できるようにする PromQL (Prometheus Query Language) と呼ばれる関数型クエリ言語を提供します。式の結果は、グラフとして表示したり、Prometheus の式ブラウザで表形式のデータとして表示したり、HTTP API を介して外部システムで使用したりできます。
+Prometheus は、ユーザーがリアルタイムで時系列データを選択して集計できるようにする PromQL (Prometheus Query Language) と呼ばれる関数型クエリ言語を提供します。  
+式の結果は、グラフとして表示したり、Prometheus の式ブラウザで表形式のデータとして表示したり、HTTP API を介して外部システムで使用したりできます。
 
 [クエリの例](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+### [フェデレーション](https://prometheus.io/docs/prometheus/latest/federation/#federation)
+
+![federation](images/federation.png)
+
+フェデレーションにより、Prometheus サーバーは、選択した時系列を別の Prometheus サーバーから収集できます。
+
+#### 階層連合
+
+階層的なフェデレーションにより、Prometheus は数十のデータセンターと数百万のノードを持つ環境に拡張できます。
+
+この使用例では、フェデレーション トポロジはツリーに似ており、上位の Prometheus サーバーが多数の下位サーバーから集約された時系列データを収集します。
+
+これは、小規模なサーバーから時系列データを収集する、より大きな Prometheus サーバーがあることを意味します。当社では、さまざまなレベルからデータを収集するトップダウンのアプローチをとっています。
+
+![federation-hierarchical](images/federation-hierarchical.png)
+
+#### クロスサービスフェデレーション
+
+この方法では、1 つの Prometheus サーバーが特定のサービスまたはサービスのグループを監視し、別のサービスのセットを監視している別のサーバーから特定の時系列データを収集します。
+
+たとえば、複数のサービスを実行しているクラスター スケジューラは、クラスター上で実行されているサービス インスタンスに関するリソース使用量情報 (メモリや CPU 使用量など) を公開する可能性があります。
+
+一方、そのクラスター上で実行されているサービスは、アプリケーション固有のサービス メトリックのみを公開します。
+
+多くの場合、これら 2 つのメトリクス セットは、別々の Prometheus サーバーによって収集されます。フェデレーションを使用すると、サービスレベルのメトリクスを含む Prometheus サーバーは、クラスタ Prometheus から特定のサービスに関するクラスタ リソース使用量メトリクスを取り込むことができるため、そのサーバー内で両方のメトリクス セットを使用できます。
+
+これにより、両方のサーバーからのマージされたデータに対してクエリとアラートを実行できます。
+
+![cross-service-federation](images/cross-service-federation.png)
 
 ### プロメテウスをインストールする
 
@@ -355,7 +386,7 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 
 #### ノードエクスポーター
 
-Prometheus Node Exporter は、ハードウェアおよびカーネル関連のさまざまなメトリクスを公開します。
+Prometheus Node Exporter は、さまざまなハードウェアおよびカーネル関連のメトリクスを公開します。
 
 ##### ノードエクスポーターのインストール
 
@@ -414,7 +445,7 @@ Prometheus Pushgateway は、一時ジョブやバッチ ジョブがメトリ�
 Pushgateway は、Prometheus が収集する一時的なメトリクス ストアとして機能します。
 
 この設定は、CI システムのバッチ ジョブや、スケジュールされた時間に実行されるバックアップ スクリプトなど、継続的に実行されないジョブの結果を取得する場合に特に役立ちます。  
-これにより、ジョブ自体が存続する可能性がある長寿命の Prometheus インスタンスを実行する必要がなく、この種のジョブの監視が簡素化されます。
+これにより、ジョブ自体よりも存続する可能性がある長寿命の Prometheus インスタンスを実行する必要がなく、この種のジョブの監視が簡素化されます。
 
 #### プッシュゲートウェイのインストール
 
@@ -517,7 +548,7 @@ Alertmanager の詳細については、公式ドキュメントにアクセス�
 
 * * *
 
-### グラファナ ロキ
+### グラファナ・ロキ
 
 * * *
 
@@ -543,7 +574,7 @@ Alertmanager の詳細については、公式ドキュメントにアクセス�
 1.  プロジェクトをフォークする
 2.  機能ブランチを作成します (`git checkout -b feature/AmazingFeature`）
 3.  変更をコミットします (`git commit -m 'Add some AmazingFeature'`）
-4.  Push to the Branch (`git push origin feature/AmazingFeature`）
+4.  ブランチにプッシュ (`git push origin feature/AmazingFeature`）
 5.  プルリクエストを開く
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -578,14 +609,16 @@ MIT ライセンスに基づいて配布されます。見る[`LICENSE`](LICENSE
 ## 謝辞
 
 -   [プロメテウス](https://prometheus.io/docs/introduction/overview/)
+-   [プロメテウスの構成](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [Prometheus のデフォルトのポート割り当て](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [プッシュゲートウェイ](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [輸出業者](https://prometheus.io/docs/instrumenting/exporters/)
 -   [ノードエクスポーター](https://github.com/prometheus/node_exporter)
 -   [PromQL の記事](https://www.metricfire.com/blog/getting-started-with-promql/)
--   プロメテウスの記事
-    -   [ｈっｔｐｓ：／／でｖこんえｃてｄ。こｍ／てぇーでふぃにちゔぇーぐいでーとーｐろめてぇうｓーいんー２０１９／](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
--   [Kube Prometheus スタックの記事](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [プロメテウスの記事](./README.md)
+    -   [プロメテウス連邦](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+    -   [Prometheus モニタリング : 2019 年の決定版ガイド](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Kube Prometheus スタックの記事](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
