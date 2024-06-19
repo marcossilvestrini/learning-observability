@@ -22,8 +22,7 @@
 
 [![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
 
-[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
+[![Contributors][contributors-shield]][contributors-url][![Forks][forks-shield]][forks-url][![Stargazers][stars-shield]][stars-url][![Issues][issues-shield]][issues-url][![MIT License][license-shield]][license-url][![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 
@@ -114,7 +113,7 @@ Quelques outils pour apprendre :
 -   Prométhée
 -   Gestionnaire d'alertes
 -   Grafana
--   Graffana Loki
+-   Grafana Loki
 -   Heure de Grafana
 
 * * *
@@ -158,7 +157,7 @@ Je publie quelques exemples à utiliser dans ce référentiel.
 -   [ ] Prométhée
 -   [ ] Gestionnaire d'alertes
 -   [ ] Grafana
--   [ ] Graffana Loki
+-   [ ] Grafana Loki
 -   [ ] Heure de Grafana
 -   [ ] Alliage Grafana
 -   [ ] Autres outils
@@ -251,9 +250,40 @@ La spécification est destinée à décrire comment les composants suivants inte
 
 ![promql](images/promql.png)
 
-Prometheus fournit un langage de requête fonctionnel appelé PromQL (Prometheus Query Language) qui permet à l'utilisateur de sélectionner et d'agréger des données de séries chronologiques en temps réel. Le résultat d'une expression peut être affiché sous forme de graphique, visualisé sous forme de données tabulaires dans le navigateur d'expressions de Prometheus, ou consommé par des systèmes externes via l'API HTTP.
+Prometheus fournit un langage de requête fonctionnel appelé PromQL (Prometheus Query Language) qui permet à l'utilisateur de sélectionner et d'agréger des données de séries chronologiques en temps réel.  
+Le résultat d'une expression peut être affiché sous forme de graphique, visualisé sous forme de données tabulaires dans le navigateur d'expressions de Prometheus, ou consommé par des systèmes externes via l'API HTTP.
 
 [Exemples de requêtes](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+### [Fédération](https://prometheus.io/docs/prometheus/latest/federation/#federation)
+
+![federation](images/federation.png)
+
+La fédération permet à un serveur Prometheus d'extraire des séries temporelles sélectionnées d'un autre serveur Prometheus.
+
+#### Fédération hiérarchique
+
+La fédération hiérarchique permet à Prometheus de s'adapter à des environnements comprenant des dizaines de centres de données et des millions de nœuds.
+
+Dans ce cas d'utilisation, la topologie de la fédération ressemble à une arborescence, avec des serveurs Prometheus de niveau supérieur collectant des données de séries chronologiques agrégées à partir d'un plus grand nombre de serveurs subordonnés.
+
+Cela signifie que nous disposons de serveurs Prometheus plus gros qui collectent des données chronologiques à partir de serveurs plus petits. Nous avons une approche descendante où les données sont collectées à différents niveaux.
+
+![federation-hierarchical](images/federation-hierarchical.png)
+
+#### Fédération interservices
+
+Cette méthode implique qu'un serveur Prometheus surveille un service ou un groupe de services particulier, collectant des données chronologiques spécifiques à partir d'un autre serveur qui surveille un ensemble de services différent.
+
+Par exemple, un planificateur de cluster exécutant plusieurs services peut exposer des informations sur l'utilisation des ressources (telles que l'utilisation de la mémoire et du processeur) sur les instances de service exécutées sur le cluster.
+
+D'un autre côté, un service exécuté sur ce cluster n'exposera que les métriques de service spécifiques à l'application.
+
+Souvent, ces deux ensembles de métriques sont récupérés par des serveurs Prometheus distincts. Grâce à la fédération, le serveur Prometheus contenant des métriques de niveau de service peut extraire les métriques d'utilisation des ressources du cluster concernant son service spécifique à partir du cluster Prometheus, afin que les deux ensembles de métriques puissent être utilisés au sein de ce serveur.
+
+En faisant cela, nous pouvons exécuter des requêtes et des alertes sur les données fusionnées des deux serveurs.
+
+![cross-service-federation](images/cross-service-federation.png)
 
 ### Installer Prometheus
 
@@ -518,7 +548,7 @@ Pour plus d’informations sur Alertmanager, accédez à la documentation offici
 
 * * *
 
-### Graffana Loki
+### Grafana Loki
 
 * * *
 
@@ -579,14 +609,16 @@ Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
 ## Remerciements
 
 -   [Prométhée](https://prometheus.io/docs/introduction/overview/)
+-   [Configurations Prometheus](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [Allocations de ports par défaut de Prometheus](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
 -   [Passerelle Push](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [Exportateurs](https://prometheus.io/docs/instrumenting/exporters/)
 -   [Exportateur de nœuds](https://github.com/prometheus/node_exporter)
 -   [Article PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
--   Articles sur Prométhée
-    -   <https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/>
--   [Article sur la pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
+-   [Articles sur Prométhée](./README.md)
+    -   [Fédération Prométhée](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+    -   [Prometheus Monitoring : Le guide définitif en 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Article sur la pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
