@@ -285,6 +285,20 @@ Ao fazer isso, podemos executar consultas e alertas nos dados mesclados de ambos
 
 ![cross-service-federation](images/cross-service-federation.png)
 
+### Descoberta de serviço HTTP
+
+![http_sd](images/http_sd.png)
+
+O Prometheus fornece uma descoberta de serviço HTTP genérica, que permite descobrir alvos em um endpoint HTTP.
+
+A descoberta de serviço HTTP é complementar aos mecanismos de descoberta de serviço suportados e é uma alternativa à descoberta de serviço baseada em arquivo.
+
+-   static_configs não é escalonável para ambientes mais dinâmicos onde instâncias são adicionadas/removidas com frequência
+-   O Prometheus pode ser integrado a mecanismos de descoberta de serviço para atualizar automaticamente sua visão das instâncias em execução
+    -   quando novas instâncias são adicionadas, o Prometheus começará a ser copiado; quando perdida na descoberta, a série temporal também será removida
+    -   integrações integradas com Consul, Azure, AWS ou baseadas em arquivo, se necessário, mecanismo personalizado
+-   O arquivo JSON/YAML pode ser publicado pela plataforma especificando todos os alvos dos quais extrair. Prometheus o usa para atualizar alvos automaticamente
+
 ### Instale o Prometheus
 
 ```sh
@@ -493,7 +507,7 @@ echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.tx
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 ```
 
-##### Pushgateway de terminais
+##### Pontos de extremidade PushGateway
 
 ```sh
 # Access metrics
@@ -507,6 +521,8 @@ http://localhost:9091
 ### Promlens
 
 #### Instalar Promlens
+
+_Funciona apenas sem autenticação básica_
 
 ```sh
 echo "Downloading Promlens..."
@@ -618,6 +634,7 @@ Link do projeto:<https://github.com/marcossilvestrini/kubernetes-observability>
 -   [Artigos do Prometeu](./README.md)
     -   [Federação Prometeu](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
     -   [Monitoramento Prometheus: o guia definitivo em 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Descoberta de serviço Prometheus](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
     -   [Artigo da pilha Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
