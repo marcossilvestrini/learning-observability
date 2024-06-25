@@ -159,7 +159,7 @@ cd kubernetes-observability || exit
 -   [ ] グラファナ
 -   [ ] グラファナ・ロキ
 -   [ ] グラファナ時間
--   [ ] Grafana Alloy
+-   [ ] グラファナ合金
 -   [ ] その他のツール
 
 を参照してください。[未解決の問題](https://github.com/marcossilvestrini/kubernetes-observability/issues)提案された機能 (および既知の問題) の完全なリストについては、こちらをご覧ください。
@@ -196,7 +196,7 @@ Prometheus の詳細については、公式ドキュメントにアクセスし
 <metric name>{<label name>=<label value>, ...}
 ```
 
-**ラベル付きのメトリック名の例:**
+**Example metric name with labels:**
 
 ```yaml
 api_http_requests_total{method="POST", handler="/messages"}
@@ -215,7 +215,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![Jobs](images/jobs_instances.png)
 
-Prometheus の用語では、スクレイピングできるエンドポイントはインスタンスと呼ばれ、通常は単一のプロセスに対応します。  
+In Prometheus terms, an endpoint you can scrape is called an instance, usually corresponding to a single process.  
 同じ目的を持つインスタンスの集合、たとえばスケーラビリティや信頼性のために複製されたプロセスは、ジョブと呼ばれます。
 
 ### Prometheus のリモート書き込み仕様
@@ -251,7 +251,7 @@ Prometheus の用語では、スクレイピングできるエンドポイント
 ![promql](images/promql.png)
 
 Prometheus は、ユーザーがリアルタイムで時系列データを選択して集計できるようにする PromQL (Prometheus Query Language) と呼ばれる関数型クエリ言語を提供します。  
-式の結果は、グラフとして表示したり、Prometheus の式ブラウザで表形式のデータとして表示したり、HTTP API を介して外部システムで使用したりできます。
+式の結果は、グラフとして表示したり、Prometheus の式ブラウザで表形式のデータとして表示したり、HTTP API を介して外部システムで使用したりすることができます。
 
 [クエリの例](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
@@ -263,7 +263,7 @@ Prometheus は、ユーザーがリアルタイムで時系列データを選択
 
 #### 階層連合
 
-階層的なフェデレーションにより、Prometheus は数十のデータセンターと数百万のノードを持つ環境に拡張できます。
+階層フェデレーションにより、Prometheus は数十のデータセンターと数百万のノードを含む環境に拡張できます。
 
 この使用例では、フェデレーション トポロジはツリーに似ており、上位の Prometheus サーバーが多数の下位サーバーから集約された時系列データを収集します。
 
@@ -279,11 +279,25 @@ Prometheus は、ユーザーがリアルタイムで時系列データを選択
 
 一方、そのクラスター上で実行されているサービスは、アプリケーション固有のサービス メトリックのみを公開します。
 
-多くの場合、これら 2 つのメトリクス セットは、別々の Prometheus サーバーによって収集されます。フェデレーションを使用すると、サービスレベルのメトリクスを含む Prometheus サーバーは、クラスタ Prometheus から特定のサービスに関するクラスタ リソース使用量メトリクスを取り込むことができるため、そのサーバー内で両方のメトリクス セットを使用できます。
+多くの場合、これら 2 つのメトリクス セットは、別個の Prometheus サーバーによって収集されます。フェデレーションを使用すると、サービスレベルのメトリクスを含む Prometheus サーバーは、クラスタ Prometheus から特定のサービスに関するクラスタ リソース使用量メトリクスを取り込むことができるため、そのサーバー内で両方のメトリクス セットを使用できます。
 
-これにより、両方のサーバーからのマージされたデータに対してクエリとアラートを実行できます。
+By doing this, we can run queries and alerts on the merged data from both servers.
 
 ![cross-service-federation](images/cross-service-federation.png)
+
+### HTTP サービスの検出
+
+![http_sd](images/http_sd.png)
+
+Prometheus は、HTTP エンドポイント経由でターゲットを検出できるようにする汎用 HTTP サービス検出を提供します。
+
+HTTP サービス ディスカバリは、サポートされているサービス ディスカバリ メカニズムを補完するものであり、ファイルベースのサービス ディスカバリに代わるものです。
+
+-   static_configs は、インスタンスが頻繁に追加/削除されるような、より動的な環境には拡張できません。
+-   Prometheus はサービス検出メカニズムと統合して、実行中のインスタンスのビューを自動的に更新できます
+    -   新しいインスタンスが追加されると、Prometheus はスクレイピングを開始します。検出から失われた場合、時系列も削除されます
+    -   Consul、Azure、AWS との組み込み統合、またはカスタム メカニズムが必要な場合はファイル ベース
+-   JSON/YAML ファイルは、スクレイピング元のすべてのターゲットを指定してプラットフォームによって公開できます。 Prometheus はこれを使用してターゲットを自動的に更新します
 
 ### プロメテウスをインストールする
 
@@ -508,6 +522,8 @@ http://localhost:9091
 
 #### プロムレンズのインストール
 
+_基本認証なしでのみ動作します_
+
 ```sh
 echo "Downloading Promlens..."
 wget -q https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
@@ -618,6 +634,7 @@ MIT ライセンスに基づいて配布されます。見る[`LICENSE`](LICENSE
 -   [プロメテウスの記事](./README.md)
     -   [プロメテウス連邦](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
     -   [Prometheus モニタリング : 2019 年の決定版ガイド](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Prometheus サービスの検出](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
     -   [Kube Prometheus スタックの記事](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
