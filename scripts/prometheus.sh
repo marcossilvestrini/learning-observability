@@ -202,6 +202,9 @@ elif [ "$local_ip" = "192.168.0.132" ]; then
     
     # basic auth
     cp prometheus/configs/web-config.yml prometheus-server/
+
+    # Service discovery - http_sd
+    cp prometheus/configs/http_sd.json prometheus-server/
         
     echo "Starting Prometheus..."
     cd prometheus-server || exit

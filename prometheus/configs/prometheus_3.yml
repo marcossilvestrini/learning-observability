@@ -15,23 +15,30 @@ scrape_configs:
       username: "skynet"
       password: "prometheus"
 
+  # Hierarchical federation
   - job_name: 'federate'
     scrape_interval: 15s
-
     honor_labels: true
     metrics_path: '/federate'
     basic_auth:
       username: "skynet"
       password: "prometheus"
-
     params:
       # 'match[]':
       #   - '{job="prometheus"}'
       #   - '{__name__=~"job:.*"}'
       'match[]':
         - '{job!~"prometheus"}'
-
     static_configs:
       - targets:
         - '192.168.0.130:9090'
         - '192.168.0.131:9090'
+  
+  # Service Discovery - http_sd    
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
