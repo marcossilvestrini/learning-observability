@@ -108,7 +108,7 @@ Este proyecto es para aprender sobre la observabilidad de Kubernetes.
 
 Este proyecto es para comenzar con las mejores prácticas y herramientas de observabilidad de Kubernetes.
 
-Algunas herramientas para aprender:
+Some tools for learning:
 
 -   Prometeo
 -   Administrador de alertas
@@ -298,6 +298,46 @@ El descubrimiento de servicios HTTP es complementario a los mecanismos de descub
     -   cuando se agregan nuevas instancias, Prometheus comenzará a eliminar, cuando se pierda el descubrimiento, la serie temporal también se eliminará
     -   integraciones integradas con Consul, Azure, AWS o basadas en archivos si se requiere un mecanismo personalizado
 -   La plataforma puede publicar el archivo JSON/YAML especificando todos los objetivos desde los cuales extraer. Prometheus lo usa para actualizar objetivos automáticamente
+
+#### Ejemplo usando http sd_file
+
+![http_file_sd](images/http_file_sd.png)
+
+prometheus.yaml para eliminar los servicios en el destino http_sd.json
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+```
+
+http_sd.json
+
+```json
+[
+    {
+        "targets": ["192.168.0.130:9100", "192.168.0.131:9100"],
+        "labels": {            
+            "__meta_prometheus_job": "node"
+        }
+    },
+    {
+        "targets": ["192.168.0.130:9091"],
+        "labels": {            
+            "__meta_prometheus_job": "pushgateway"
+        }
+    }    
+]
+```
 
 ### Instalar Prometeo
 
