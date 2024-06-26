@@ -172,7 +172,7 @@ cd kubernetes-observability || exit
 
 ![prometheus](images/prometheus.png)
 
-Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
+Prometheus 是一個開源系統監控和警報工具包，最初是在 SoundCloud 建置的。
 
 自2012年推出以來，許多公司和組織都採用了Prometheus，該專案擁有非常活躍的開發者和用戶社群。
 
@@ -208,7 +208,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 **[櫃檯](https://prometheus.io/docs/concepts/metric_types/#counter)**– 僅接受並儲存那些隨時間增加的值。  
 **[測量](https://prometheus.io/docs/concepts/metric_types/#gauge)**– 儲存可以取不同值的值，這些值既可以增加也可以減少。  
-**[直方圖](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 對觀察結果進行取樣（通常是請求持續時間或回應大小等）並將其計數到可設定的儲存桶中。它還提供所有觀察值的總和，使您可以計算平均值。  
+**[直方圖](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 對觀察結果（通常是請求持續時間或回應大小）進行取樣，並將其計數到可設定的儲存桶中。它還提供所有觀察值的總和，使您可以計算平均值。  
 **[概括](https://prometheus.io/docs/concepts/metric_types/#histogram)**– 使用附加統計資料（分位數）提供更詳細資料表示的直方圖。
 
 ### 作業和實例
@@ -298,6 +298,46 @@ HTTP 服務發現是支援的服務發現機制的補充，並且是基於檔案
     -   當新增實例時，Prometheus 將開始抓取，當發現遺失時，時間序列也將被刪除
     -   與 Consul、Azure、AWS 或基於文件的內建整合（如果需要自訂機制）
 -   JSON/YAML 檔案可以由平台發布，指定要從中抓取的所有目標。 Prometheus 使用它來自動更新目標
+
+#### 使用 http sd_file 的範例
+
+![http_file_sd](images/http_file_sd.png)
+
+prometheus.yaml 用於廢棄目標 http_sd.json 中的服務
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+```
+
+http_sd.json
+
+```json
+[
+    {
+        "targets": ["192.168.0.130:9100", "192.168.0.131:9100"],
+        "labels": {            
+            "__meta_prometheus_job": "node"
+        }
+    },
+    {
+        "targets": ["192.168.0.130:9091"],
+        "labels": {            
+            "__meta_prometheus_job": "pushgateway"
+        }
+    }    
+]
+```
 
 ### 安裝普羅米修斯
 
@@ -423,7 +463,7 @@ cd node_exporter-*.*-amd64
 pm2 start node_exporter --name node_exporter
 ```
 
-##### Endpoints Node Exporter
+##### 端點節點導出器
 
 ```sh
 # Access metrics
@@ -454,7 +494,7 @@ scrape_configs:
 
 ### 推播網關
 
-Prometheus Pushgateway 是一項中間服務，允許臨時作業和批次作業將其指標公開給 Prometheus。  
+Prometheus Pushgateway 是一項中間服務，可讓臨時作業和批次作業將其指標公開給 Prometheus。  
 由於此類工作可能存在的時間不夠長而無法刪除，因此他們可以將其指標推送到 Pushgateway。  
 然後，Pushgateway 充當 Prometheus 抓取的臨時指標儲存。
 
