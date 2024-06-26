@@ -114,7 +114,7 @@
 -   مدير التنبيه
 -   جرافانا
 -   جرافانا لوكي
--   توقيت غرافانا
+-   توقيت جرافانا
 
 * * *
 
@@ -226,7 +226,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   "المستقبل" هو شيء يستقبل بيانات الكتابة عن بعد من Prometheus.
 -   "العينة" هي زوج من (الطابع الزمني، القيمة).
 -   "التسمية" هي زوج من (المفتاح، القيمة).
--   "السلسلة" هي قائمة بالعينات، يتم تحديدها بواسطة مجموعة فريدة من التصنيفات.
+-   "السلسلة" هي قائمة من العينات، التي تم تحديدها بواسطة مجموعة فريدة من التصنيفات.
 
 #### المرسلون والمستقبلون المتوافقون
 
@@ -251,7 +251,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 ![promql](images/promql.png)
 
 توفر Prometheus لغة استعلام وظيفية تسمى PromQL (لغة استعلام Prometheus) التي تتيح للمستخدم تحديد وتجميع بيانات السلاسل الزمنية في الوقت الفعلي.  
-يمكن عرض نتيجة التعبير إما على شكل رسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
+يمكن عرض نتيجة التعبير كرسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
 
 [أمثلة الاستعلام](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
@@ -298,6 +298,46 @@ api_http_requests_total{method="POST", handler="/messages"}
     -   عند إضافة مثيلات جديدة، سيبدأ Prometheus في الحذف، وعند فقده من الاكتشاف، ستتم أيضًا إزالة السلسلة الزمنية
     -   عمليات التكامل المضمنة مع Consul أو Azure أو AWS أو الملف بناءً على الحاجة إلى آلية مخصصة
 -   يمكن نشر ملف JSON/YAML بواسطة النظام الأساسي مع تحديد جميع الأهداف التي سيتم التخلص منها. يستخدمه بروميثيوس لتحديث الأهداف تلقائيًا
+
+#### مثال باستخدام http sd_file
+
+![http_file_sd](images/http_file_sd.png)
+
+prometheus.yaml لإلغاء الخدمات الموجودة في الهدف http_sd.json
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+```
+
+http_sd.json
+
+```json
+[
+    {
+        "targets": ["192.168.0.130:9100", "192.168.0.131:9100"],
+        "labels": {            
+            "__meta_prometheus_job": "node"
+        }
+    },
+    {
+        "targets": ["192.168.0.130:9091"],
+        "labels": {            
+            "__meta_prometheus_job": "pushgateway"
+        }
+    }    
+]
+```
 
 ### تثبيت بروميثيوس
 
@@ -568,7 +608,7 @@ http://192.168.0.130:8081
 
 * * *
 
-### توقيت غرافانا
+### توقيت جرافانا
 
 * * *
 
@@ -627,7 +667,7 @@ http://192.168.0.130:8081
 -   [بروميثيوس](https://prometheus.io/docs/introduction/overview/)
 -   [تكوينات بروميثيوس](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [بروميثيوس تخصيصات المنفذ الافتراضي](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
--   [بوابة الدفع](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [المصدرين](https://prometheus.io/docs/instrumenting/exporters/)
 -   [مصدر العقدة](https://github.com/prometheus/node_exporter)
 -   [مقالة PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
