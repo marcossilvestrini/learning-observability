@@ -113,7 +113,7 @@
 -   プロメテウス
 -   アラートマネージャー
 -   グラファナ
--   グラファナ・ロキ
+-   Grafana Loki
 -   グラファナ時間
 
 * * *
@@ -196,7 +196,7 @@ Prometheus の詳細については、公式ドキュメントにアクセスし
 <metric name>{<label name>=<label value>, ...}
 ```
 
-**Example metric name with labels:**
+**ラベル付きのメトリック名の例:**
 
 ```yaml
 api_http_requests_total{method="POST", handler="/messages"}
@@ -215,7 +215,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![Jobs](images/jobs_instances.png)
 
-In Prometheus terms, an endpoint you can scrape is called an instance, usually corresponding to a single process.  
+Prometheus の用語では、スクレイピングできるエンドポイントはインスタンスと呼ばれ、通常は単一のプロセスに対応します。  
 同じ目的を持つインスタンスの集合、たとえばスケーラビリティや信頼性のために複製されたプロセスは、ジョブと呼ばれます。
 
 ### Prometheus のリモート書き込み仕様
@@ -263,7 +263,7 @@ Prometheus は、ユーザーがリアルタイムで時系列データを選択
 
 #### 階層連合
 
-階層フェデレーションにより、Prometheus は数十のデータセンターと数百万のノードを含む環境に拡張できます。
+階層的なフェデレーションにより、Prometheus は数十のデータセンターと数百万のノードを持つ環境に拡張できます。
 
 この使用例では、フェデレーション トポロジはツリーに似ており、上位の Prometheus サーバーが多数の下位サーバーから集約された時系列データを収集します。
 
@@ -279,9 +279,9 @@ Prometheus は、ユーザーがリアルタイムで時系列データを選択
 
 一方、そのクラスター上で実行されているサービスは、アプリケーション固有のサービス メトリックのみを公開します。
 
-多くの場合、これら 2 つのメトリクス セットは、別個の Prometheus サーバーによって収集されます。フェデレーションを使用すると、サービスレベルのメトリクスを含む Prometheus サーバーは、クラスタ Prometheus から特定のサービスに関するクラスタ リソース使用量メトリクスを取り込むことができるため、そのサーバー内で両方のメトリクス セットを使用できます。
+多くの場合、これら 2 つのメトリクス セットは、別個の Prometheus サーバーによって取得されます。フェデレーションを使用すると、サービスレベルのメトリクスを含む Prometheus サーバーは、クラスタ Prometheus から特定のサービスに関するクラスタ リソース使用量メトリクスを取り込むことができるため、そのサーバー内で両方のメトリクス セットを使用できます。
 
-By doing this, we can run queries and alerts on the merged data from both servers.
+こうすることで、両方のサーバーからの結合されたデータに対してクエリとアラートを実行できます。
 
 ![cross-service-federation](images/cross-service-federation.png)
 
@@ -298,6 +298,46 @@ HTTP サービス ディスカバリは、サポートされているサービ�
     -   新しいインスタンスが追加されると、Prometheus はスクレイピングを開始します。検出から失われた場合、時系列も削除されます
     -   Consul、Azure、AWS との組み込み統合、またはカスタム メカニズムが必要な場合はファイル ベース
 -   JSON/YAML ファイルは、スクレイピング元のすべてのターゲットを指定してプラットフォームによって公開できます。 Prometheus はこれを使用してターゲットを自動的に更新します
+
+#### http sd_file を使用した例
+
+![http_file_sd](images/http_file_sd.png)
+
+ターゲット http_sd.json 内のサービスをスクラップするための prometheus.yaml
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+```
+
+http_sd.json
+
+```json
+[
+    {
+        "targets": ["192.168.0.130:9100", "192.168.0.131:9100"],
+        "labels": {            
+            "__meta_prometheus_job": "node"
+        }
+    },
+    {
+        "targets": ["192.168.0.130:9091"],
+        "labels": {            
+            "__meta_prometheus_job": "pushgateway"
+        }
+    }    
+]
+```
 
 ### プロメテウスをインストールする
 
