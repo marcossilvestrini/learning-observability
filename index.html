@@ -379,6 +379,66 @@ cd kubernetes-observability || exit
       </li>
       <li>JSON/YAML file can be published by the platform specifying all targets to scrape from. Prometheus uses it to automatically update targets</li>
     </ul>
+    <h4 id="example-using-http-sd_file"><a class="anchor" aria-hidden="true" tabindex="-1" href="#example-using-http-sd_file"><span class="octicon octicon-link"></span></a>Example using http sd_file</h4>
+    <p>
+      <img src="images/http_file_sd.png" alt="http_file_sd">
+    </p>
+    <p>prometheus.yaml for scrap the services in target http_sd.json</p>
+    <pre class="language-yaml"><code class="language-yaml code-highlight"><span class="code-line line-number" line="1"><span class="token key atrule">global</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="2">  <span class="token key atrule">scrape_interval</span><span class="token punctuation">:</span> 15s
+</span><span class="code-line line-number" line="3">  <span class="token key atrule">evaluation_interval</span><span class="token punctuation">:</span> 15s
+</span><span class="code-line line-number" line="4"><span class="token key atrule">scrape_configs</span><span class="token punctuation">:</span>  
+</span><span class="code-line line-number" line="5">  <span class="token comment"># Service Discovery with file_sd  </span>
+</span><span class="code-line line-number" line="6">  <span class="token punctuation">-</span> <span class="token key atrule">job_name</span><span class="token punctuation">:</span> <span class="token string">'http_sd'</span>
+</span><span class="code-line line-number" line="7">    <span class="token key atrule">basic_auth</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="8">      <span class="token key atrule">username</span><span class="token punctuation">:</span> <span class="token string">"skynet"</span>
+</span><span class="code-line line-number" line="9">      <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token string">"prometheus"</span>
+</span><span class="code-line line-number" line="10">    <span class="token key atrule">file_sd_configs</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="11">      <span class="token punctuation">-</span> <span class="token key atrule">files</span><span class="token punctuation">:</span>
+</span><span class="code-line line-number" line="12">        <span class="token punctuation">-</span> /home/vagrant/prometheus<span class="token punctuation">-</span>server/http_sd.json
+</span></code><div onclick="copied(this)" data-code="global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: &#x27;http_sd&#x27;
+    basic_auth:
+      username: &#x22;skynet&#x22;
+      password: &#x22;prometheus&#x22;
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <p>http_sd.json</p>
+    <pre class="language-json"><code class="language-json code-highlight"><span class="code-line line-number" line="1"><span class="token punctuation">[</span>
+</span><span class="code-line line-number" line="2">    <span class="token punctuation">{</span>
+</span><span class="code-line line-number" line="3">        <span class="token property">"targets"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"192.168.0.130:9100"</span><span class="token punctuation">,</span> <span class="token string">"192.168.0.131:9100"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="4">        <span class="token property">"labels"</span><span class="token operator">:</span> <span class="token punctuation">{</span>            
+</span><span class="code-line line-number" line="5">            <span class="token property">"__meta_prometheus_job"</span><span class="token operator">:</span> <span class="token string">"node"</span>
+</span><span class="code-line line-number" line="6">        <span class="token punctuation">}</span>
+</span><span class="code-line line-number" line="7">    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="8">    <span class="token punctuation">{</span>
+</span><span class="code-line line-number" line="9">        <span class="token property">"targets"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"192.168.0.130:9091"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="10">        <span class="token property">"labels"</span><span class="token operator">:</span> <span class="token punctuation">{</span>            
+</span><span class="code-line line-number" line="11">            <span class="token property">"__meta_prometheus_job"</span><span class="token operator">:</span> <span class="token string">"pushgateway"</span>
+</span><span class="code-line line-number" line="12">        <span class="token punctuation">}</span>
+</span><span class="code-line line-number" line="13">    <span class="token punctuation">}</span>    
+</span><span class="code-line line-number" line="14"><span class="token punctuation">]</span>
+</span></code><div onclick="copied(this)" data-code="[
+    {
+        &#x22;targets&#x22;: [&#x22;192.168.0.130:9100&#x22;, &#x22;192.168.0.131:9100&#x22;],
+        &#x22;labels&#x22;: {            
+            &#x22;__meta_prometheus_job&#x22;: &#x22;node&#x22;
+        }
+    },
+    {
+        &#x22;targets&#x22;: [&#x22;192.168.0.130:9091&#x22;],
+        &#x22;labels&#x22;: {            
+            &#x22;__meta_prometheus_job&#x22;: &#x22;pushgateway&#x22;
+        }
+    }    
+]
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h3 id="install-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-prometheus"><span class="octicon octicon-link"></span></a>Install Prometheus</h3>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download files - https://prometheus.io/download/</span>
 </span><span class="code-line line-number" line="2"><span class="token function">wget</span> https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
