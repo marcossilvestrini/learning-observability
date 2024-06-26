@@ -155,7 +155,7 @@ Je publie quelques exemples à utiliser dans ce référentiel.
 
 -   [x] Créer un référentiel
 -   [ ] Prométhée
--   [ ] Gestionnaire d'alertes
+-   [ ] Alertmanager
 -   [ ] Grafana
 -   [ ] Grafana Loki
 -   [ ] Heure de Grafana
@@ -180,7 +180,7 @@ L'écosystème Prometheus se compose de plusieurs composants, dont beaucoup sont
 
 -   le serveur principal Prometheus qui récupère et stocke les données de séries chronologiques
 -   bibliothèques clientes pour instrumenter le code d'application
--   une passerelle push pour prendre en charge les emplois de courte durée
+-   a push gateway for supporting short-lived jobs
 -   exportateurs spécialisés pour des services comme HAProxy, StatsD, Graphite, etc.
 -   un gestionnaire d'alertes pour gérer les alertes
 -   divers outils d'assistance
@@ -215,7 +215,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![Jobs](images/jobs_instances.png)
 
-En termes de Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
+En termes Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
 Un ensemble d'instances ayant le même objectif, un processus répliqué à des fins d'évolutivité ou de fiabilité par exemple, est appelé un travail.
 
 ### Spécification d'écriture à distance Prometheus
@@ -273,7 +273,7 @@ Cela signifie que nous disposons de serveurs Prometheus plus gros qui collectent
 
 #### Fédération interservices
 
-Cette méthode implique qu'un serveur Prometheus surveille un service ou un groupe de services particulier, collectant des données chronologiques spécifiques à partir d'un autre serveur qui surveille un ensemble de services différent.
+This method involves one Prometheus server monitoring a particular service or group of services, gathering specific time-series data from another server that is monitoring a different set of services.
 
 Par exemple, un planificateur de cluster exécutant plusieurs services peut exposer des informations sur l'utilisation des ressources (telles que l'utilisation de la mémoire et du processeur) sur les instances de service exécutées sur le cluster.
 
@@ -284,6 +284,20 @@ Souvent, ces deux ensembles de métriques sont récupérés par des serveurs Pro
 En faisant cela, nous pouvons exécuter des requêtes et des alertes sur les données fusionnées des deux serveurs.
 
 ![cross-service-federation](images/cross-service-federation.png)
+
+### Découverte du service HTTP
+
+![http_sd](images/http_sd.png)
+
+Prometheus fournit un service HTTP générique de découverte, qui lui permet de découvrir des cibles sur un point de terminaison HTTP.
+
+La découverte de services HTTP est complémentaire aux mécanismes de découverte de services pris en charge et constitue une alternative à la découverte de services basée sur les fichiers.
+
+-   static_configs ne s'adapte pas aux environnements plus dynamiques où les instances sont fréquemment ajoutées/supprimées
+-   Prometheus peut s'intégrer aux mécanismes de découverte de services pour mettre automatiquement à jour sa vue des instances en cours d'exécution.
+    -   lorsque de nouvelles instances sont ajoutées, Prometheus commencera à gratter, en cas de perte de la découverte, la série chronologique sera également supprimée
+    -   built-in integrations with Consul, Azure, AWS or file based if custom mechanism required
+-   Le fichier JSON/YAML peut être publié par la plateforme en spécifiant toutes les cibles à extraire. Prometheus l'utilise pour mettre à jour automatiquement les cibles
 
 ### Installer Prometheus
 
@@ -386,7 +400,7 @@ L'exportateur expose les métriques Prometheus, généralement en convertissant 
 
 #### Exportateur de nœuds
 
-Prometheus Node Exporter expose une grande variété de métriques liées au matériel et au noyau.
+The Prometheus Node Exporter exposes a wide variety of hardware- and kernel-related metrics.
 
 ##### Installer l'exportateur de nœuds
 
@@ -493,7 +507,7 @@ echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.tx
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 ```
 
-##### Passerelle push des points de terminaison
+##### Points de terminaison PushGateway
 
 ```sh
 # Access metrics
@@ -507,6 +521,8 @@ http://localhost:9091
 ### Promlens
 
 #### Installer Promlens
+
+_Fonctionne uniquement sans authentification de base_
 
 ```sh
 echo "Downloading Promlens..."
@@ -618,6 +634,7 @@ Lien du projet :<https://github.com/marcossilvestrini/kubernetes-observability>
 -   [Articles sur Prométhée](./README.md)
     -   [Fédération Prométhée](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
     -   [Prometheus Monitoring : Le guide définitif en 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Découverte du service Prometheus](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
     -   [Article sur la pile Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

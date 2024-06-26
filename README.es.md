@@ -108,7 +108,7 @@ Este proyecto es para aprender sobre la observabilidad de Kubernetes.
 
 Este proyecto es para comenzar con las mejores prácticas y herramientas de observabilidad de Kubernetes.
 
-Some tools for learning:
+Algunas herramientas para aprender:
 
 -   Prometeo
 -   Administrador de alertas
@@ -208,7 +208,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 **[Encimera](https://prometheus.io/docs/concepts/metric_types/#counter)**– acepta y almacena sólo aquellos valores que aumentarán con el tiempo.  
 **[Indicador](https://prometheus.io/docs/concepts/metric_types/#gauge)**– almacena los valores que pueden tomar diferentes valores, que pueden tanto aumentar como disminuir.  
-**[histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)** – samples observations (usually things like request durations or response sizes) and counts them in configurable buckets. It also provides a sum of all observed values, allowing you to calculate averages.  
+**[histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
 **[Resumen](https://prometheus.io/docs/concepts/metric_types/#histogram)**– histograma con una representación de datos más detallada utilizando estadísticas adicionales (cuantiles).
 
 ### Trabajos e instancias
@@ -284,6 +284,20 @@ A menudo, estos dos conjuntos de métricas son seleccionados por servidores Prom
 Al hacer esto, podemos ejecutar consultas y alertas sobre los datos combinados de ambos servidores.
 
 ![cross-service-federation](images/cross-service-federation.png)
+
+### Descubrimiento de servicios HTTP
+
+![http_sd](images/http_sd.png)
+
+Prometheus proporciona un descubrimiento de servicios HTTP genérico que le permite descubrir objetivos a través de un punto final HTTP.
+
+El descubrimiento de servicios HTTP es complementario a los mecanismos de descubrimiento de servicios admitidos y es una alternativa al descubrimiento de servicios basado en archivos.
+
+-   static_configs no escala a entornos más dinámicos donde se agregan o eliminan instancias con frecuencia
+-   Prometheus puede integrarse con mecanismos de descubrimiento de servicios para actualizar automáticamente su vista de las instancias en ejecución.
+    -   cuando se agregan nuevas instancias, Prometheus comenzará a eliminar, cuando se pierda el descubrimiento, la serie temporal también se eliminará
+    -   integraciones integradas con Consul, Azure, AWS o basadas en archivos si se requiere un mecanismo personalizado
+-   La plataforma puede publicar el archivo JSON/YAML especificando todos los objetivos desde los cuales extraer. Prometheus lo usa para actualizar objetivos automáticamente
 
 ### Instalar Prometeo
 
@@ -493,7 +507,7 @@ echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.tx
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 ```
 
-##### Puerta de enlace de puntos finales
+##### Puntos finales PushGateway
 
 ```sh
 # Access metrics
@@ -507,6 +521,8 @@ http://localhost:9091
 ### prolens
 
 #### Instalar Promlens
+
+_Solo funciona sin autenticación básica_
 
 ```sh
 echo "Downloading Promlens..."
@@ -618,6 +634,7 @@ Enlace del proyecto:<https://github.com/marcossilvestrini/kubernetes-observabili
 -   [Artículos de Prometeo](./README.md)
     -   [Federación Prometeo](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
     -   [Monitoreo de Prometheus: la guía definitiva en 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [Descubrimiento del servicio Prometheus](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
     -   [Artículo de la pila Kube Prometheus](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

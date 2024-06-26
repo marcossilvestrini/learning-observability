@@ -158,7 +158,7 @@ cd kubernetes-observability || exit
 -   [ ] 警報管理器
 -   [ ] 格拉法納
 -   [ ] 格拉法娜·洛基
--   [ ] Grafana Tempo
+-   [ ] 格拉法納時間
 -   [ ] 格拉法納合金
 -   [ ] 其他工具
 
@@ -172,7 +172,7 @@ cd kubernetes-observability || exit
 
 ![prometheus](images/prometheus.png)
 
-Prometheus 是一個開源系統監控和警報工具包，最初是在 SoundCloud 建置的。
+Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud.
 
 自2012年推出以來，許多公司和組織都採用了Prometheus，該專案擁有非常活躍的開發者和用戶社群。
 
@@ -228,14 +228,14 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   「標籤」是一對（鍵，值）。
 -   「系列」是樣本列表，由一組唯一的標籤標識。
 
-#### Compatible Senders and Receivers
+#### 相容的發送器和接收器
 
 該規範旨在描述以下元件如何交互作用：
 
 -   普羅米修斯（作為“發送者”和“接收者”）
 -   Avalanche（作為“發送者”）- 負載測試工具 Prometheus Metrics。
 -   皮質（作為“接收器”）
--   彈性代理（作為“接收器”）
+-   彈性代理（作為「接收者」）
 -   Grafana Agent（既作為「發送者」又作為「接收者」）
 -   GreptimeDB（作為「接收者」）
 -   InfluxData 的 Telegraf 代理程式。 （作為發送者和接收者）
@@ -251,9 +251,9 @@ api_http_requests_total{method="POST", handler="/messages"}
 ![promql](images/promql.png)
 
 Prometheus 提供了一種名為 PromQL（Prometheus Query Language）的功能查詢語言，可讓使用者即時選擇和聚合時間序列資料。  
-表達式的結果可以顯示為圖形，在 Prometheus 表達式瀏覽器中以表格資料形式查看，或由外部系統透過 HTTP API 使用。
+表達式的結果可以顯示為圖表，在 Prometheus 表達式瀏覽器中以表格資料形式查看，或由外部系統透過 HTTP API 使用。
 
-[Query examples](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+[查詢範例](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
 ### [聯邦](https://prometheus.io/docs/prometheus/latest/federation/#federation)
 
@@ -284,6 +284,20 @@ Prometheus 提供了一種名為 PromQL（Prometheus Query Language）的功能�
 透過這樣做，我們可以對來自兩台伺服器的合併資料執行查詢和警報。
 
 ![cross-service-federation](images/cross-service-federation.png)
+
+### HTTP 服務發現
+
+![http_sd](images/http_sd.png)
+
+Prometheus 提供了通用的 HTTP 服務發現，使其能夠透過 HTTP 端點發現目標。
+
+HTTP 服務發現是支援的服務發現機制的補充，並且是基於檔案的服務發現的替代方案。
+
+-   static_configs 無法擴展到頻繁新增/刪除實例的動態環境
+-   Prometheus 可以與服務發現機制集成，以自動更新其正在運行的實例的視圖
+    -   當新增實例時，Prometheus 將開始抓取，當發現遺失時，時間序列也將被刪除
+    -   與 Consul、Azure、AWS 或基於文件的內建整合（如果需要自訂機制）
+-   JSON/YAML 檔案可以由平台發布，指定要從中抓取的所有目標。 Prometheus 使用它來自動更新目標
 
 ### 安裝普羅米修斯
 
@@ -409,7 +423,7 @@ cd node_exporter-*.*-amd64
 pm2 start node_exporter --name node_exporter
 ```
 
-##### 端點節點導出器
+##### Endpoints Node Exporter
 
 ```sh
 # Access metrics
@@ -507,6 +521,8 @@ http://localhost:9091
 ### 普羅倫斯
 
 #### 安裝 Promlens
+
+_僅在沒有基本身份驗證的情況下工作_
 
 ```sh
 echo "Downloading Promlens..."
@@ -618,6 +634,7 @@ http://192.168.0.130:8081
 -   [普羅米修斯文章](./README.md)
     -   [普羅米修斯聯邦](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
     -   [Prometheus 監控：2019 年權威指南](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [普羅米修斯服務發現](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
     -   [Kube Prometheus 堆疊文章](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

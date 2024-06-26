@@ -363,6 +363,22 @@ cd kubernetes-observability || exit
     <p>
       <img src="images/cross-service-federation.png" alt="cross-service-federation">
     </p>
+    <h3 id="http-service-discovery"><a class="anchor" aria-hidden="true" tabindex="-1" href="#http-service-discovery"><span class="octicon octicon-link"></span></a>HTTP Service Discovery</h3>
+    <p>
+      <img src="images/http_sd.png" alt="http_sd">
+    </p>
+    <p>Prometheus provides a generic HTTP Service Discovery, that enables it to discover targets over an HTTP endpoint.</p>
+    <p>The HTTP Service Discovery is complimentary to the supported service discovery mechanisms, and is an alternative to File-based Service Discovery.</p>
+    <ul>
+      <li>static_configs does not scale to more dynamic environments where instances are added/removed frequently</li>
+      <li>Prometheus can integrate with service discovery mechanisms to automatically update it’s view of of running instances
+        <ul>
+          <li>when new instances are added Prometheus will begin scraping, when lost from discovery the time series will also be removed</li>
+          <li>built-in integrations with Consul, Azure, AWS or file based if custom mechanism required</li>
+        </ul>
+      </li>
+      <li>JSON/YAML file can be published by the platform specifying all targets to scrape from. Prometheus uses it to automatically update targets</li>
+    </ul>
     <h3 id="install-prometheus"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-prometheus"><span class="octicon octicon-link"></span></a>Install Prometheus</h3>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Download files - https://prometheus.io/download/</span>
 </span><span class="code-line line-number" line="2"><span class="token function">wget</span> https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz
@@ -616,7 +632,7 @@ echo &#x27;training_completion{course=&#x22;CKS&#x22;, status=&#x22;in_progress&
 echo &#x27;training_completion{course=&#x22;LPIC2&#x22;, status=&#x22;not_started&#x22;} 0&#x27; >> metrics.txt
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
-    <h5 id="endpoints-pushgateway"><a class="anchor" aria-hidden="true" tabindex="-1" href="#endpoints-pushgateway"><span class="octicon octicon-link"></span></a>Endpoints Pushgateway</h5>
+    <h5 id="endpoints-pushgateway"><a class="anchor" aria-hidden="true" tabindex="-1" href="#endpoints-pushgateway"><span class="octicon octicon-link"></span></a>Endpoints PushGateway</h5>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># Access metrics</span>
 </span><span class="code-line line-number" line="2">http://localhost:9091
 </span></code><div onclick="copied(this)" data-code="# Access metrics
@@ -628,6 +644,7 @@ http://localhost:9091
     </p>
     <h3 id="promlens"><a class="anchor" aria-hidden="true" tabindex="-1" href="#promlens"><span class="octicon octicon-link"></span></a>Promlens</h3>
     <h4 id="install-promlens"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-promlens"><span class="octicon octicon-link"></span></a>Install Promlens</h4>
+    <p><em>Only work without basic authentication</em></p>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token builtin class-name">echo</span> <span class="token string">"Downloading Promlens..."</span>
 </span><span class="code-line line-number" line="2"><span class="token function">wget</span> <span class="token parameter variable">-q</span> https://github.com/prometheus/promlens/releases/download/v0.3.0/promlens-0.3.0.linux-amd64.tar.gz
 </span><span class="code-line line-number" line="3">
@@ -717,6 +734,7 @@ http://192.168.0.130:8081
         <ul>
           <li><a href="https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/">Prometheus Federation</a></li>
           <li><a href="https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/">Prometheus Monitoring : The Definitive Guide in 2019</a></li>
+          <li><a href="https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html">Prometheus Service Discovery</a></li>
           <li><a href="https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/">Kube Prometheus Stack Article</a></li>
         </ul>
       </li>

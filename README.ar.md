@@ -114,7 +114,7 @@
 -   مدير التنبيه
 -   جرافانا
 -   جرافانا لوكي
--   توقيت جرافانا
+-   توقيت غرافانا
 
 * * *
 
@@ -241,7 +241,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   وكيل Telegraf الخاص بـ InfluxData. (كمرسل وكمستقبل)
 -   M3 (بوصفه "المتلقي")
 -   ميمير (بصفته "المتلقي")
--   OpenTelemetry Collector (بصفته "مرسلًا" وفي النهاية "كمستقبلًا")
+-   OpenTelemetry Collector (بصفته "مرسلًا" وفي النهاية "مستقبلًا")
 -   ثانوس (بوصفه "المتلقي")
 -   المتجه (بوصفه "المرسل" و"المتلقي")
 -   VictoriaMetrics (بوصفها "المتلقي")
@@ -251,7 +251,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 ![promql](images/promql.png)
 
 توفر Prometheus لغة استعلام وظيفية تسمى PromQL (لغة استعلام Prometheus) التي تتيح للمستخدم تحديد وتجميع بيانات السلاسل الزمنية في الوقت الفعلي.  
-يمكن عرض نتيجة التعبير إما كرسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
+يمكن عرض نتيجة التعبير إما على شكل رسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
 
 [أمثلة الاستعلام](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
@@ -284,6 +284,20 @@ api_http_requests_total{method="POST", handler="/messages"}
 ومن خلال القيام بذلك، يمكننا تشغيل الاستعلامات والتنبيهات على البيانات المدمجة من كلا الخادمين.
 
 ![cross-service-federation](images/cross-service-federation.png)
+
+### اكتشاف خدمة HTTP
+
+![http_sd](images/http_sd.png)
+
+يوفر Prometheus اكتشافًا عامًا لخدمة HTTP، والذي يمكّنه من اكتشاف الأهداف عبر نقطة نهاية HTTP.
+
+يعد اكتشاف خدمة HTTP مكملاً لآليات اكتشاف الخدمة المدعومة، وهو بديل لاكتشاف الخدمة المستند إلى الملف.
+
+-   لا يتم توسيع نطاق static_configs إلى بيئات أكثر ديناميكية حيث تتم إضافة/إزالة المثيلات بشكل متكرر
+-   يمكن أن يتكامل Prometheus مع آليات اكتشاف الخدمة لتحديث عرضه للمثيلات قيد التشغيل تلقائيًا
+    -   عند إضافة مثيلات جديدة، سيبدأ Prometheus في الحذف، وعند فقده من الاكتشاف، ستتم أيضًا إزالة السلسلة الزمنية
+    -   عمليات التكامل المضمنة مع Consul أو Azure أو AWS أو الملف بناءً على الحاجة إلى آلية مخصصة
+-   يمكن نشر ملف JSON/YAML بواسطة النظام الأساسي مع تحديد جميع الأهداف التي سيتم التخلص منها. يستخدمه بروميثيوس لتحديث الأهداف تلقائيًا
 
 ### تثبيت بروميثيوس
 
@@ -493,7 +507,7 @@ echo 'training_completion{course="LPIC2", status="not_started"} 0' >> metrics.tx
 curl --data-binary @metrics.txt http://192.168.0.130:9091/metrics/job/training_metrics
 ```
 
-##### نقاط النهاية
+##### نقاط النهاية PushGateway
 
 ```sh
 # Access metrics
@@ -507,6 +521,8 @@ http://localhost:9091
 ### بروملينز
 
 #### قم بتثبيت بروملينز
+
+_العمل فقط دون المصادقة الأساسية_
 
 ```sh
 echo "Downloading Promlens..."
@@ -552,7 +568,7 @@ http://192.168.0.130:8081
 
 * * *
 
-### توقيت جرافانا
+### توقيت غرافانا
 
 * * *
 
@@ -569,7 +585,7 @@ http://192.168.0.130:8081
 المساهمات هي ما يجعل مجتمع المصادر المفتوحة مكانًا رائعًا للتعلم والإلهام والإبداع. أي مساهمات تقدمها هي**اقدر هذا جدا**.
 
 إذا كان لديك اقتراح من شأنه أن يجعل هذا الأمر أفضل، فيرجى شوكة الريبو وإنشاء طلب سحب. يمكنك أيضًا ببساطة فتح مشكلة بالعلامة "التحسين".
-لا تنسى أن تعطي المشروع نجمة! شكرًا لك مرة أخرى!
+لا تنس أن تعطي المشروع نجمة! شكرًا لك مرة أخرى!
 
 1.  شوكة المشروع
 2.  قم بإنشاء فرع الميزات الخاص بك (`git checkout -b feature/AmazingFeature`)
@@ -616,8 +632,9 @@ http://192.168.0.130:8081
 -   [مصدر العقدة](https://github.com/prometheus/node_exporter)
 -   [مقالة PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
 -   [مقالات بروميثيوس](./README.md)
-    -   [Prometheus Federation](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
+    -   [اتحاد بروميثيوس](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
     -   [مراقبة بروميثيوس: الدليل النهائي في عام 2019](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
+    -   [اكتشاف خدمة بروميثيوس](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
     -   [مقالة كوب بروميثيوس ستاك](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
