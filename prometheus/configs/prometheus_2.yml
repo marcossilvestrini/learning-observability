@@ -8,6 +8,7 @@ alerting:
         - targets:
 
 rule_files:
+  - "rules-process-explorer.yml"
 
 scrape_configs:
   - job_name: "prometheus"
@@ -28,6 +29,7 @@ scrape_configs:
       password: "prometheus"
       #  password_file: ./web-config.yml
 
+# remote write - to prometheus_1
 remote_write:
   - url: "http://192.168.0.130:9090/api/v1/write"    
     queue_config:

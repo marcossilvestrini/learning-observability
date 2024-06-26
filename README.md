@@ -296,6 +296,46 @@ The HTTP Service Discovery is complimentary to the supported service discovery m
   * built-in integrations with Consul, Azure, AWS or file based if custom mechanism required
 * JSON/YAML file can be published by the platform specifying all targets to scrape from. Prometheus uses it to automatically update targets
 
+#### Example using http sd_file
+
+![http_file_sd](images/http_file_sd.png)
+
+prometheus.yaml for scrap the services in target http_sd.json
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+```
+
+http_sd.json
+
+```json
+[
+    {
+        "targets": ["192.168.0.130:9100", "192.168.0.131:9100"],
+        "labels": {            
+            "__meta_prometheus_job": "node"
+        }
+    },
+    {
+        "targets": ["192.168.0.130:9091"],
+        "labels": {            
+            "__meta_prometheus_job": "pushgateway"
+        }
+    }    
+]
+```
+
 ### Install Prometheus
 
 ```sh

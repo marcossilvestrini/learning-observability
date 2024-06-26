@@ -34,7 +34,7 @@ scrape_configs:
         - '192.168.0.130:9090'
         - '192.168.0.131:9090'
   
-  # Service Discovery - http_sd    
+  # http sd - Service Discovery with file_sd  
   - job_name: 'http_sd'
     basic_auth:
       username: "skynet"
@@ -42,3 +42,16 @@ scrape_configs:
     file_sd_configs:
       - files:
         - /home/vagrant/prometheus-server/http_sd.json
+
+  # http sd -Service Discovery with httpd_sd
+  - job_name: 'process_exporter'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scheme: http
+    http_sd_configs:
+      - url: 'http://192.168.0.132:5000/targets'
+        refresh_interval: 30s
+  

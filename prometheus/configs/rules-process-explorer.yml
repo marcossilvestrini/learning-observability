@@ -1,0 +1,56 @@
+groups:
+  - name: process_exporter
+    rules:
+    # Total CPU usage per process
+    - record: process_cpu_seconds_total:rate
+      expr: rate(process_cpu_seconds_total[1m])
+      labels:
+        job: process_exporter
+
+    # Total memory usage per process
+    - record: process_resident_memory_bytes:sum
+      expr: sum by (job, instance, process_name) (process_resident_memory_bytes)
+      labels:
+        job: process_exporter
+
+    # Total number of open file descriptors per process
+    - record: process_open_fds:sum
+      expr: sum by (job, instance, process_name) (process_open_fds)
+      labels:
+        job: process_exporter
+
+    # Total virtual memory size per process
+    - record: process_virtual_memory_bytes:sum
+      expr: sum by (job, instance, process_name) (process_virtual_memory_bytes)
+      labels:
+        job: process_exporter
+
+    # Alert if any process exceeds a CPU usage threshold
+    - alert: HighCPUUsage
+      expr: rate(process_cpu_seconds_total[1m]) > 0.5
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High CPU usage detected for process {{ $labels.process_name }}"
+        description: "Process {{ $labels.process_name }} on instance {{ $labels.instance }} is using high CPU (>{{ $value }})."
+
+    # Alert if any process exceeds a memory usage threshold
+    - alert: HighMemoryUsage
+      expr: process_resident_memory_bytes > 500000000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High memory usage detected for process {{ $labels.process_name }}"
+        description: "Process {{ $labels.process_name }} on instance {{ $labels.instance }} is using high memory (>{{ $value }} bytes)."
+
+    # Alert if any process has too many open file descriptors
+    - alert: HighOpenFileDescriptors
+      expr: process_open_fds > 1000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High number of open file descriptors detected for process {{ $labels.process_name }}"
+        description: "Process {{ $labels.process_name }} on instance {{ $labels.instance }} has a high number of open file descriptors (>{{ $value }})."

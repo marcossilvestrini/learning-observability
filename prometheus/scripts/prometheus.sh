@@ -27,7 +27,6 @@ if ! command -v pm2 &> /dev/null ; then
     pm2 completion install
 fi
 
-
 # Install Prometheus
 echo "Downloading Prometheus..."
 if [ -d prometheus-server ]; then    
@@ -48,7 +47,20 @@ cd || exit
 local_ip=$(hostname -I | tr ' ' '\n' | grep '192.168.0.')
 
 # Verificar o IP e configurar o Prometheus
-if [ "$local_ip" = "192.168.0.130" ]; then
+if [ "$local_ip" = "192.168.0.130" ]; then   
+
+    # Install process explorer
+    wget -q https://github.com/ncabatoff/process-exporter/releases/download/v0.7.10/process-exporter-0.7.10.linux-amd64.tar.gz
+    tar xzf process-exporter-0.7.10.linux-amd64.tar.gz
+    sudo mv process-exporter-0.7.10.linux-amd64/process-exporter /usr/local/bin/
+    sudo cp prometheus/configs/process-exporter.yml /etc/
+    sudo cp prometheus/configs/process-exporter.service /etc/systemd/system/
+    sudo systemctl daemon-reload
+    sudo systemctl start process-exporter
+    sudo systemctl enable process-exporter
+    rm process-exporter-0.7.10.linux-amd64.tar.gz
+    #curl http://localhost:9256/metrics
+    
     # Configurações para Prometheus-1
     if [ -d /var/lib/prometheus ]; then
         # Se a pasta existir, limpar o diretório wal
@@ -69,7 +81,8 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     
     # Rules
     cp prometheus/configs/rules.yml prometheus-server/
-    
+    cp prometheus/configs/rules-process-explorer.yml prometheus-server/
+
     echo "Starting Prometheus..."
     cd prometheus-server || exit
     #pm2 start prometheus --name prometheus-server -- --config.file="$configFile"
@@ -142,6 +155,19 @@ if [ "$local_ip" = "192.168.0.130" ]; then
     cd || exit    
     
 elif [ "$local_ip" = "192.168.0.131" ]; then
+
+    # Install process explorer
+    wget -q https://github.com/ncabatoff/process-exporter/releases/download/v0.7.10/process-exporter-0.7.10.linux-amd64.tar.gz
+    tar xzf process-exporter-0.7.10.linux-amd64.tar.gz
+    sudo mv process-exporter-0.7.10.linux-amd64/process-exporter /usr/local/bin/
+    sudo cp prometheus/configs/process-exporter.yml /etc/
+    sudo cp prometheus/configs/process-exporter.service /etc/systemd/system/
+    sudo systemctl daemon-reload
+    sudo systemctl start process-exporter
+    sudo systemctl enable process-exporter
+    rm process-exporter-0.7.10.linux-amd64.tar.gz
+    #curl http://localhost:9256/metrics
+
     # Configurações para Prometheus-2
     
     echo "Updating configuration file: prometheus.yml"
@@ -150,6 +176,9 @@ elif [ "$local_ip" = "192.168.0.131" ]; then
     
     # basic auth
     cp prometheus/configs/web-config.yml prometheus-server/
+
+    # Rules    
+    cp prometheus/configs/rules-process-explorer.yml prometheus-server/
         
     echo "Starting Prometheus..."
     cd prometheus-server || exit
@@ -194,8 +223,20 @@ elif [ "$local_ip" = "192.168.0.131" ]; then
     cd || exit
 
 elif [ "$local_ip" = "192.168.0.132" ]; then
-    # Configurações para Prometheus-3
+
+    # Configurações http sd(Service Discovery) Endpoint
+    echo "Configure HTTP SD - Prometheus Service Discovery Endpoint..."
+    pip install flask
+    sudo cp prometheus/configs/http-sd-endpoint.py /usr/local/bin/    
+    PROCESS_NAME="http-sd-endpoint"    
+    if pm2 list | grep -q $PROCESS_NAME; then
+    echo "Process $PROCESS_NAME is already running. Stopping it first..."
+    pm2 delete $PROCESS_NAME
+    fi    
+    echo "Starting process $PROCESS_NAME..."
+    pm2 start /usr/local/bin/http-sd-endpoint.py --name $PROCESS_NAME    
     
+    # Configurações para Prometheus-3    
     echo "Updating configuration file: prometheus.yml"
     cp prometheus/configs/prometheus_3.yml  prometheus-server/prometheus.yml
     chmod 644 prometheus-server/prometheus.yml
