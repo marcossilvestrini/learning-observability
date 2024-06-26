@@ -299,6 +299,46 @@ A descoberta de serviço HTTP é complementar aos mecanismos de descoberta de se
     -   integrações integradas com Consul, Azure, AWS ou baseadas em arquivo, se necessário, mecanismo personalizado
 -   O arquivo JSON/YAML pode ser publicado pela plataforma especificando todos os alvos dos quais extrair. Prometheus o usa para atualizar alvos automaticamente
 
+#### Exemplo usando http sd_file
+
+![http_file_sd](images/http_file_sd.png)
+
+prometheus.yaml para descartar os serviços no destino http_sd.json
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+```
+
+http_sd.json
+
+```json
+[
+    {
+        "targets": ["192.168.0.130:9100", "192.168.0.131:9100"],
+        "labels": {            
+            "__meta_prometheus_job": "node"
+        }
+    },
+    {
+        "targets": ["192.168.0.130:9091"],
+        "labels": {            
+            "__meta_prometheus_job": "pushgateway"
+        }
+    }    
+]
+```
+
 ### Instale o Prometheus
 
 ```sh
@@ -393,7 +433,7 @@ count(promhttp_metric_handler_requests_total)
 rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
-### Exportadores Prometheus
+### Prometheus Exportadores
 
 Um exportador é um binário executado junto com o aplicativo do qual você deseja obter métricas.  
 O exportador expõe métricas do Prometheus, geralmente convertendo métricas expostas em um formato não Prometheus em um formato compatível com o Prometheus.
