@@ -155,7 +155,7 @@ Je publie quelques exemples à utiliser dans ce référentiel.
 
 -   [x] Créer un référentiel
 -   [ ] Prométhée
--   [ ] Alertmanager
+-   [ ] Gestionnaire d'alertes
 -   [ ] Grafana
 -   [ ] Grafana Loki
 -   [ ] Heure de Grafana
@@ -180,7 +180,7 @@ L'écosystème Prometheus se compose de plusieurs composants, dont beaucoup sont
 
 -   le serveur principal Prometheus qui récupère et stocke les données de séries chronologiques
 -   bibliothèques clientes pour instrumenter le code d'application
--   a push gateway for supporting short-lived jobs
+-   une passerelle push pour prendre en charge les emplois de courte durée
 -   exportateurs spécialisés pour des services comme HAProxy, StatsD, Graphite, etc.
 -   un gestionnaire d'alertes pour gérer les alertes
 -   divers outils d'assistance
@@ -215,7 +215,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![Jobs](images/jobs_instances.png)
 
-En termes Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
+En termes de Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
 Un ensemble d'instances ayant le même objectif, un processus répliqué à des fins d'évolutivité ou de fiabilité par exemple, est appelé un travail.
 
 ### Spécification d'écriture à distance Prometheus
@@ -273,7 +273,7 @@ Cela signifie que nous disposons de serveurs Prometheus plus gros qui collectent
 
 #### Fédération interservices
 
-This method involves one Prometheus server monitoring a particular service or group of services, gathering specific time-series data from another server that is monitoring a different set of services.
+Cette méthode implique qu'un serveur Prometheus surveille un service ou un groupe de services particulier, collectant des données chronologiques spécifiques à partir d'un autre serveur qui surveille un ensemble de services différent.
 
 Par exemple, un planificateur de cluster exécutant plusieurs services peut exposer des informations sur l'utilisation des ressources (telles que l'utilisation de la mémoire et du processeur) sur les instances de service exécutées sur le cluster.
 
@@ -296,8 +296,48 @@ La découverte de services HTTP est complémentaire aux mécanismes de découver
 -   static_configs ne s'adapte pas aux environnements plus dynamiques où les instances sont fréquemment ajoutées/supprimées
 -   Prometheus peut s'intégrer aux mécanismes de découverte de services pour mettre automatiquement à jour sa vue des instances en cours d'exécution.
     -   lorsque de nouvelles instances sont ajoutées, Prometheus commencera à gratter, en cas de perte de la découverte, la série chronologique sera également supprimée
-    -   built-in integrations with Consul, Azure, AWS or file based if custom mechanism required
+    -   intégrations intégrées avec Consul, Azure, AWS ou basées sur des fichiers si un mécanisme personnalisé est requis
 -   Le fichier JSON/YAML peut être publié par la plateforme en spécifiant toutes les cibles à extraire. Prometheus l'utilise pour mettre à jour automatiquement les cibles
+
+#### Exemple utilisant http sd_file
+
+![http_file_sd](images/http_file_sd.png)
+
+prometheus.yaml pour supprimer les services dans la cible http_sd.json
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:  
+  # Service Discovery with file_sd  
+  - job_name: 'http_sd'
+    basic_auth:
+      username: "skynet"
+      password: "prometheus"
+    file_sd_configs:
+      - files:
+        - /home/vagrant/prometheus-server/http_sd.json
+```
+
+http_sd.json
+
+```json
+[
+    {
+        "targets": ["192.168.0.130:9100", "192.168.0.131:9100"],
+        "labels": {            
+            "__meta_prometheus_job": "node"
+        }
+    },
+    {
+        "targets": ["192.168.0.130:9091"],
+        "labels": {            
+            "__meta_prometheus_job": "pushgateway"
+        }
+    }    
+]
+```
 
 ### Installer Prometheus
 
@@ -400,7 +440,7 @@ L'exportateur expose les métriques Prometheus, généralement en convertissant 
 
 #### Exportateur de nœuds
 
-The Prometheus Node Exporter exposes a wide variety of hardware- and kernel-related metrics.
+Prometheus Node Exporter expose une grande variété de métriques liées au matériel et au noyau.
 
 ##### Installer l'exportateur de nœuds
 
