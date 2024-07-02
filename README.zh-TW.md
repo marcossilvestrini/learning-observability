@@ -83,7 +83,7 @@
 
 ## 關於該項目
 
-這個專案是為了學習 kubernetes 可觀察性。
+這個項目是為了學習學習可觀察性。
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -106,7 +106,7 @@
 
 ## 入門
 
-該計畫旨在開始使用 kubernetes 可觀察性工具和最佳實踐。
+該計畫旨在開始學習可觀察性工具和最佳實踐。
 
 一些學習工具：
 
@@ -293,7 +293,7 @@ Prometheus 提供了通用的 HTTP 服務發現，使其能夠透過 HTTP 端點
 
 HTTP 服務發現是支援的服務發現機制的補充，並且是基於檔案的服務發現的替代方案。
 
--   static_configs 無法擴展到頻繁新增/刪除實例的動態環境
+-   static_configs 無法擴展到頻繁新增/刪除實例的更動態的環境
 -   Prometheus 可以與服務發現機制集成，以自動更新其正在運行的實例的視圖
     -   當新增實例時，Prometheus 將開始抓取，當發現遺失時，時間序列也將被刪除
     -   與 Consul、Azure、AWS 或基於文件的內建整合（如果需要自訂機制）
@@ -494,7 +494,7 @@ scrape_configs:
 
 ### 推播網關
 
-Prometheus Pushgateway 是一項中間服務，可讓臨時作業和批次作業將其指標公開給 Prometheus。  
+Prometheus Pushgateway 是一項中間服務，允許臨時作業和批次作業將其指標公開給 Prometheus。  
 由於此類工作可能存在的時間不夠長而無法刪除，因此他們可以將其指標推送到 Pushgateway。  
 然後，Pushgateway 充當 Prometheus 抓取的臨時指標儲存。
 
@@ -674,7 +674,7 @@ http://192.168.0.130:8081
 -   [普羅米修斯文章](./README.md)
     -   [普羅米修斯聯邦](https://www.dbi-services.com/blog/high-availability-and-hierarchical-federation-with-prometheus/)
     -   [Prometheus 監控：2019 年權威指南](https://devconnected.com/the-definitive-guide-to-prometheus-in-2019/)
-    -   [普羅米修斯服務發現](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
+    -   [Prometheus Service Discovery](https://ryanharrison.co.uk/2021/04/05/prometheus-monitoring-guide-part-1-install-instrumentation.html)
     -   [Kube Prometheus 堆疊文章](https://www.kubecost.com/kubernetes-devops-tools/kube-prometheus/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
