@@ -32,10 +32,10 @@
     <img src="images/observability.png" alt="observability">
   </a>
 
-<h3 align="center">Learning Obserbability</h3>
+<h3 align="center">Learning Observability</h3>
 
   <p align="center">
-    Project for learning about Learning Obserbability.
+    Project for learning about Learning Observability.
     <br />
     <a href="https://github.com/marcossilvestrini/learning-observability"><strong>Explore the docs »</strong></a>
     <br />

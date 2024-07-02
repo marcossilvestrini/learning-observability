@@ -34,10 +34,10 @@
     <img src="images/observability.png" alt="observability">
   </a>
 
-<h3 align="center">Learning Obserbability</h3>
+<h3 align="center">Learning Observability</h3>
 
   <p align="center">
-    Project for learning about Learning Obserbability.
+    Project for learning about Learning Observability.
     <br />
     <a href="https://github.com/marcossilvestrini/learning-observability"><strong>Explore the docs »</strong></a>
     <br />
@@ -83,7 +83,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is for learning about Learning Obserbability.
+This project is for learning about Observability.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -105,7 +105,7 @@ This project is for learning about Learning Obserbability.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This project is for getting started with Learning Obserbability tools and best practices.
+This project is for getting started with Learning Observability tools and best practices.
 
 Some tools for learning:
 
