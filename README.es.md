@@ -83,7 +83,7 @@
 
 ## Sobre el proyecto
 
-Este proyecto es para aprender sobre la observabilidad de Kubernetes.
+Este proyecto es para aprender sobre la observabilidad del aprendizaje.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -106,9 +106,9 @@ Este proyecto es para aprender sobre la observabilidad de Kubernetes.
 
 ## Empezando
 
-Este proyecto es para comenzar con las mejores prácticas y herramientas de observabilidad de Kubernetes.
+Este proyecto es para comenzar con las mejores prácticas y herramientas de observabilidad del aprendizaje.
 
-Some tools for learning:
+Algunas herramientas para aprender:
 
 -   Prometeo
 -   Administrador de alertas
@@ -208,7 +208,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 **[Encimera](https://prometheus.io/docs/concepts/metric_types/#counter)**– acepta y almacena sólo aquellos valores que aumentarán con el tiempo.  
 **[Indicador](https://prometheus.io/docs/concepts/metric_types/#gauge)**– almacena los valores que pueden tomar diferentes valores, que pueden tanto aumentar como disminuir.  
-**[histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
+**[Histograma](https://prometheus.io/docs/concepts/metric_types/#histogram)**– toma muestras de observaciones (generalmente cosas como duraciones de solicitudes o tamaños de respuestas) y las cuenta en grupos configurables. También proporciona una suma de todos los valores observados, lo que le permite calcular promedios.  
 **[Resumen](https://prometheus.io/docs/concepts/metric_types/#histogram)**– histograma con una representación de datos más detallada utilizando estadísticas adicionales (cuantiles).
 
 ### Trabajos e instancias
