@@ -83,7 +83,7 @@
 
 ## Sobre o projeto
 
-Este projeto é para aprender sobre a observabilidade do Kubernetes.
+Este projeto é para aprender sobre Observabilidade de Aprendizagem.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -106,7 +106,7 @@ Este projeto é para aprender sobre a observabilidade do Kubernetes.
 
 ## Começando
 
-Este projeto é para começar a usar ferramentas e práticas recomendadas de observabilidade do Kubernetes.
+Este projeto é para começar a usar ferramentas e práticas recomendadas de Observabilidade de Aprendizagem.
 
 Algumas ferramentas para aprender:
 
@@ -433,7 +433,7 @@ count(promhttp_metric_handler_requests_total)
 rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 ```
 
-### Prometheus Exportadores
+### Exportadores Prometheus
 
 Um exportador é um binário executado junto com o aplicativo do qual você deseja obter métricas.  
 O exportador expõe métricas do Prometheus, geralmente convertendo métricas expostas em um formato não Prometheus em um formato compatível com o Prometheus.
