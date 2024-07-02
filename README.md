@@ -16,9 +16,9 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Create Release](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/release.yml)
-[![Generate HTML](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/generate-html.yml)
-[![Slack Notification](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/kubernetes-observability/actions/workflows/slack.yml)
+[![Create Release](https://github.com/marcossilvestrini/learning-observability/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/learning-observability/actions/workflows/release.yml)
+[![Generate HTML](https://github.com/marcossilvestrini/learning-observability/actions/workflows/generate-html.yml/badge.svg)](https://github.com/marcossilvestrini/learning-observability/actions/workflows/generate-html.yml)
+[![Slack Notification](https://github.com/marcossilvestrini/learning-observability/actions/workflows/slack.yml/badge.svg)](https://github.com/marcossilvestrini/learning-observability/actions/workflows/slack.yml)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -30,23 +30,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/marcossilvestrini/kubernetes-observability">
+  <a href="https://github.com/marcossilvestrini/learning-observability">
     <img src="images/observability.png" alt="observability">
   </a>
 
-<h3 align="center">Kubernetes Observability</h3>
+<h3 align="center">Learning Obserbability</h3>
 
   <p align="center">
-    Project for learning about Kubernetes observability.
+    Project for learning about Learning Obserbability.
     <br />
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/marcossilvestrini/learning-observability"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://marcossilvestrini.github.io/kubernetes-observability">Project Page</a>
+    <a href="https://marcossilvestrini.github.io/learning-observability">Project Page</a>
     -
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Report Bug</a>
+    <a href="https://github.com/marcossilvestrini/learning-observability/issues">Report Bug</a>
     -
-    <a href="https://github.com/marcossilvestrini/kubernetes-observability/issues">Request Feature</a>
+    <a href="https://github.com/marcossilvestrini/learning-observability/issues">Request Feature</a>
   </p>
 </div>
 
@@ -83,7 +83,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is for learning about kubernetes observability.
+This project is for learning about Learning Obserbability.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -105,7 +105,7 @@ This project is for learning about kubernetes observability.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This project is for getting started with kubernetes observability tools and best practices.
+This project is for getting started with Learning Obserbability tools and best practices.
 
 Some tools for learning:
 
@@ -130,8 +130,8 @@ Some tools for learning:
 Clone the repo
 
 ```sh
-git clone https://github.com/marcossilvestrini/kubernetes-observability.git
-cd kubernetes-observability || exit
+git clone https://github.com/marcossilvestrini/learning-observability.git
+cd learning-observability || exit
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -159,7 +159,7 @@ I publish some exemples for use in this repository.
 * [ ] Grafana Alloy
 * [ ] Others tools
 
-See the [open issues](https://github.com/marcossilvestrini/kubernetes-observability/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/marcossilvestrini/learning-observability/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -648,7 +648,7 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 * Marcos Silvestrini - [@mrsilvestrini](https://twitter.com/mrsilvestrini)
 * <marcos.silvestrini@gmail.com>
 
-Project Link: [https://github.com/marcossilvestrini/kubernetes-observability](https://github.com/marcossilvestrini/kubernetes-observability)
+Project Link: [https://github.com/marcossilvestrini/learning-observability](https://github.com/marcossilvestrini/learning-observability)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -674,16 +674,16 @@ Project Link: [https://github.com/marcossilvestrini/kubernetes-observability](ht
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
-[contributors-url]: https://github.com/marcossilvestrini/kubernetes-observability/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
-[forks-url]: https://github.com/marcossilvestrini/kubernetes-observability/network/members
-[stars-shield]: https://img.shields.io/github/stars/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
-[stars-url]: https://github.com/marcossilvestrini/kubernetes-observability/stargazers
-[issues-shield]: https://img.shields.io/github/issues/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
-[issues-url]: https://github.com/marcossilvestrini/kubernetes-observability/issues
-[license-shield]: https://img.shields.io/github/license/marcossilvestrini/kubernetes-observability.svg?style=for-the-badge
-[license-url]: https://github.com/marcossilvestrini/kubernetes-observability/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/marcossilvestrini/learning-observability.svg?style=for-the-badge
+[contributors-url]: https://github.com/marcossilvestrini/learning-observability/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/marcossilvestrini/learning-observability.svg?style=for-the-badge
+[forks-url]: https://github.com/marcossilvestrini/learning-observability/network/members
+[stars-shield]: https://img.shields.io/github/stars/marcossilvestrini/learning-observability.svg?style=for-the-badge
+[stars-url]: https://github.com/marcossilvestrini/learning-observability/stargazers
+[issues-shield]: https://img.shields.io/github/issues/marcossilvestrini/learning-observability.svg?style=for-the-badge
+[issues-url]: https://github.com/marcossilvestrini/learning-observability/issues
+[license-shield]: https://img.shields.io/github/license/marcossilvestrini/learning-observability.svg?style=for-the-badge
+[license-url]: https://github.com/marcossilvestrini/learning-observability/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/marcossilvestrini
 [Github-badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white

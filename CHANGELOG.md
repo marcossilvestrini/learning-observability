@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [v0.1.0](https://github.com/marcossilvestrini/kubernetes-observability/releases/tag/v0.1.0)
+## [v0.1.0](https://github.com/marcossilvestrini/learning-observability/releases/tag/v0.1.0)
 
 > Release Date: 2024-05-06
 
