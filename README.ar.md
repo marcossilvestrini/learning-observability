@@ -83,7 +83,7 @@
 
 ## حول المشروع
 
-هذا المشروع مخصص للتعرف على إمكانية ملاحظة kubernetes.
+هذا المشروع مخصص للتعرف على إمكانية ملاحظة التعلم.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -106,7 +106,7 @@
 
 ## ابدء
 
-يهدف هذا المشروع إلى البدء باستخدام أدوات مراقبة kubernetes وأفضل الممارسات.
+يهدف هذا المشروع إلى البدء باستخدام أدوات إمكانية ملاحظة التعلم وأفضل الممارسات.
 
 بعض أدوات التعلم:
 
@@ -114,7 +114,7 @@
 -   مدير التنبيه
 -   جرافانا
 -   جرافانا لوكي
--   توقيت جرافانا
+-   توقيت غرافانا
 
 * * *
 
@@ -158,7 +158,7 @@ cd learning-observability || exit
 -   [ ] مدير التنبيه
 -   [ ] جرافانا
 -   [ ] جرافانا لوكي
--   [ ] توقيت جرافانا
+-   [ ] توقيت غرافانا
 -   [ ] سبائك جرافانا
 -   [ ] أدوات أخرى
 
@@ -226,7 +226,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   "المستقبل" هو شيء يستقبل بيانات الكتابة عن بعد من Prometheus.
 -   "العينة" هي زوج من (الطابع الزمني، القيمة).
 -   "التسمية" هي زوج من (المفتاح، القيمة).
--   "السلسلة" هي قائمة من العينات، التي تم تحديدها بواسطة مجموعة فريدة من التصنيفات.
+-   "السلسلة" هي قائمة بالعينات، يتم تحديدها بواسطة مجموعة فريدة من التصنيفات.
 
 #### المرسلون والمستقبلون المتوافقون
 
@@ -240,7 +240,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 -   GreptimeDB (بوصفه "المتلقي")
 -   وكيل Telegraf الخاص بـ InfluxData. (كمرسل وكمستقبل)
 -   M3 (بوصفه "المتلقي")
--   ميمير (بصفته "المتلقي")
+-   ميمير (بوصفه "المتلقي")
 -   OpenTelemetry Collector (بصفته "مرسلًا" وفي النهاية "مستقبلًا")
 -   ثانوس (بوصفه "المتلقي")
 -   المتجه (بوصفه "المرسل" و"المتلقي")
@@ -251,7 +251,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 ![promql](images/promql.png)
 
 توفر Prometheus لغة استعلام وظيفية تسمى PromQL (لغة استعلام Prometheus) التي تتيح للمستخدم تحديد وتجميع بيانات السلاسل الزمنية في الوقت الفعلي.  
-يمكن عرض نتيجة التعبير كرسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
+يمكن عرض نتيجة التعبير إما على شكل رسم بياني، أو عرضها كبيانات جدولية في متصفح تعبيرات Prometheus، أو استهلاكها بواسطة أنظمة خارجية عبر HTTP API.
 
 [أمثلة الاستعلام](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 
@@ -289,7 +289,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![http_sd](images/http_sd.png)
 
-يوفر Prometheus اكتشافًا عامًا لخدمة HTTP، والذي يمكّنه من اكتشاف الأهداف عبر نقطة نهاية HTTP.
+يوفر Prometheus اكتشاف خدمة HTTP عامًا، والذي يمكّنه من اكتشاف الأهداف عبر نقطة نهاية HTTP.
 
 يعد اكتشاف خدمة HTTP مكملاً لآليات اكتشاف الخدمة المدعومة، وهو بديل لاكتشاف الخدمة المستند إلى الملف.
 
@@ -608,7 +608,7 @@ http://192.168.0.130:8081
 
 * * *
 
-### توقيت جرافانا
+### توقيت غرافانا
 
 * * *
 
@@ -654,7 +654,7 @@ http://192.168.0.130:8081
 -   ماركوس سيلفستريني -[@mrsilvestrini](https://twitter.com/mrsilvestrini)
 -   [ماركوس.سيلفسترن@جميل.كوم](mailto:marcos.silvestrini@gmail.com)
 
-رابط المشروع:[هتبص://جذب.كوم/ماركسيلفصترن/كوبرنتصبصرفبلت](https://github.com/marcossilvestrini/learning-observability)
+رابط المشروع:[هتبص://جذب.كوم/ماركسيلفصترن/ليرننجبسرفبلت](https://github.com/marcossilvestrini/learning-observability)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -667,7 +667,7 @@ http://192.168.0.130:8081
 -   [بروميثيوس](https://prometheus.io/docs/introduction/overview/)
 -   [تكوينات بروميثيوس](https://github.com/alerta/prometheus-config/tree/master/config)
 -   [بروميثيوس تخصيصات المنفذ الافتراضي](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
--   [Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
+-   [بوابة الدفع](https://github.com/prometheus/pushgateway/blob/master/README.md)
 -   [المصدرين](https://prometheus.io/docs/instrumenting/exporters/)
 -   [مصدر العقدة](https://github.com/prometheus/node_exporter)
 -   [مقالة PromQL](https://www.metricfire.com/blog/getting-started-with-promql/)
