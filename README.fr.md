@@ -83,7 +83,7 @@
 
 ## À propos du projet
 
-Ce projet vise à en apprendre davantage sur l'observabilité de Kubernetes.
+Ce projet est destiné à en apprendre davantage sur l'observabilité de l'apprentissage.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -106,7 +106,7 @@ Ce projet vise à en apprendre davantage sur l'observabilité de Kubernetes.
 
 ## Commencer
 
-Ce projet permet de démarrer avec les outils d'observabilité et les meilleures pratiques de Kubernetes.
+Ce projet permet de démarrer avec les outils et les meilleures pratiques de Learning Observability.
 
 Quelques outils pour apprendre :
 
@@ -215,7 +215,7 @@ api_http_requests_total{method="POST", handler="/messages"}
 
 ![Jobs](images/jobs_instances.png)
 
-En termes de Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
+En termes Prometheus, un point de terminaison que vous pouvez gratter est appelé une instance, correspondant généralement à un seul processus.  
 Un ensemble d'instances ayant le même objectif, un processus répliqué à des fins d'évolutivité ou de fiabilité par exemple, est appelé un travail.
 
 ### Spécification d'écriture à distance Prometheus
